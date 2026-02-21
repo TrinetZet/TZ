@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Елена Ляшок — Digital-маркетолог, SMM-специалист, контент-мейкер. Специализация: видеоконтент, инфлюенсер-маркетинг, работа с локациями.">
+    
+    <meta property="og:title" content="Елена Ляшок — Digital-маркетолог">
+    <meta property="og:description" content="SMM, видеоконтент, инфлюенсер-маркетинг, работа с локациями">
+    
+    <title>Елена Ляшок — Digital-маркетолог</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/gilroy');
+        
+        :root {
+            /* Soft Green & Light Theme */
+            --bg-primary: #f8faf9;
+            --bg-secondary: #ffffff;
+            --bg-warm: #f0f4f2;
+            --accent-green: #7c9a92;
+            --accent-green-light: #9ab4ad;
+            --accent-green-dark: #5a756d;
+            --accent-sage: #a8c4b0;
+            --text-primary: #2d3436;
+            --text-secondary: #636e72;
+            --text-muted: #95a5a6;
+            --border-light: rgba(124, 154, 146, 0.15);
+            --shadow-soft: 0 4px 24px rgba(45, 52, 54, 0.06);
+            --shadow-hover: 0 12px 40px rgba(124, 154, 146, 0.15);
+            
+            --font-display: 'Gilroy', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(124, 154, 146, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(168, 196, 176, 0.04) 0%, transparent 50%);
+        }
+
+        /* Decorative Elements */
+        .deco-circle {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(60px);
+            opacity: 0.4;
+        }
+
+        .deco-1 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, var(--accent-sage), transparent);
+            top: -100px;
+            right: -100px;
+        }
+
+        .deco-2 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, transparent, var(--accent-green-light));
+            bottom: 10%;
+            left: -100px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(248, 250, 249, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            font-family: var(--font-display);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-green);
+            transition: width 0.3s;
+            border-radius: 2px;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-green-dark);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 10rem 3rem 6rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+        }
+
+        .hero-visual {
+            position: relative;
+            order: 2;
+            display: flex;
+            justify-content: center;
+        }
+
+        .photo-container {
+            position: relative;
+            width: 420px;
+            height: 520px;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: var(--bg-secondary);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--border-light);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+
+        .photo-frame:hover img {
+            transform: scale(1.03);
+        }
+
+        .photo-tag {
+            position: absolute;
+            bottom: 30px;
+            left: -20px;
+            background: var(--accent-green);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(124, 154, 146, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .hero-text {
+            order: 1;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(124, 154, 146, 0.1);
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-green-dark);
+            margin-bottom: 2rem;
+            font-weight: 600;
+            font-family: var(--font-display);
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.8rem, 5vw, 4.5rem);
+            font-weight: 600;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .hero-title span {
+            color: var(--accent-green);
+            display: block;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 480px;
+            margin-bottom: 2.5rem;
+            font-weight: 400;
+            line-height: 1.8;
+            font-family: var(--font-display);
+            font-weight: 500;
+        }
+
+        .hero-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .badge {
+            padding: 0.6rem 1.2rem;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-soft);
+            font-family: var(--font-display);
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .badge:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green-dark);
+            transform: translateY(-2px);
+        }
+
+        .badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent-green);
+            border-radius: 50%;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 1.1rem 2.2rem;
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            border-radius: 100px;
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(124, 154, 146, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-green-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(124, 154, 146, 0.4);
+        }
+
+        .btn-secondary {
+            padding: 1.1rem 2.2rem;
+            background: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-light);
+            border-radius: 100px;
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-green);
+            color: var(--accent-green-dark);
+            background: rgba(124, 154, 146, 0.05);
+        }
+
+        /* Marquee */
+        .marquee {
+            background: var(--bg-warm);
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            padding: 1.5rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .marquee-content {
+            display: inline-flex;
+            animation: marquee 25s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            padding: 0 2.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .marquee-item::before {
+            content: '•';
+            color: var(--accent-green);
+            font-size: 0.8rem;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Sections */
+        .section {
+            padding: 7rem 3rem;
+            position: relative;
+        }
+
+        .section-header {
+            max-width: 800px;
+            margin: 0 auto 4rem;
+            text-align: center;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+            display: block;
+            font-weight: 600;
+            font-family: var(--font-display);
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            color: var(--text-primary);
+        }
+
+        /* Directions Grid */
+        .directions-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .direction-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .direction-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-green), var(--accent-sage));
+            transform: scaleX(0);
+            transition: transform 0.4s;
+        }
+
+        .direction-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(124, 154, 146, 0.3);
+        }
+
+        .direction-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .direction-icon {
+            width: 56px;
+            height: 56px;
+            margin-bottom: 1.5rem;
+            background: rgba(124, 154, 146, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-green);
+            font-size: 1.5rem;
+        }
+
+        .direction-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .direction-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            font-family: var(--font-display);
+            font-weight: 500;
+        }
+
+        .direction-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .direction-tag {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: var(--bg-warm);
+            color: var(--accent-green-dark);
+            border-radius: 100px;
+            font-family: var(--font-display);
+            font-weight: 600;
+        }
+
+        /* Experience Section */
+        .experience-section {
+            background: var(--bg-warm);
+            border-radius: 40px;
+            margin: 0 2rem;
+        }
+
+        .experience-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .experience-card {
+            background: white;
+            border-radius: 24px;
+            padding: 2.5rem;
+            border: 1px solid var(--border-light);
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            align-items: start;
+            transition: all 0.3s;
+        }
+
+        .experience-card:hover {
+            box-shadow: var(--shadow-soft);
+            transform: translateX(10px);
+        }
+
+        .experience-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .experience-date {
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--accent-green);
+            font-weight: 600;
+        }
+
+        .experience-company {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: var(--font-display);
+        }
+
+        .experience-location {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .experience-content h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .experience-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .experience-list li {
+            padding-left: 1.5rem;
+            position: relative;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-family: var(--font-display);
+            font-weight: 500;
+        }
+
+        .experience-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+        /* Tools Cloud */
+        .tools-section {
+            text-align: center;
+        }
+
+        .tools-cloud {
+            max-width: 900px;
+            margin: 3rem auto 0;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .tool-tag {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: 100px;
+            font-family: var(--font-display);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .tool-tag:hover {
+            background: var(--accent-green);
+            color: white;
+            border-color: var(--accent-green);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(124, 154, 146, 0.3);
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
+            color: white;
+            border-radius: 40px;
+            margin: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .contact-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 500px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+            font-family: var(--font-display);
+            font-weight: 500;
+        }
+
+        .contact-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-method {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-decoration: none;
+            color: white;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .contact-method:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .contact-label {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .contact-value {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            background: var(--bg-primary);
+        }
+
+        .footer-name {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 99;
+            padding: 6rem 2rem 2rem;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border-light);
+            transition: color 0.3s;
+            font-weight: 600;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent-green);
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-green);
+            z-index: 1000;
+            width: 0%;
+        }
+
+        /* Mobile Adaptation */
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .hero-text {
+                order: 2;
+            }
+
+            .hero-visual {
+                order: 1;
+            }
+
+            .photo-container {
+                width: 300px;
+                height: 380px;
+            }
+
+            .hero-badges {
+                justify-content: center;
+            }
+
+            .hero-subtitle {
+                margin: 0 auto 2rem;
+            }
+
+            .directions-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+
+            .experience-card {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .experience-meta {
+                border-bottom: 1px solid var(--border-light);
+                padding-bottom: 1rem;
+            }
+
+            .contact-methods {
+                grid-template-columns: 1fr;
+            }
+
+            .tools-cloud {
+                gap: 0.75rem;
+            }
+
+            .tool-tag {
+                padding: 0.6rem 1rem;
+                font-size: 0.85rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .section {
+                padding: 5rem 1.5rem;
+            }
+
+            .hero {
+                padding: 8rem 1.5rem 4rem;
+            }
+
+            .experience-section {
+                margin: 0 1rem;
+                border-radius: 24px;
+            }
+
+            .contact-section {
+                margin: 1rem;
+                border-radius: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .photo-container {
+                width: 260px;
+                height: 320px;
+            }
+
+            .photo-tag {
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: -15px;
+                animation: none;
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .direction-card {
+                padding: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-progress" id="scrollProgress"></div>
+    <div class="deco-circle deco-1"></div>
+    <div class="deco-circle deco-2"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#directions" onclick="closeMobileMenu()">Направления</a>
+        <a href="#experience" onclick="closeMobileMenu()">Опыт</a>
+        <a href="#tools" onclick="closeMobileMenu()">Инструменты</a>
+        <a href="#contact" onclick="closeMobileMenu()">Контакты</a>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="navbar">
+        <div class="nav-logo">Елена Ляшок</div>
+        <ul class="nav-links">
+            <li><a href="#directions" class="nav-link">Направления</a></li>
+            <li><a href="#experience" class="nav-link">Опыт</a></li>
+            <li><a href="#tools" class="nav-link">Инструменты</a></li>
+            <li><a href="#contact" class="nav-link">Контакты</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-label">Digital-маркетолог</div>
+                <h1 class="hero-title">
+                    Создаю контент,
+                    <span>который продаёт</span>
+                </h1>
+                <p class="hero-subtitle">
+                    SMM с упором на видео: снимаю, монтирую, веду контент-план и комьюнити. 
+                    Запускаю инфлюенсер-коллаборации, делаю презентации и медиакиты.
+                </p>
+                <div class="hero-badges">
+                    <span class="badge">Видеоконтент</span>
+                    <span class="badge">SMM</span>
+                    <span class="badge">Инфлюенсеры</span>
+                    <span class="badge">Работа с локациями</span>
+                </div>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn-primary">
+                        Обсудить проект
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
+                    <a href="https://t.me/apo0li_kyse" class="btn-secondary" target="_blank">
+                        Написать в Telegram
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="photo-container">
+                    <div class="photo-frame">
+                        <img src="https://static.tildacdn.com/tild3563-3739-4338-a463-613131616331/photo_2026-02-21_21-.jpg" alt="Елена Ляшок — Digital-маркетолог">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee">
+        <div class="marquee-content">
+            <span class="marquee-item">SMM</span>
+            <span class="marquee-item">Видеоконтент</span>
+            <span class="marquee-item">Инфлюенсер-маркетинг</span>
+            <span class="marquee-item">Работа с локациями</span>
+            <span class="marquee-item">Контент-маркетинг</span>
+            <span class="marquee-item">Партнёрский маркетинг</span>
+            <span class="marquee-item">Digital-стратегия</span>
+            <span class="marquee-item">SMM</span>
+            <span class="marquee-item">Видеоконтент</span>
+            <span class="marquee-item">Инфлюенсер-маркетинг</span>
+            <span class="marquee-item">Работа с локациями</span>
+            <span class="marquee-item">Контент-маркетинг</span>
+            <span class="marquee-item">Партнёрский маркетинг</span>
+            <span class="marquee-item">Digital-стратегия</span>
+        </div>
+    </div>
+
+    <!-- Directions Section -->
+    <section class="section" id="directions">
+        <div class="section-header reveal">
+            <span class="section-label">Чем занимаюсь</span>
+            <h2 class="section-title">Ключевые направления работы</h2>
+        </div>
+        
+        <div class="directions-grid">
+            <div class="direction-card reveal">
+                <div class="direction-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="23 7 16 12 23 17 23 7"/>
+                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                    </svg>
+                </div>
+                <h3 class="direction-title">Видеоконтент</h3>
+                <p class="direction-text">
+                    Съёмка и монтаж Reels, шорт-видео, UGC-контент. Анализ трендов, 
+                    адаптация под бренд, продакшн от идеи до публикации.
+                </p>
+                <div class="direction-tags">
+                    <span class="direction-tag">Reels</span>
+                    <span class="direction-tag">Shorts</span>
+                    <span class="direction-tag">UGC</span>
+                </div>
+            </div>
+            
+            <div class="direction-card reveal">
+                <div class="direction-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <h3 class="direction-title">Инфлюенсер-маркетинг</h3>
+                <p class="direction-text">
+                    Поиск и отбор партнёров, PR-коммуникации, запуск офлайн и соц-активаций. 
+                    Построение долгосрочных партнёрств.
+                </p>
+                <div class="direction-tags">
+                    <span class="direction-tag">Партнёры</span>
+                    <span class="direction-tag">PR</span>
+                    <span class="direction-tag">Активации</span>
+                </div>
+            </div>
+            
+            <div class="direction-card reveal">
+                <div class="direction-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                </div>
+                <h3 class="direction-title">Работа с локациями</h3>
+                <p class="direction-text">
+                    Карточки на Яндекс.Картах, 2GIS, Zoon. Актуализация информации, 
+                    мониторинг отзывов, рекламные кампании, геосегментация.
+                </p>
+                <div class="direction-tags">
+                    <span class="direction-tag">Яндекс</span>
+                    <span class="direction-tag">2GIS</span>
+                    <span class="direction-tag">Репутация</span>
+                </div>
+            </div>
+
+            <div class="direction-card reveal">
+                <div class="direction-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="3" y1="9" x2="21" y2="9"/>
+                        <line x1="9" y1="21" x2="9" y2="9"/>
+                    </svg>
+                </div>
+                <h3 class="direction-title">SMM-стратегия</h3>
+                <p class="direction-text">
+                    Ведение соцсетей, контент-планирование, работа с комьюнити. 
+                    Разработка визуала, презентации и медиакиты в Figma.
+                </p>
+                <div class="direction-tags">
+                    <span class="direction-tag">Контент-план</span>
+                    <span class="direction-tag">Figma</span>
+                    <span class="direction-tag">Дизайн</span>
+                </div>
+            </div>
+
+            <div class="direction-card reveal">
+                <div class="direction-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                </div>
+                <h3 class="direction-title">POS-материалы</h3>
+                <p class="direction-text">
+                    Разработка и подготовка к печати постеров, листовок, бренд-носителей. 
+                    Согласование макетов, контроль качества и сроков.
+                </p>
+                <div class="direction-tags">
+                    <span class="direction-tag">Печать</span>
+                    <span class="direction-tag">Брендинг</span>
+                    <span class="direction-tag">Контроль</span>
+                </div>
+            </div>
+
+            <div class="direction-card reveal">
+                <div class="direction-icon">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 20h9"/>
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                    </svg>
+                </div>
+                <h3 class="direction-title">Внутренний контент</h3>
+                <p class="direction-text">
+                    Презентации для отделов, медиакиты, бренд-гайды, шаблоны документов. 
+                    Стандартизация форматов, работа с CRM.
+                </p>
+                <div class="direction-tags">
+                    <span class="direction-tag">Bitrix24</span>
+                    <span class="direction-tag">Документы</span>
+                    <span class="direction-tag">CRM</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="section experience-section" id="experience">
+        <div class="section-header reveal">
+            <span class="section-label">Опыт работы</span>
+            <h2 class="section-title">Где работала и чем занималась</h2>
+        </div>
+
+        <div class="experience-grid">
+            <div class="experience-card reveal">
+                <div class="experience-meta">
+                    <div class="experience-date">Окт 2024 — наст. время</div>
+                    <div class="experience-company">Академия Будущего</div>
+                    <div class="experience-location">Москва, ffc.team</div>
+                </div>
+                <div class="experience-content">
+                    <h3>Digital контент-маркетолог</h3>
+                    <ul class="experience-list">
+                        <li>POS-материалы: разработка макетов, согласование, контроль печати (SLA ≥ 95%)</li>
+                        <li>Карточки локаций: Яндекс.Карты, 2GIS, Zoon — актуализация и рекламные кампании</li>
+                        <li>Внутренний контент: презентации, медиакиты, стандартизация шаблонов</li>
+                        <li>Работа в Bitrix24 и Viva CRM, структурирование баз</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-card reveal">
+                <div class="experience-meta">
+                    <div class="experience-date">Нояб 2023 — Май 2024</div>
+                    <div class="experience-company">Квиз, плиз!</div>
+                    <div class="experience-location">Москва, quizplease.ru</div>
+                </div>
+                <div class="experience-content">
+                    <h3>Менеджер по партнёрскому маркетингу</h3>
+                    <ul class="experience-list">
+                        <li>Партнёрский маркетинг: поиск инфлюенсеров, PR-коммуникации, офлайн-активации</li>
+                        <li>Reels и шорт-видео: анализ трендов, работа с UGC, продакшн</li>
+                        <li>Запуск детских офлайн-игр и привлечение постоянных партнёров</li>
+                        <li>Ведение Telegram-канала «Квиз, плиз! Teens»: стратегия и контент-план</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="section tools-section" id="tools">
+        <div class="section-header reveal">
+            <span class="section-label">Инструменты</span>
+            <h2 class="section-title">С чем работаю</h2>
+        </div>
+
+        <div class="tools-cloud reveal">
+            <span class="tool-tag">Instagram</span>
+            <span class="tool-tag">VK</span>
+            <span class="tool-tag">Telegram</span>
+            <span class="tool-tag">VK Ads</span>
+            <span class="tool-tag">Яндекс.Бизнес</span>
+            <span class="tool-tag">Яндекс.Метрика</span>
+            <span class="tool-tag">TGStat</span>
+            <span class="tool-tag">Figma</span>
+            <span class="tool-tag">Adobe Illustrator</span>
+            <span class="tool-tag">Bitrix24</span>
+            <span class="tool-tag">Viva CRM</span>
+            <span class="tool-tag">Google Sheets</span>
+            <span class="tool-tag">ChatGPT</span>
+            <span class="tool-tag">KREA</span>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+        <div class="contact-content">
+            <span class="section-label" style="color: white; opacity: 0.9;">Контакты</span>
+            <h2 class="contact-title reveal">Давайте работать вместе</h2>
+            <p class="contact-subtitle reveal">
+                Открыта к предложениям о работе, проектам и коллаборациям. 
+                Быстро разбираюсь в задачах, беру ответственность и довожу до результата.
+            </p>
+            
+            <div class="contact-methods reveal">
+                <a href="https://t.me/apo0li_kyse" class="contact-method" target="_blank">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                        </svg>
+                    </div>
+                    <span class="contact-label">Telegram</span>
+                    <span class="contact-value">@apo0li_kyse</span>
+                </a>
+                
+                <a href="tel:+79147782301" class="contact-method">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <span class="contact-label">Телефон</span>
+                    <span class="contact-value">+7 (914) 778-23-01</span>
+                </a>
+
+                <a href="mailto:llyashok@mail.ru" class="contact-method">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <span class="contact-label">Email</span>
+                    <span class="contact-value">llyashok@mail.ru</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-name">Елена Ляшок</div>
+        <p>Digital-маркетолог • Москва • 2026</p>
+    </footer>
+
+    <script>
+        // Mobile Menu
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('active');
+        }
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const navbar = document.getElementById('navbar');
+            const scrollTop = document.documentElement.scrollTop;
+            const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            
+            scrollProgress.style.width = scrollPercent + '%';
+            
+            if (scrollTop > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Intersection Observer
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
