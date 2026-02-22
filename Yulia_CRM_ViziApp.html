@@ -17,7 +17,7 @@
     
     <style>
         :root {
-            /* Pastel Palette: https://coolors.co/palette/edafb8-f7e1d7-dedbd2-b0c4b1-4a5759 */
+            /* Pastel Palette */
             --bg-primary: #f7e1d7;
             --bg-secondary: #dedbd2;
             --bg-tertiary: #edafb8;
@@ -258,119 +258,52 @@
             border-color: var(--bg-tertiary);
         }
 
-        /* Hero Visual */
-        .hero-visual {
+        /* Hero Photo */
+        .hero-photo {
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
+            width: 220px;
+            height: 220px;
+            margin: 0 auto 2rem;
+            order: -1;
         }
 
-        .process-visual {
-            position: relative;
+        .photo-wrapper {
             width: 100%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 24px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .process-title {
-            font-family: var(--font-display);
-            font-size: 0.875rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .process-steps {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .process-step {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 12px;
-            transition: all 0.3s;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-
-        .process-step:hover {
-            transform: translateX(5px);
-            background: rgba(255, 255, 255, 0.8);
-        }
-
-        .step-number {
-            width: 28px;
-            height: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--gradient-1);
-            color: white;
+            height: 100%;
             border-radius: 50%;
-            font-size: 0.75rem;
-            font-weight: 600;
-            flex-shrink: 0;
-        }
-
-        .step-text {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-
-        .step-arrow {
-            margin-left: auto;
-            color: var(--text-tertiary);
-            font-size: 1.2rem;
-        }
-
-        .process-step:last-child .step-arrow {
-            display: none;
-        }
-
-        .hero-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            width: 100%;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1.25rem 0.5rem;
-            background: rgba(255, 255, 255, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            border: 3px solid rgba(237, 175, 184, 0.4);
+            box-shadow: 0 10px 40px rgba(237, 175, 184, 0.3);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(10px);
         }
 
-        .stat-value {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-primary);
-            margin-bottom: 0.25rem;
+        .photo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
         }
 
-        .stat-label {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            line-height: 1.4;
+        .photo-ring {
+            position: absolute;
+            inset: -8px;
+            border: 2px solid transparent;
+            border-top-color: var(--bg-tertiary);
+            border-radius: 50%;
+            animation: spin 12s linear infinite;
+        }
+
+        .photo-ring:nth-child(2) {
+            inset: -15px;
+            border-top-color: var(--accent-secondary);
+            animation-duration: 18s;
+            animation-direction: reverse;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Marquee */
@@ -437,6 +370,262 @@
             max-width: 600px;
             line-height: 1.2;
             color: var(--text-primary);
+        }
+
+        /* Process Section - New Scroll Animation */
+.process-section {
+    position: relative;
+    min-height: 300vh;
+    background: var(--bg-primary);
+    margin-bottom: 5rem; /* Добавляем отступ снизу */
+}
+
+.process-container {
+    position: sticky;
+    top: 80px; /* Отступ для фиксированной навигации */
+    height: calc(100vh - 10px);
+    display: flex;
+    align-items: flex-start; /* Прижимаем к верху */
+    justify-content: center;
+    padding-top: 2rem; /* Дополнительный отступ сверху */
+    overflow: hidden;
+}
+
+        .process-wrapper {
+            max-width: 1000px;
+            width: 100%;
+            padding: 2rem;
+            position: relative;
+        }
+
+.process-header {
+    text-align: center;
+    margin-bottom: 2rem; /* Уменьшаем отступ */
+    margin-top: 1rem; /* Добавляем отступ сверху */
+}
+
+        .process-header .section-label {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: rgba(237, 175, 184, 0.2);
+            border-radius: 100px;
+            margin-bottom: 1rem;
+        }
+
+        .process-title-main {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+.process-steps-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem; /* Уменьшили с 2rem до 0.8rem */
+}
+        .process-line {
+            position: absolute;
+            left: 2rem;
+            top: 0;
+            bottom: 0;
+            width: 0px;
+            background: rgba(74, 87, 89, 0.1);
+            z-index: 0;
+        }
+
+        .process-line-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 0%;
+            background: var(--gradient-1);
+            transition: height 0.1s linear;
+        }
+
+        .process-step-new {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            opacity: 0.3;
+            transform: translateX(-30px) scale(0.95);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+        }
+
+        .process-step-new.active {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+            background: rgba(255, 255, 255, 0.9);
+            border-color: var(--bg-tertiary);
+            box-shadow: 0 20px 40px rgba(237, 175, 184, 0.2);
+        }
+
+        .process-step-new.completed {
+            opacity: 0.6;
+            transform: translateX(0) scale(0.98);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .step-number-new {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(237, 175, 184, 0.2);
+            border: 2px solid rgba(237, 175, 184, 0.3);
+            border-radius: 50%;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-tertiary);
+            flex-shrink: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .process-step-new.active .step-number-new {
+            background: var(--gradient-1);
+            border-color: var(--bg-tertiary);
+            color: white;
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(237, 175, 184, 0.4);
+        }
+
+        .process-step-new.completed .step-number-new {
+            background: var(--success);
+            border-color: var(--accent-secondary);
+            color: white;
+        }
+
+        .step-number-new::after {
+            content: '✓';
+            position: absolute;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+
+        .process-step-new.completed .step-number-new::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .process-step-new.completed .step-number-new span {
+            opacity: 0;
+        }
+
+        .step-content {
+            flex: 1;
+            padding-top: 0.5rem;
+        }
+
+        .step-title-new {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        .process-step-new.active .step-title-new {
+            color: var(--accent-primary);
+        }
+
+        .step-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .process-step-new.active .step-description {
+            max-height: 100px;
+            opacity: 1;
+            margin-top: 0.5rem;
+        }
+
+        .step-icon {
+            position: absolute;
+            right: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%) translateX(20px);
+            opacity: 0;
+            font-size: 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .process-step-new.active .step-icon {
+            opacity: 1;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* Progress Indicator */
+        .process-progress {
+            position: fixed;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .process-progress.visible {
+            opacity: 1;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(74, 87, 89, 0.2);
+            transition: all 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-dot.active {
+            background: var(--bg-tertiary);
+            transform: scale(1.3);
+            box-shadow: 0 0 20px rgba(237, 175, 184, 0.6);
+        }
+
+        .progress-dot.completed {
+            background: var(--accent-secondary);
+        }
+
+        .progress-dot::before {
+            content: attr(data-step);
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            opacity: 0;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+        }
+
+        .progress-dot:hover::before {
+            opacity: 1;
         }
 
         /* Experience Grid */
@@ -786,13 +975,10 @@
                 order: 1;
             }
 
-            .process-visual {
-                max-width: 100%;
-            }
-
-            .hero-stats {
-                max-width: 400px;
-                margin: 0 auto;
+            .hero-photo {
+                width: 180px;
+                height: 180px;
+                margin-bottom: 1.5rem;
             }
 
             .experience-grid {
@@ -822,6 +1008,29 @@
             .tools-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .process-progress {
+                display: none;
+            }
+
+            .process-step-new {
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .step-number-new {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+
+            .step-title-new {
+                font-size: 1.2rem;
+            }
+
+            .step-icon {
+                display: none;
+            }
         }
 
         @media (max-width: 640px) {
@@ -841,6 +1050,11 @@
             .btn-primary, .btn-secondary {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .hero-photo {
+                width: 150px;
+                height: 150px;
             }
 
             .stat-value {
@@ -873,70 +1087,16 @@
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
             }
+
+            .process-title-main {
+                font-size: 1.75rem;
+            }
         }
         
-        /* Hero Photo */
-.hero-photo {
-    position: relative;
-    width: 220px;
-    height: 220px;
-    margin: 0 auto 2rem;
-    order: -1;
-}
-
-.photo-wrapper {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    overflow: hidden;
-    position: relative;
-    border: 3px solid rgba(237, 175, 184, 0.4);
-    box-shadow: 0 10px 40px rgba(237, 175, 184, 0.3);
-    background: rgba(255, 255, 255, 0.5);
-    backdrop-filter: blur(10px);
-}
-
-.photo-wrapper img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-
-.photo-ring {
-    position: absolute;
-    inset: -8px;
-    border: 2px solid transparent;
-    border-top-color: var(--bg-tertiary);
-    border-radius: 50%;
-    animation: spin 12s linear infinite;
-}
-
-.photo-ring:nth-child(2) {
-    inset: -15px;
-    border-top-color: var(--accent-secondary);
-    animation-duration: 18s;
-    animation-direction: reverse;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
-/* Mobile */
-@media (max-width: 968px) {
-    .hero-photo {
-        width: 180px;
-        height: 180px;
-        margin-bottom: 1.5rem;
-    }
-}
-
-@media (max-width: 640px) {
-    .hero-photo {
-        width: 150px;
-        height: 150px;
-    }
+        #experience {
+    background: var(--bg-secondary);
+    margin-top: 4rem; /* Дополнительный отступ сверху */
+    padding-top: 8rem; /* Увеличиваем внутренний отступ */
 }
     </style>
 </head>
@@ -947,6 +1107,7 @@
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="#about" onclick="closeMobileMenu()">Обо мне</a>
+        <a href="#process" onclick="closeMobileMenu()">Процесс</a>
         <a href="#experience" onclick="closeMobileMenu()">Опыт</a>
         <a href="#skills" onclick="closeMobileMenu()">Навыки</a>
         <a href="#tools" onclick="closeMobileMenu()">Инструменты</a>
@@ -958,6 +1119,7 @@
         <div class="nav-logo">Юлия — CRM-маркетолог</div>
         <ul class="nav-links">
             <li><a href="#about" class="nav-link">Обо мне</a></li>
+            <li><a href="#process" class="nav-link">Процесс</a></li>
             <li><a href="#experience" class="nav-link">Опыт</a></li>
             <li><a href="#skills" class="nav-link">Навыки</a></li>
             <li><a href="#tools" class="nav-link">Инструменты</a></li>
@@ -978,26 +1140,17 @@
             <canvas id="heroCanvas"></canvas>
         </div>
         
-        
-        
         <div class="hero-content">
-            
-            
-            
             <div class="hero-text">
-                
                 <!-- Фото -->
-<div class="hero-photo reveal">
-    <div class="photo-wrapper">
-        <!-- ВСТАВЬ ССЫЛКУ НА ФОТО ЗДЕСЬ -->
-        <img src="https://static.tildacdn.com/tild3761-3639-4165-a332-633663393362/photo_2026-02-21_21-.jpg" alt="Юлия — CRM-маркетолог">
-    </div>
-    <div class="photo-ring"></div>
-    <div class="photo-ring"></div>
-</div>
+                <div class="hero-photo reveal">
+                    <div class="photo-wrapper">
+                        <img src="https://static.tildacdn.com/tild3234-6635-4562-b338-646238613836/IMG_20260221_212533_.jpg" alt="Юлия — CRM-маркетолог">
+                    </div>
+                    <div class="photo-ring"></div>
+                    <div class="photo-ring"></div>
+                </div>
                 <div class="hero-label">CRM • Performance • Аналитика</div>
-                
-                
                 
                 <h1 class="hero-title">
                     CRM-маркетолог
@@ -1017,12 +1170,11 @@
                             <polyline points="12 5 19 12 12 19"/>
                         </svg>
                     </a>
-                    <a href="#experience" class="btn-secondary">
-                        Смотреть опыт
+                    <a href="#process" class="btn-secondary">
+                        Смотреть процесс
                     </a>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -1054,9 +1206,6 @@
 
     <!-- About Section -->
     <section class="section" id="about">
-        
-        
-        
         <div class="section-header reveal">
             <span class="section-label">Философия</span>
             <h2 class="section-title">Закрепляю результат через системные процессы</h2>
@@ -1092,46 +1241,99 @@
                 </p>
             </div>
         </div>
-        
-       
-            <div class="hero-visual">
-                 <p></p>
-                <div class="process-visual">
-                    <div class="process-title">От гипотезы к масштабированию</div>
-                    <div class="process-steps">
-                        <div class="process-step">
-                            <div class="step-number">1</div>
-                            <div class="step-text">Гипотеза</div>
-                            <div class="step-arrow">↓</div>
+    </section>
+
+    <!-- Process Section with Scroll Animation -->
+    <section class="process-section" id="process">
+        <div class="process-progress" id="processProgress">
+            <div class="progress-dot" data-step="Гипотеза" onclick="scrollToStep(0)"></div>
+            <div class="progress-dot" data-step="Тест" onclick="scrollToStep(1)"></div>
+            <div class="progress-dot" data-step="Анализ" onclick="scrollToStep(2)"></div>
+            <div class="progress-dot" data-step="Оптимизация" onclick="scrollToStep(3)"></div>
+            <div class="progress-dot" data-step="Масштаб" onclick="scrollToStep(4)"></div>
+            <div class="progress-dot" data-step="Авто" onclick="scrollToStep(5)"></div>
+        </div>
+
+        <div class="process-container">
+            <div class="process-wrapper">
+                <div class="process-header">
+                    <span class="section-label">Методология</span>
+                    <h2 class="process-title-main">От гипотезы к масштабированию</h2>
+                </div>
+
+                <div class="process-steps-container">
+                    <div class="process-line">
+                        <div class="process-line-fill" id="lineFill"></div>
+                    </div>
+
+                    <div class="process-step-new" data-step="0">
+                        <div class="step-number-new"><span>1</span></div>
+                        <div class="step-content">
+                            <div class="step-title-new">Гипотеза</div>
+                            <div class="step-description">
+                                Формулируем предположение на основе данных аудитории и поведенческих паттернов
+                            </div>
                         </div>
-                        <div class="process-step">
-                            <div class="step-number">2</div>
-                            <div class="step-text">Тестирование</div>
-                            <div class="step-arrow">↓</div>
+                        <div class="step-icon">💡</div>
+                    </div>
+
+                    <div class="process-step-new" data-step="1">
+                        <div class="step-number-new"><span>2</span></div>
+                        <div class="step-content">
+                            <div class="step-title-new">Тестирование</div>
+                            <div class="step-description">
+                                Запускаем A/B-тесты на ограниченной выборке с чёткими метриками успеха
+                            </div>
                         </div>
-                        <div class="process-step">
-                            <div class="step-number">3</div>
-                            <div class="step-text">Анализ</div>
-                            <div class="step-arrow">↓</div>
+                        <div class="step-icon">🧪</div>
+                    </div>
+
+                    <div class="process-step-new" data-step="2">
+                        <div class="step-number-new"><span>3</span></div>
+                        <div class="step-content">
+                            <div class="step-title-new">Анализ</div>
+                            <div class="step-description">
+                                Измеряем статистическую значимость и выявляем инсайты для оптимизации
+                            </div>
                         </div>
-                        <div class="process-step">
-                            <div class="step-number">4</div>
-                            <div class="step-text">Оптимизация</div>
-                            <div class="step-arrow">↓</div>
+                        <div class="step-icon">📊</div>
+                    </div>
+
+                    <div class="process-step-new" data-step="3">
+                        <div class="step-number-new"><span>4</span></div>
+                        <div class="step-content">
+                            <div class="step-title-new">Оптимизация</div>
+                            <div class="step-description">
+                                Внедряем улучшения на основе данных: креативы, сегментация, триггеры
+                            </div>
                         </div>
-                        <div class="process-step">
-                            <div class="step-number">5</div>
-                            <div class="step-text">Масштабирование</div>
-                            <div class="step-arrow">↓</div>
+                        <div class="step-icon">⚡</div>
+                    </div>
+
+                    <div class="process-step-new" data-step="4">
+                        <div class="step-number-new"><span>5</span></div>
+                        <div class="step-content">
+                            <div class="step-title-new">Масштабирование</div>
+                            <div class="step-description">
+                                Увеличиваем охват проверенных механик на всю базу с сохранением эффективности
+                            </div>
                         </div>
-                        <div class="process-step">
-                            <div class="step-number">6</div>
-                            <div class="step-text">Автоматизация</div>
+                        <div class="step-icon">🚀</div>
+                    </div>
+
+                    <div class="process-step-new" data-step="5">
+                        <div class="step-number-new"><span>6</span></div>
+                        <div class="step-content">
+                            <div class="step-title-new">Автоматизация</div>
+                            <div class="step-description">
+                                Настраиваем автоматические сценарии для самоподдерживающейся системы роста
+                            </div>
                         </div>
+                        <div class="step-icon">🤖</div>
                     </div>
                 </div>
             </div>
-            
+        </div>
     </section>
 
     <!-- Experience Section -->
@@ -1313,15 +1515,19 @@
             </p>
             
             <div class="contact-links reveal">
-                <a href="https://t.me/say_juli" class="contact-link" target="_blank">
-                    <span>Telegram</span>
-                    @say_juli →
-                </a>
-                <a href="tel:+79825833720" class="contact-link">
-                    <span>Телефон</span>
-                    +7 (982) 583-37-20 →
-                </a>
-            </div>
+    <a href="https://t.me/say_juli " class="contact-link" target="_blank">
+        <span>Telegram</span>
+        @say_juli →
+    </a>
+    <a href="mailto:juliet27sham@gmail.com" class="contact-link">
+        <span>Email</span>
+        juliet27sham@gmail.com →
+    </a>
+    <a href="tel:+79825833720" class="contact-link">
+        <span>Телефон</span>
+        +7 (982) 583-37-20 →
+    </a>
+</div>
         </div>
     </section>
 
@@ -1349,7 +1555,7 @@
             scrollProgress.style.width = scrollPercent + '%';
         });
 
-        // Intersection Observer
+        // Intersection Observer for general reveals
         const observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
@@ -1364,6 +1570,100 @@
         }, observerOptions);
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Process Section Scroll Animation
+        const processSection = document.querySelector('.process-section');
+        const processSteps = document.querySelectorAll('.process-step-new');
+        const progressDots = document.querySelectorAll('.progress-dot');
+        const lineFill = document.getElementById('lineFill');
+        const processProgress = document.getElementById('processProgress');
+        
+        let currentStep = -1;
+
+        function updateProcessAnimation() {
+            if (!processSection) return;
+            
+            const rect = processSection.getBoundingClientRect();
+            const sectionHeight = processSection.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            
+            // Check if process section is in view
+            if (rect.top < viewportHeight && rect.bottom > 0) {
+                processProgress.classList.add('visible');
+                
+                // Calculate scroll progress within section (0 to 1)
+                const scrollProgress = Math.max(0, Math.min(1, 
+                    (viewportHeight - rect.top) / (sectionHeight + viewportHeight)
+                ));
+                
+                // Update line fill
+                const lineHeight = scrollProgress * 100;
+                lineFill.style.height = lineHeight + '%';
+                
+                // Determine active step (0-5)
+                const totalSteps = processSteps.length;
+                const stepProgress = scrollProgress * totalSteps;
+                const activeStepIndex = Math.min(Math.floor(stepProgress), totalSteps - 1);
+                
+                // Update steps
+                processSteps.forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    
+                    if (index < activeStepIndex) {
+                        step.classList.add('completed');
+                    } else if (index === activeStepIndex) {
+                        step.classList.add('active');
+                        // Add slight delay for description animation
+                        setTimeout(() => {
+                            step.style.transform = 'translateX(0) scale(1)';
+                        }, 100);
+                    }
+                });
+                
+                // Update progress dots
+                progressDots.forEach((dot, index) => {
+                    dot.classList.remove('active', 'completed');
+                    if (index < activeStepIndex) {
+                        dot.classList.add('completed');
+                    } else if (index === activeStepIndex) {
+                        dot.classList.add('active');
+                    }
+                });
+                
+                currentStep = activeStepIndex;
+            } else {
+                processProgress.classList.remove('visible');
+            }
+        }
+
+        // Scroll to specific step
+        function scrollToStep(stepIndex) {
+            if (!processSection) return;
+            
+            const sectionHeight = processSection.offsetHeight;
+            const viewportHeight = window.innerHeight;
+            const stepPosition = (stepIndex / 5) * (sectionHeight - viewportHeight) + processSection.offsetTop;
+            
+            window.scrollTo({
+                top: stepPosition,
+                behavior: 'smooth'
+            });
+        }
+
+        // Throttled scroll listener
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    updateProcessAnimation();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Initial call
+        updateProcessAnimation();
 
         // Canvas Animation - Soft Particles
         const canvas = document.getElementById('heroCanvas');
