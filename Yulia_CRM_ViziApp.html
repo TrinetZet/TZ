@@ -1,20 +1,21 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <meta name="description" content="Юлия — CRM-маркетолог на стыке CRM, performance и аналитики. Измеримый маркетинг через данные, гипотезы и оптимизацию процессов.">
-    
+
     <meta property="og:title" content="Юлия — CRM-маркетолог">
     <meta property="og:description" content="CRM, Performance и Аналитика. Работа с Синергией, Яндекс, Фоксфорд, SkillFactory">
-    
+
     <title>Юлия — CRM-маркетолог</title>
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             /* Pastel Palette */
@@ -32,7 +33,7 @@
             --gradient-2: linear-gradient(135deg, #f7e1d7 0%, #dedbd2 100%);
             --font-display: 'Inter', sans-serif;
             --font-body: 'Inter', sans-serif;
-            
+
             /* Spacing System */
             --space-xs: 0.5rem;
             --space-sm: 1rem;
@@ -264,8 +265,17 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
         }
 
         @keyframes fadeInUp {
@@ -273,6 +283,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -422,7 +433,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         /* Marquee */
@@ -479,8 +492,13 @@
         }
 
         @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
         }
 
         /* Sections */
@@ -931,46 +949,53 @@
         }
 
         /* Tools Section */
-.tools-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: rgba(255, 255, 255, 0.4);
-    border-radius: 24px;
-    padding: var(--space-xl);
-    border: 1px solid rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(10px);
-    box-sizing: border-box; /* добавь это */
-    width: 100%; /* добавь это */
-}
-.tools-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-md);
-    margin-top: var(--space-lg);
-}
-
-@media (max-width: 968px) {
-    .tools-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (max-width: 640px) {
-    .tools-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: var(--space-sm);
-    }
-}
-
-        .tool-item {
-            text-align: center;
-            padding: var(--space-md) var(--space-sm);
-            background: rgba(255, 255, 255, 0.7);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: default;
+        .tools-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            padding: var(--space-xl);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            box-sizing: border-box;
+            /* добавь это */
+            width: 100%;
+            /* добавь это */
         }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+
+        @media (max-width: 968px) {
+            .tools-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-sm);
+            }
+        }
+
+.tool-item {
+    text-align: center;
+    padding: var(--space-md) var(--space-sm);
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    width: 100%;
+    min-width: 0; /* добавь это */
+    overflow: hidden; /* добавь это */
+    word-wrap: break-word; /* добавь это */
+}
 
         .tool-item:hover {
             transform: translateY(-5px) scale(1.05);
@@ -1101,17 +1126,20 @@
 
         /* Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
+
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
                 scroll-behavior: auto !important;
             }
-            
+
             .marquee-content {
                 animation: none;
             }
-            
+
             .photo-ring {
                 animation: none;
             }
@@ -1233,7 +1261,8 @@
                 width: 100%;
             }
 
-            .btn-primary, .btn-secondary {
+            .btn-primary,
+            .btn-secondary {
                 width: 100%;
                 justify-content: center;
             }
@@ -1251,7 +1280,8 @@
                 inset: -14px;
             }
 
-            .experience-card, .skill-category {
+            .experience-card,
+            .skill-category {
                 padding: var(--space-md);
             }
 
@@ -1340,6 +1370,7 @@
 
         /* Touch Device Optimizations */
         @media (hover: none) {
+
             .btn-primary:hover,
             .btn-secondary:hover,
             .contact-link:hover,
@@ -1379,12 +1410,19 @@
                 flex-direction: row;
             }
 
-            .btn-primary, .btn-secondary {
+            .btn-primary,
+            .btn-secondary {
                 width: auto;
             }
         }
+        
+        
+        .process-step-new[data-step="5"] {
+    margin-bottom: 4rem;
+}
     </style>
 </head>
+
 <body>
     <div class="scroll-progress" id="scrollProgress"></div>
     <div class="grain"></div>
@@ -1412,9 +1450,9 @@
         </ul>
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Открыть меню">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <line x1="3" y1="12" x2="21" y2="12"/>
-                <line x1="3" y1="18" x2="21" y2="18"/>
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
             </svg>
         </button>
     </nav>
@@ -1424,7 +1462,7 @@
         <div class="hero-bg">
             <canvas id="heroCanvas"></canvas>
         </div>
-        
+
         <div class="hero-content">
             <div class="hero-text">
                 <div class="hero-photo reveal">
@@ -1435,23 +1473,23 @@
                     <div class="photo-ring"></div>
                 </div>
                 <div class="hero-label">CRM • Performance • Аналитика</div>
-                
+
                 <h1 class="hero-title">
                     CRM-маркетолог
                     <span>на стыке данных и процессов</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Маркетинг должен быть измеримым и управляемым: через данные, 
-                    гипотезы и оптимизацию процессов. Развиваюсь в направлении 
-                    CRM-архитектуры и построения устойчивых систем привлечения 
+                    Маркетинг должен быть измеримым и управляемым: через данные,
+                    гипотезы и оптимизацию процессов. Развиваюсь в направлении
+                    CRM-архитектуры и построения устойчивых систем привлечения
                     и удержания клиентов.
                 </p>
                 <div class="hero-cta">
                     <a href="https://t.me/say_juli" target="_blank" rel="noopener noreferrer" class="btn-primary">
                         Написать в Telegram
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="5" y1="12" x2="19" y2="12"/>
-                            <polyline points="12 5 19 12 12 19"/>
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                            <polyline points="12 5 19 12 12 19" />
                         </svg>
                     </a>
                     <a href="#process" class="btn-secondary">
@@ -1495,33 +1533,33 @@
             <span class="section-label">Философия</span>
             <h2 class="section-title">Закрепляю результат через системные процессы</h2>
         </div>
-        
+
         <div class="experience-grid">
             <div class="experience-card reveal">
                 <div class="exp-company">Измеримость</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Каждое решение подкреплено данными: CTR, CPA, CPL, CAC, ROMI. 
+                    Каждое решение подкреплено данными: CTR, CPA, CPL, CAC, ROMI.
                     Никакой интуиции — только конкретные метрики и их динамика.
                 </p>
             </div>
             <div class="experience-card reveal">
                 <div class="exp-company">Автоматизация</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Проектирую автоматизированные сценарии коммуникаций: от welcome-цепочек 
+                    Проектирую автоматизированные сценарии коммуникаций: от welcome-цепочек
                     до реактивации. Человек участвует только там, где нужна эмпатия.
                 </p>
             </div>
             <div class="experience-card reveal">
                 <div class="exp-company">Интеграция</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Объединяю рекламные кабинеты, CRM и аналитику в единую экосистему. 
+                    Объединяю рекламные кабинеты, CRM и аналитику в единую экосистему.
                     Данные перетекают между системами без потерь и ручного ввода.
                 </p>
             </div>
             <div class="experience-card reveal">
                 <div class="exp-company">Масштабирование</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Рабочие гипотезы превращаю в масштабируемые процессы. То, что работает 
+                    Рабочие гипотезы превращаю в масштабируемые процессы. То, что работает
                     на 1000 клиентов, работает и на 100 000 без пропорционального роста затрат.
                 </p>
             </div>
@@ -1795,10 +1833,10 @@
             <span class="section-label" style="justify-content: center; display: flex;">Контакты</span>
             <h2 class="contact-title reveal">Давайте построим систему, которая продаёт</h2>
             <p class="contact-subtitle reveal">
-                Открыта для проектов по CRM-маркетингу, performance-кампаниям 
+                Открыта для проектов по CRM-маркетингу, performance-кампаниям
                 и построению аналитических систем для измеримого роста.
             </p>
-            
+
             <div class="contact-links reveal">
                 <a href="https://t.me/say_juli" class="contact-link" target="_blank" rel="noopener noreferrer">
                     <span>Telegram</span>
@@ -1848,25 +1886,29 @@
 
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
-            
+
             if (currentScroll > 100) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
-            
+
             lastScroll = currentScroll;
-        }, { passive: true });
+        }, {
+            passive: true
+        });
 
         // Scroll Progress
         const scrollProgress = document.getElementById('scrollProgress');
-        
+
         window.addEventListener('scroll', () => {
             const scrollTop = document.documentElement.scrollTop;
             const docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
             const scrollPercent = (scrollTop / docHeight) * 100;
             scrollProgress.style.width = scrollPercent + '%';
-        }, { passive: true });
+        }, {
+            passive: true
+        });
 
         // Intersection Observer for general reveals
         const observerOptions = {
@@ -1890,52 +1932,52 @@
         const progressDots = document.querySelectorAll('.progress-dot');
         const lineFill = document.getElementById('lineFill');
         const processProgress = document.getElementById('processProgress');
-        
+
         let currentStep = -1;
         let isProcessVisible = false;
 
         function updateProcessAnimation() {
             if (!processSection) return;
-            
+
             const rect = processSection.getBoundingClientRect();
             const sectionHeight = processSection.offsetHeight;
             const viewportHeight = window.innerHeight;
-            
+
             // Check if process section is in view
             const isInViewport = rect.top < viewportHeight && rect.bottom > 0;
-            
+
             if (isInViewport) {
                 if (!isProcessVisible) {
                     isProcessVisible = true;
                     processProgress.classList.add('visible');
                 }
-                
+
                 // Calculate scroll progress within section (0 to 1)
-                const scrollProgress = Math.max(0, Math.min(1, 
+                const scrollProgress = Math.max(0, Math.min(1,
                     (viewportHeight - rect.top) / (sectionHeight + viewportHeight * 0.5)
                 ));
-                
+
                 // Update line fill
                 const lineHeight = scrollProgress * 100;
                 lineFill.style.height = lineHeight + '%';
-                
+
                 // Determine active step (0-5)
                 const totalSteps = processSteps.length;
                 const stepProgress = scrollProgress * totalSteps;
                 const activeStepIndex = Math.min(Math.floor(stepProgress), totalSteps - 1);
-                
+
                 // Update steps with throttling
                 if (activeStepIndex !== currentStep) {
                     processSteps.forEach((step, index) => {
                         step.classList.remove('active', 'completed');
-                        
+
                         if (index < activeStepIndex) {
                             step.classList.add('completed');
                         } else if (index === activeStepIndex) {
                             step.classList.add('active');
                         }
                     });
-                    
+
                     // Update progress dots
                     progressDots.forEach((dot, index) => {
                         dot.classList.remove('active', 'completed');
@@ -1945,7 +1987,7 @@
                             dot.classList.add('active');
                         }
                     });
-                    
+
                     currentStep = activeStepIndex;
                 }
             } else {
@@ -1959,11 +2001,11 @@
         // Scroll to specific step
         function scrollToStep(stepIndex) {
             if (!processSection) return;
-            
+
             const sectionHeight = processSection.offsetHeight;
             const viewportHeight = window.innerHeight;
             const stepPosition = (stepIndex / (processSteps.length - 1)) * (sectionHeight - viewportHeight * 0.8) + processSection.offsetTop;
-            
+
             window.scrollTo({
                 top: Math.max(0, stepPosition),
                 behavior: 'smooth'
@@ -1980,7 +2022,9 @@
                 });
                 ticking = true;
             }
-        }, { passive: true });
+        }, {
+            passive: true
+        });
 
         // Initial call
         updateProcessAnimation();
@@ -1990,7 +2034,8 @@
         const ctx = canvas.getContext('2d');
         let width, height;
         let particles = [];
-        let mouseX = 0, mouseY = 0;
+        let mouseX = 0,
+            mouseY = 0;
         let isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
         let animationId;
 
@@ -2060,6 +2105,7 @@
         }
 
         let frameCount = 0;
+
         function animate() {
             // Skip frames on mobile for performance
             if (isTouchDevice && frameCount++ % 2 !== 0) {
@@ -2114,18 +2160,20 @@
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
-                
+
                 // Pause animation when mouse inactive
                 clearTimeout(mouseTimeout);
                 if (animationId) {
                     cancelAnimationFrame(animationId);
                     animate();
                 }
-                
+
                 mouseTimeout = setTimeout(() => {
                     // Continue animation but with less intensity
                 }, 100);
-            }, { passive: true });
+            }, {
+                passive: true
+            });
         }
 
         // Initialize canvas
@@ -2135,7 +2183,7 @@
 
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
@@ -2167,4 +2215,5 @@
         }
     </script>
 </body>
+
 </html>
