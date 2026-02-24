@@ -304,23 +304,24 @@
         }
 
         .hero-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-            font-size: clamp(0.65rem, 2vw, 0.75rem);
-            text-transform: uppercase;
-            letter-spacing: 0.2em;
-            color: var(--navy-accent);
-            font-weight: 600;
-        }
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    font-size: clamp(0.65rem, 2vw, 0.75rem);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--navy-accent);
+    font-weight: 600;
+}
 
-        .hero-label::before {
-            content: '';
-            width: clamp(20px, 4vw, 40px);
-            height: 1px;
-            background: var(--gold);
-        }
+.hero-label::before,
+.hero-label::after {
+    content: '';
+    width: clamp(20px, 4vw, 40px);
+    height: 1px;
+    background: var(--gold);
+}
 
         .hero-title {
             font-family: var(--font-display);
