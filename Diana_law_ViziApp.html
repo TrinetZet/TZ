@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Диана Сивкова — юрист, специалист по IT-праву, интеллектуальной собственности и договорному праву.">
+    <title>Диана Сивкова — Юрист | IT & IP Law</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-primary: #fafbfc;
+            --bg-secondary: #ffffff;
+            --bg-cream: #f5f6f8;
+            --navy-deep: #1a2744;
+            --navy-medium: #2d3e5f;
+            --navy-light: #3d5175;
+            --navy-accent: #4a6fa5;
+            --gold: #c9a962;
+            --gold-light: #e0c78a;
+            --text-primary: #1a1a1a;
+            --text-secondary: #4a5568;
+            --text-muted: #718096;
+            --border-elegant: rgba(26, 39, 68, 0.08);
+            --shadow-soft: 0 4px 24px rgba(26, 39, 68, 0.06);
+            --shadow-hover: 0 12px 40px rgba(26, 39, 68, 0.12);
+            --shadow-luxury: 0 20px 60px rgba(26, 39, 68, 0.15);
+            
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            width: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(26, 39, 68, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201, 169, 98, 0.03) 0%, transparent 50%);
+        }
+
+        /* Luxury Grain Overlay */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Decorative Elements */
+        .deco-circle {
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid rgba(26, 39, 68, 0.05);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .deco-1 {
+            width: clamp(300px, 50vw, 600px);
+            height: clamp(300px, 50vw, 600px);
+            top: -10%;
+            right: -10%;
+            animation: rotate 60s linear infinite;
+        }
+
+        .deco-2 {
+            width: clamp(200px, 40vw, 400px);
+            height: clamp(200px, 40vw, 400px);
+            bottom: 10%;
+            left: -10%;
+            border-color: rgba(201, 169, 98, 0.1);
+            animation: rotate 40s linear infinite reverse;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(250, 251, 252, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-elegant);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav.scrolled {
+            padding: 1rem 5%;
+            background: rgba(250, 251, 252, 0.98);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 4vw, 1.75rem);
+            font-weight: 600;
+            color: var(--navy-deep);
+            letter-spacing: 0.02em;
+            position: relative;
+            z-index: 101;
+        }
+
+        .nav-logo::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-logo:hover::after {
+            width: 100%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: clamp(1.5rem, 3vw, 3rem);
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--navy-deep);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--navy-deep);
+        }
+
+        .nav-link:hover::before {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 8rem 5% 4rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: clamp(3rem, 6vw, 6rem);
+            align-items: center;
+        }
+
+        .hero-visual {
+            position: relative;
+            order: 2;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .photo-container {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            aspect-ratio: 4/5; /* Fluid height based on width */
+            margin: 0 auto;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: var(--bg-secondary);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: var(--shadow-luxury);
+            border: clamp(6px, 2vw, 12px) solid white;
+            position: relative;
+        }
+
+        .photo-frame::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            z-index: -1;
+            opacity: 0.6;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(30%) contrast(1.05);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .photo-frame:hover img {
+            filter: grayscale(0%) contrast(1.1);
+            transform: scale(1.03);
+        }
+
+        .photo-corner {
+            position: absolute;
+            width: clamp(20px, 5vw, 40px);
+            height: clamp(20px, 5vw, 40px);
+            border: 2px solid var(--gold);
+            z-index: 10;
+            transition: all 0.4s ease;
+        }
+
+        /* Kept slightly tighter to prevent horizontal overflow on tiny screens */
+        .corner-tl { top: -15px; left: -15px; border-right: none; border-bottom: none; }
+        .corner-tr { top: -15px; right: -15px; border-left: none; border-bottom: none; }
+        .corner-bl { bottom: -15px; left: -15px; border-right: none; border-top: none; }
+        .corner-br { bottom: -15px; right: -15px; border-left: none; border-top: none; }
+
+        .photo-container:hover .photo-corner {
+            width: clamp(30px, 8vw, 60px);
+            height: clamp(30px, 8vw, 60px);
+            border-color: var(--navy-deep);
+        }
+
+        .photo-badge {
+            position: absolute;
+            bottom: clamp(10px, 3vw, 30px);
+            right: clamp(-10px, -2vw, -30px);
+            background: var(--navy-deep);
+            color: white;
+            padding: clamp(0.7rem, 2vw, 1rem) clamp(1rem, 3vw, 1.5rem);
+            font-family: var(--font-display);
+            font-size: clamp(0.75rem, 2vw, 0.9rem);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            box-shadow: 0 10px 30px rgba(26, 39, 68, 0.3);
+            z-index: 20;
+            transform: rotate(-5deg);
+            transition: all 0.4s ease;
+        }
+
+        .photo-container:hover .photo-badge {
+            transform: rotate(0deg) translateY(-5px);
+            background: var(--gold);
+            color: var(--navy-deep);
+        }
+
+        .hero-text {
+            order: 1;
+        }
+
+        .hero-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-size: clamp(0.65rem, 2vw, 0.75rem);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--navy-accent);
+            font-weight: 600;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: clamp(20px, 4vw, 40px);
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 600;
+            line-height: 1.1;
+            color: var(--navy-deep);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-title span {
+            display: block;
+            font-style: italic;
+            color: var(--navy-accent);
+            font-weight: 400;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.25rem);
+            color: var(--text-secondary);
+            max-width: 540px;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            font-weight: 400;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: clamp(1.5rem, 4vw, 3rem);
+            margin-bottom: 3rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--border-elegant);
+            border-bottom: 1px solid var(--border-elegant);
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            font-weight: 600;
+            color: var(--navy-deep);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: clamp(1rem, 3vw, 1.25rem) clamp(1.5rem, 4vw, 2.5rem);
+            font-family: var(--font-body);
+            font-size: clamp(0.75rem, 2vw, 0.85rem);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            width: 100%;
+            max-width: max-content;
+        }
+
+        .btn-primary {
+            background: var(--navy-deep);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            transition: left 0.4s ease;
+            z-index: 0;
+        }
+
+        .btn-primary:hover::before { left: 0; }
+        .btn-primary span, .btn-primary svg { position: relative; z-index: 1; }
+
+        .btn-primary:hover {
+            color: var(--navy-deep);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(26, 39, 68, 0.2);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--navy-deep);
+            border: 1px solid var(--navy-deep);
+        }
+
+        .btn-secondary:hover {
+            background: var(--navy-deep);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            display: none; /* Hidden on mobile to save space */
+        }
+
+        @media (min-width: 1025px) {
+            .scroll-indicator { display: flex; }
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--navy-deep), transparent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: var(--gold);
+            animation: scroll 2s ease-in-out infinite;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(300%); }
+        }
+
+        /* Sections Universal */
+        .section {
+            padding: clamp(4rem, 10vw, 8rem) 5%;
+            position: relative;
+            width: 100%;
+        }
+
+        .section-header {
+            max-width: 1200px;
+            margin: 0 auto clamp(3rem, 6vw, 5rem);
+            text-align: center;
+        }
+
+        .section-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--navy-accent);
+            margin-bottom: 1rem;
+            display: block;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            max-width: 800px;
+            margin: 0 auto;
+            line-height: 1.2;
+            color: var(--navy-deep);
+        }
+
+        /* Expertise Section */
+        .expertise-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: clamp(1.5rem, 3vw, 2rem);
+        }
+
+        .expertise-card {
+            background: white;
+            border: 1px solid var(--border-elegant);
+            padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2rem);
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .expertise-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+        }
+
+        .expertise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-luxury);
+            border-color: transparent;
+        }
+
+        .expertise-card:hover::before { transform: scaleX(1); }
+
+        .expertise-icon {
+            width: clamp(50px, 10vw, 70px);
+            height: clamp(50px, 10vw, 70px);
+            margin: 0 auto 1.5rem;
+            border: 1px solid var(--border-elegant);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--navy-deep);
+            font-size: 1.75rem;
+            transition: all 0.4s ease;
+        }
+
+        .expertise-card:hover .expertise-icon {
+            background: var(--navy-deep);
+            color: white;
+            border-color: var(--navy-deep);
+            transform: rotateY(360deg);
+        }
+
+        .expertise-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.25rem, 3vw, 1.5rem);
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--navy-deep);
+        }
+
+        .expertise-text {
+            color: var(--text-secondary);
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            line-height: 1.6;
+        }
+
+        /* Experience Section */
+        .experience-section {
+            background: var(--bg-cream);
+            position: relative;
+        }
+
+        .experience-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--border-elegant), transparent);
+        }
+
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0; bottom: 0;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, var(--navy-deep), transparent);
+            transform: translateX(-50%);
+        }
+
+.timeline-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 5vw, 4rem);
+    margin-bottom: clamp(2rem, 5vw, 4rem);
+    position: relative;
+    opacity: 1; /* Было 0 — теперь видно сразу */
+    transform: translateY(0); /* Было 30px — теперь на месте */
+    transition: all 0.8s ease;
+}
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content { grid-column: 2; }
+        .timeline-item:nth-child(even) .timeline-date { grid-column: 1; text-align: right; }
+
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 3px solid var(--gold);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            background: var(--gold);
+            transform: translateX(-50%) scale(1.2);
+            box-shadow: 0 0 0 8px rgba(201, 169, 98, 0.2);
+        }
+
+        .timeline-date {
+            font-family: var(--font-display);
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            color: var(--navy-accent);
+            font-weight: 600;
+            padding-top: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: clamp(1.5rem, 4vw, 2.5rem);
+            border: 1px solid var(--border-elegant);
+            position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px; height: 100%;
+            background: var(--gold);
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .timeline-content:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateX(5px);
+        }
+        .timeline-content:hover::before { transform: scaleY(1); }
+
+        .timeline-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.25rem, 3vw, 1.5rem);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--navy-deep);
+        }
+
+        .timeline-company {
+            color: var(--navy-accent);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .timeline-list { list-style: none; }
+        .timeline-list li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            font-size: clamp(0.85rem, 2vw, 0.9rem);
+            line-height: 1.6;
+        }
+        .timeline-list li::before {
+            content: '—';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: clamp(2rem, 5vw, 4rem);
+        }
+
+        .skills-category {
+            background: white;
+            border: 1px solid var(--border-elegant);
+            padding: clamp(1.5rem, 5vw, 3rem);
+            position: relative;
+        }
+
+        .skills-category::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 3px;
+            background: var(--navy-deep);
+        }
+
+        .skills-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 4vw, 1.75rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--navy-deep);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .skills-title::after {
+            content: ''; flex: 1; height: 1px;
+            background: var(--border-elegant);
+        }
+
+        .skill-item { margin-bottom: 1.5rem; }
+        .skill-header {
+            display: flex; justify-content: space-between;
+            margin-bottom: 0.5rem; font-size: 0.9rem;
+        }
+        .skill-name { font-weight: 500; color: var(--text-primary); }
+        .skill-level { color: var(--navy-accent); font-weight: 600; }
+
+        .skill-bar {
+            height: 3px;
+            background: var(--bg-cream);
+            position: relative; overflow: hidden;
+        }
+
+        .skill-progress {
+            position: absolute; top: 0; left: 0; height: 100%;
+            background: linear-gradient(to right, var(--navy-deep), var(--navy-accent));
+            width: 0; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .skill-item.visible .skill-progress { width: var(--progress); }
+
+        /* Certificates */
+        .certs-grid {
+            max-width: 1000px; margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: clamp(1.5rem, 4vw, 2rem);
+        }
+
+        .cert-card {
+            background: white; border: 1px solid var(--border-elegant);
+            padding: 2rem; text-align: center;
+            transition: all 0.4s ease; position: relative;
+        }
+
+        .cert-card::after {
+            content: '▪'; position: absolute; bottom: 1rem; right: 1rem;
+            color: var(--gold); font-size: 0.8rem;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-5px); box-shadow: var(--shadow-hover);
+            border-color: var(--gold);
+        }
+
+        .cert-year {
+            font-family: var(--font-display); font-size: 2rem;
+            color: var(--gold); font-weight: 600; margin-bottom: 0.5rem;
+        }
+        .cert-title {
+            font-weight: 600; color: var(--navy-deep); margin-bottom: 0.5rem; line-height: 1.4;
+        }
+        .cert-org { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--navy-deep); color: white;
+            position: relative; overflow: hidden;
+        }
+
+        .contact-section::before {
+            content: ''; position: absolute; top: -50%; right: -20%;
+            width: clamp(300px, 50vw, 600px); height: clamp(300px, 50vw, 600px);
+            background: rgba(201, 169, 98, 0.05); border-radius: 50%;
+        }
+
+        .contact-content {
+            max-width: 1000px; margin: 0 auto; text-align: center;
+            position: relative; z-index: 1;
+        }
+
+        .contact-label {
+            color: var(--gold); font-size: 0.75rem; text-transform: uppercase;
+            letter-spacing: 0.2em; margin-bottom: 1.5rem; margin-top: 1.5rem; display: block;
+        }
+
+        .contact-title {
+            font-family: var(--font-display); font-size: clamp(2rem, 6vw, 4rem);
+            font-weight: 600; margin-bottom: 1.5rem; color: white;
+        }
+
+        .contact-subtitle {
+            color: rgba(255, 255, 255, 0.7); font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            max-width: 600px; margin: 0 auto 3rem; line-height: 1.6;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: clamp(1rem, 3vw, 2rem); margin-top: clamp(2rem, 5vw, 4rem);
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: clamp(1.5rem, 4vw, 2.5rem); transition: all 0.4s ease;
+            text-decoration: none; color: white; display: flex; flex-direction: column; align-items: center;
+        }
+
+        .contact-card:hover {
+            background: rgba(255, 255, 255, 0.08); border-color: var(--gold); transform: translateY(-5px);
+        }
+
+        .contact-icon {
+            width: clamp(50px, 10vw, 60px); height: clamp(50px, 10vw, 60px);
+            border: 1px solid var(--gold); display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1.5rem; color: var(--gold); font-size: 1.5rem; transition: all 0.4s ease;
+        }
+        .contact-card:hover .contact-icon { background: var(--gold); color: var(--navy-deep); }
+        .contact-type {
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.5); margin-bottom: 0.5rem;
+        }
+        .contact-value {
+            font-family: var(--font-display); font-size: clamp(1rem, 3vw, 1.25rem); font-weight: 600; word-break: break-word; text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--navy-deep); padding: clamp(1.5rem, 4vw, 3rem); text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .footer-text { color: rgba(255, 255, 255, 0.5); font-size: 0.85rem; letter-spacing: 0.1em; }
+
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.4, 0, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none; background: none; border: none; color: var(--navy-deep);
+            cursor: pointer; padding: 0.5rem; z-index: 101;
+        }
+
+        .mobile-menu {
+            display: flex; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-primary); z-index: 100; padding: 6rem 5% 2rem;
+            flex-direction: column; gap: 1rem;
+            transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overscroll-behavior: contain;
+        }
+
+        .mobile-menu.active { transform: translateY(0); }
+        .mobile-menu a {
+            font-family: var(--font-display); font-size: 2rem; color: var(--navy-deep);
+            text-decoration: none; padding: 1rem 0; border-bottom: 1px solid var(--border-elegant);
+            text-align: center;
+        }
+
+        /* Responsive Breakpoints - Mobile First Approach Corrections */
+        @media (max-width: 1024px) {
+            .hero-content { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
+            .hero-text { order: 2; }
+            .hero-visual { order: 1; }
+            .hero-stats { justify-content: center; }
+            .hero-subtitle { margin: 0 auto 2rem; }
+            .btn-primary, .btn-secondary { max-width: none; }
+            .hero-cta { flex-direction: column; }
+            
+            .timeline::before { left: 24px; }
+            .timeline-item { grid-template-columns: 1fr; padding-left: 60px; gap: 1rem; }
+            .timeline-item:nth-child(even) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-date { grid-column: 1; text-align: left; }
+            .timeline-dot { left: 24px; }
+            .timeline-content:hover { transform: translateY(-5px); } /* Disable X translation on mobile */
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .mobile-menu-btn { display: block; }
+            .timeline::before { left: 16px; }
+            .timeline-item { padding-left: 48px; }
+            .timeline-dot { left: 16px; width: 16px; height: 16px; border-width: 2px;}
+            .timeline-item:hover .timeline-dot { box-shadow: 0 0 0 4px rgba(201, 169, 98, 0.2); }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain-overlay"></div>
+    <div class="deco-circle deco-1"></div>
+    <div class="deco-circle deco-2"></div>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#about" onclick="closeMobileMenu()">Обо мне</a>
+        <a href="#expertise" onclick="closeMobileMenu()">Компетенции</a>
+        <a href="#experience" onclick="closeMobileMenu()">Опыт</a>
+        <a href="#certificates" onclick="closeMobileMenu()">Сертификаты</a>
+        <a href="#contact" onclick="closeMobileMenu()">Контакты</a>
+    </div>
+
+    <nav class="nav" id="navbar">
+        <div class="nav-logo">Д. Сивкова</div>
+        <ul class="nav-links">
+            <li><a href="#about" class="nav-link">Обо мне</a></li>
+            <li><a href="#expertise" class="nav-link">Компетенции</a></li>
+            <li><a href="#experience" class="nav-link">Опыт</a></li>
+            <li><a href="#certificates" class="nav-link">Сертификаты</a></li>
+            <li><a href="#contact" class="nav-link">Контакты</a></li>
+        </ul>
+        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+    </nav>
+
+    <section class="hero" id="about">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-label">IT & Intellectual Property Law</div>
+                <h1 class="hero-title">
+                    Диана Сивкова
+                    <span>Юрист</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Специализируюсь на сопровождении проектов в IT-сфере при участии коммерческих и государственных заказчиков. Стараюсь найти баланс между интересами бизнеса и юридическими рисками.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">3+</span>
+                        <span class="stat-label">Года опыта</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">IT</span>
+                        <span class="stat-label">Специализация</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">B2</span>
+                        <span class="stat-label">Английский</span>
+                    </div>
+                </div>
+
+                <div class="hero-cta">
+                    <a href="#contact" class="btn-primary">
+                        <span>Связаться</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                            <polyline points="12 5 19 12 12 19"/>
+                        </svg>
+                    </a>
+                    <a href="#experience" class="btn-secondary">Смотреть опыт</a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="photo-container">
+                    <div class="photo-corner corner-tl"></div>
+                    <div class="photo-corner corner-tr"></div>
+                    <div class="photo-corner corner-bl"></div>
+                    <div class="photo-corner corner-br"></div>
+                    <div class="photo-frame">
+                        <img src="https://static.tildacdn.com/tild3130-3333-4433-a431-363836363939/Screenshot_20260224_.jpg" alt="Диана Сивкова — Юрист">
+                    </div>
+                    <div class="photo-badge">Юрист</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section class="section" id="expertise">
+        <div class="section-header reveal">
+            <span class="section-label">Компетенции</span>
+            <h2 class="section-title">Ключевые направления практики</h2>
+        </div>
+
+        <div class="expertise-grid">
+            <div class="expertise-card reveal">
+                <div class="expertise-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                        <line x1="8" y1="21" x2="16" y2="21"/>
+                        <line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                </div>
+                <h3 class="expertise-title">IT-право</h3>
+                <p class="expertise-text">Лицензионные договоры, сертификаты на ПО, разработка, внедрение, интеграция и техническая поддержка</p>
+            </div>
+            <div class="expertise-card reveal">
+                <div class="expertise-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h3 class="expertise-title">Интеллектуальная собственность</h3>
+                <p class="expertise-text">Служебные произведения, регистрация ИС, защита прав, open-source комплаенс</p>
+            </div>
+            <div class="expertise-card reveal">
+                <div class="expertise-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                </div>
+                <h3 class="expertise-title">Договорное право</h3>
+                <p class="expertise-text">Полный цикл договорной работы, сопровождение маркетинговой активности, консультации</p>
+            </div>
+            <div class="expertise-card reveal">
+                <div class="expertise-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <h3 class="expertise-title">Персональные данные</h3>
+                <p class="expertise-text">Compliance, политики обработки, согласия, меры защиты информации</p>
+            </div>
+            <div class="expertise-card reveal">
+                <div class="expertise-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                </div>
+                <h3 class="expertise-title">Судебные споры</h3>
+                <p class="expertise-text">Претензионная работа, представительство в судах, арбитраж, медиация</p>
+            </div>
+            <div class="expertise-card reveal">
+                <div class="expertise-icon">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                </div>
+                <h3 class="expertise-title">Legal Design</h3>
+                <p class="expertise-text">Юридический дизайн документов, оптимизация бизнес-процессов, создание баз знаний</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section experience-section" id="experience">
+        <div class="section-header reveal">
+            <span class="section-label">Профессиональный путь</span>
+            <h2 class="section-title">Опыт работы</h2>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Август 2023 — наст. время</div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Юрист</h3>
+                    <div class="timeline-company">КРОК</div>
+                    <ul class="timeline-list">
+                        <li>IT-договоры: лицензионные, сертификаты на ПО, работы/услуги (разработка, внедрение, интеграция, техподдержка)</li>
+                        <li>Общая договорная работа и сопровождение маркетинговой активности</li>
+                        <li>Интеллектуальная собственность: служебные произведения, регистрация, защита ИС</li>
+                        <li>Претензионная и судебная работа</li>
+                        <li>Legal ops: юридические бизнес-процессы и создание базы знаний</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Май 2021 — Июль 2023</div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Помощник юриста</h3>
+                    <div class="timeline-company">Юридические компании Владивостока и Москвы</div>
+                    <ul class="timeline-list">
+                        <li>Помощь старшим коллегам по общеправовым вопросам</li>
+                        <li>Банкротные процедуры и сопровождение</li>
+                        <li>Вопросы интеллектуальной собственности</li>
+                        <li>Подготовка правовых заключений и договоров</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">2018 — 2022</div>
+                <div class="timeline-content">
+                    <h3 class="timeline-title">Юриспруденция</h3>
+                    <div class="timeline-company">Дальневосточный федеральный университет</div>
+                    <ul class="timeline-list">
+                        <li>Высшее юридическое образование</li>
+                        <li>Специализация в сфере гражданского и корпоративного права</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header reveal">
+            <span class="section-label">Навыки</span>
+            <h2 class="section-title">Профессиональные компетенции</h2>
+        </div>
+
+        <div class="skills-grid">
+            <div class="skills-category reveal">
+                <h3 class="skills-title">Hard Skills</h3>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Договорное право / Contract Law</span>
+                        <span class="skill-level">95%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 95%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">IT-право / IT Law</span>
+                        <span class="skill-level">90%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 90%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Интеллектуальная собственность / IP</span>
+                        <span class="skill-level">85%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 85%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Судебные споры / Litigation</span>
+                        <span class="skill-level">80%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 80%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Legal Design</span>
+                        <span class="skill-level">75%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 75%"></div></div>
+                </div>
+            </div>
+
+            <div class="skills-category reveal">
+                <h3 class="skills-title">Soft Skills</h3>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Аналитическое мышление</span>
+                        <span class="skill-level">95%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 95%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Деловая коммуникация</span>
+                        <span class="skill-level">90%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 90%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Переговоры</span>
+                        <span class="skill-level">85%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 85%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Английский язык</span>
+                        <span class="skill-level">B2</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 80%"></div></div>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-header">
+                        <span class="skill-name">Legal Tech</span>
+                        <span class="skill-level">70%</span>
+                    </div>
+                    <div class="skill-bar"><div class="skill-progress" style="--progress: 70%"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="certificates">
+        <div class="section-header reveal">
+            <span class="section-label">Образование</span>
+            <h2 class="section-title">Сертификаты и курсы</h2>
+        </div>
+
+        <div class="certs-grid">
+            <div class="cert-card reveal">
+                <div class="cert-year">2025</div>
+                <h3 class="cert-title">Документы юриста</h3>
+                <p class="cert-org">Академия дизайна документов</p>
+            </div>
+            <div class="cert-card reveal">
+                <div class="cert-year">2024</div>
+                <h3 class="cert-title">Интеллектуальная собственность: от закона к практике</h3>
+                <p class="cert-org">НИУ ВШЭ</p>
+            </div>
+            <div class="cert-card reveal">
+                <div class="cert-year">2024</div>
+                <h3 class="cert-title">Сделки в отношении прав на программы для ЭВМ</h3>
+                <p class="cert-org">М-Логос</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact-section" id="contact">
+        <div class="contact-content">
+            <span class="contact-label">Контакты</span>
+            <h2 class="contact-title reveal">Готова к новым вызовам</h2>
+            <p class="contact-subtitle reveal">
+                Открыта к предложениям о сотрудничестве в сфере IT-права, интеллектуальной собственности и корпоративного права. Рассматриваю позиции в Москве и удалённо.
+            </p>
+
+            <div class="contact-grid reveal">
+                <a href="tel:+79502831655" class="contact-card">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                    </div>
+                    <div class="contact-type">Телефон</div>
+                    <div class="contact-value">+7 (950) 283-16-55</div>
+                </a>
+
+                <a href="mailto:sivkovadm99@gmail.com" class="contact-card">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                    </div>
+                    <div class="contact-type">Email</div>
+                    <div class="contact-value">sivkovadm99@gmail.com</div>
+                </a>
+
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                    </div>
+                    <div class="contact-type">Локация</div>
+                    <div class="contact-value">Москва</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p class="footer-text">© 2026 Диана Сивкова. Все права защищены.</p>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = document.getElementById('mobileMenu').classList.contains('active') ? 'hidden' : 'auto';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    
+                    if (entry.target.classList.contains('skills-category')) {
+                        const skillItems = entry.target.querySelectorAll('.skill-item');
+                        skillItems.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.add('visible');
+                            }, index * 100);
+                        });
+                    }
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        document.querySelectorAll('.skills-category').forEach(el => observer.observe(el));
+        document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Parallax optimized: disabled on mobile devices to prevent layout shift and lag
+        window.addEventListener('scroll', () => {
+            if (window.innerWidth <= 768) return; 
+            
+            const scrolled = window.pageYOffset;
+            const circles = document.querySelectorAll('.deco-circle');
+            circles.forEach((circle, index) => {
+                const speed = 0.2 + (index * 0.1);
+                circle.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.05}deg)`;
+            });
+        });
+    </script>
+</body>
+</html>
