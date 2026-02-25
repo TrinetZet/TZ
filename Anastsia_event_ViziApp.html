@@ -292,13 +292,13 @@ function handleAction(e) {
     // --- ДОБАВЛЯЕМ АВТОСКРОЛЛ ---
     // Вычисляем позицию, куда нужно проскроллить: 
     // это верх контентной области + текущее смещение шторки
-    const scrollTarget = contentArea.offsetTop + targetY;
+    const reducedScroll = targetY / 2; 
+    const scrollTarget = contentArea.offsetTop + reducedScroll;
 
-    // Делаем небольшую задержку, чтобы анимация шторки началась чуть раньше скролла
     setTimeout(() => {
         window.scrollTo({
-            top: scrollTarget - 100, // -100px чтобы оставить запас сверху и агент не прилипал к краю
-            behavior: 'smooth'      // Плавная прокрутка
+            top: scrollTarget - 50, // Уменьшила и отступ сверху до 50px, чтобы было компактнее
+            behavior: 'smooth'
         });
     }, 100);
     // ----------------------------
