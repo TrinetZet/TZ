@@ -320,9 +320,25 @@
     };
 
     document.addEventListener('mousedown', handleAction);
-    document.addEventListener('touchstart', (e) => {
-        if(currentTap < TOTAL_TAPS) { e.preventDefault(); handleAction(e); }
-    }, {passive: false});
+    let touchStartY = 0;
+
+document.addEventListener('touchstart', (e) => {
+    // Запоминаем, где пользователь коснулся экрана
+    touchStartY = e.touches[0].clientY;
+}, {passive: true});
+
+document.addEventListener('touchend', (e) => {
+    if (currentTap >= TOTAL_TAPS || isAnimating) return;
+
+    const touchEndY = e.changedTouches[0].clientY;
+    const yDiff = touchEndY - touchStartY;
+
+    // Если палец почти не двигался (разница меньше 10px) — это тап
+    // Если разница большая — значит пользователь скроллит, не мешаем ему
+    if (Math.abs(yDiff) < 10) {
+        handleAction(e.changedTouches[0]);
+    }
+}, {passive: true});
 </script>
 
 </body>
