@@ -153,6 +153,7 @@
     
     /* Тень сверху, чтобы отделять шторку от контента при движении */
     box-shadow: 0 -20px 50px rgba(0,0,0,1); 
+    pointer-events: none;
 }
 
         /* --- Стили контента (как в твоем оригинале) --- */
@@ -270,48 +271,55 @@
         }
     }
  
-    function handleAction(e) { 
-        if (currentTap >= TOTAL_TAPS || isAnimating) return;
-        isAnimating = true;
-        currentTap++;
+function handleAction(e) {
+    if (currentTap >= TOTAL_TAPS || isAnimating) return;
+    isAnimating = true;
+    currentTap++;
 
-        const x = e.clientX || (e.touches && e.touches[0].clientX);
-        const y = e.clientY || (e.touches && e.touches[0].clientY);
-        spawnParticles(x, y);
+    const x = e.clientX || (e.touches && e.touches[0].clientX);
+    const y = e.clientY || (e.touches && e.touches[0].clientY);
+    if(x && y) spawnParticles(x, y);
 
-        // Расчет движения (основан на высоте контентной области)
-        const areaHeight = contentArea.offsetHeight;
-        const targetY = (currentTap / TOTAL_TAPS) * areaHeight;
+    const areaHeight = contentArea.offsetHeight;
+    const targetY = (currentTap / TOTAL_TAPS) * areaHeight;
 
-        // 1. Двигаем шторку
-        curtain.style.transform = `translateY(${targetY}px)`;
-        
-        // 2. Двигаем агента (синхронно)
-        // Добавляем отступ хедера, чтобы он начинал движение оттуда
-        const headerHeight = document.querySelector('.header').offsetHeight;
-        agent.style.transform = `translateY(${headerHeight + targetY}px)`;
+    // 1. Двигаем элементы
+    curtain.style.transform = `translateY(${targetY}px)`;
+    const headerHeight = document.querySelector('.header').offsetHeight;
+    agent.style.transform = `translateY(${headerHeight + targetY}px)`;
+    rope.style.transform = `translateY(calc(-100% + ${headerHeight + targetY + 10}px))`;
 
-        // 3. Трос (растет из-за верхней границы до рук агента)
-        rope.style.transform = `translateY(calc(-100% + ${headerHeight + targetY + 10}px))`;
+    // --- ДОБАВЛЯЕМ АВТОСКРОЛЛ ---
+    // Вычисляем позицию, куда нужно проскроллить: 
+    // это верх контентной области + текущее смещение шторки
+    const scrollTarget = contentArea.offsetTop + targetY;
 
-        // Облачко
-        bubble.classList.add('hidden');
-        setTimeout(() => {
-            if (phrases[currentTap]) {
-                bubble.innerText = phrases[currentTap];
-                bubble.classList.remove('hidden');
-            }
-        }, 300);
+    // Делаем небольшую задержку, чтобы анимация шторки началась чуть раньше скролла
+    setTimeout(() => {
+        window.scrollTo({
+            top: scrollTarget - 100, // -100px чтобы оставить запас сверху и агент не прилипал к краю
+            behavior: 'smooth'      // Плавная прокрутка
+        });
+    }, 100);
+    // ----------------------------
 
-        setTimeout(() => {
-            isAnimating = false;
-            if (currentTap === TOTAL_TAPS) {
-                [curtain, agent, rope].forEach(el => el.style.opacity = '0');
-                finale.classList.add('show');
-            }
-        }, 800);
-    }
+    // Логика облачка
+    bubble.classList.add('hidden');
+    setTimeout(() => {
+        if (phrases[currentTap]) {
+            bubble.innerText = phrases[currentTap];
+            bubble.classList.remove('hidden');
+        }
+    }, 300);
 
+    setTimeout(() => {
+        isAnimating = false;
+        if (currentTap === TOTAL_TAPS) {
+            [curtain, agent, rope].forEach(el => el.style.opacity = '0');
+            finale.classList.add('show');
+        }
+    }, 800);
+}
     // Инициализация позиции агента (ставим его в начало контента)
     window.onload = () => {
         const headerHeight = document.querySelector('.header').offsetHeight;
