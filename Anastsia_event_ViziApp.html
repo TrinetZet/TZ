@@ -283,25 +283,42 @@ function handleAction(e) {
     const areaHeight = contentArea.offsetHeight;
     const targetY = (currentTap / TOTAL_TAPS) * areaHeight;
 
-    // 1. Двигаем элементы
+    // 1. Двигаем элементы (оставляем без изменений)
     curtain.style.transform = `translateY(${targetY}px)`;
     const headerHeight = document.querySelector('.header').offsetHeight;
     agent.style.transform = `translateY(${headerHeight + targetY}px)`;
     rope.style.transform = `translateY(calc(-100% + ${headerHeight + targetY + 10}px))`;
 
-    // --- ДОБАВЛЯЕМ АВТОСКРОЛЛ ---
-    // Вычисляем позицию, куда нужно проскроллить: 
-    // это верх контентной области + текущее смещение шторки
-    const reducedScroll = targetY / 2; 
-    const scrollTarget = contentArea.offsetTop + reducedScroll;
+    // --- МИКРО-СКРОЛЛ (ЕЩЕ МЕНЬШЕ И ПЛАВНЕЕ) ---
+    const startY = window.pageYOffset;
+    
+    // Вместо привязки к координатам контента, просто сдвигаем на 40-60 пикселей вниз за тап
+    // Это даст предсказуемый и короткий результат на любом устройстве
+    const scrollStep = 180; 
+    const targetScrollY = startY + scrollStep;
+    
+    const distance = targetScrollY - startY;
+    const duration = 1500; // Еще больше увеличила время, чтобы движение было почти "ленивым"
+    let startTime = null;
+
+    function smoothStep(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        
+        // Используем более "плоскую" кривую (Ease Out Quart), чтобы старт был незаметным
+        const easing = 1 - Math.pow(1 - progress, 4);
+        
+        window.scrollTo(0, startY + distance * easing);
+
+        if (progress < 1) {
+            requestAnimationFrame(smoothStep);
+        }
+    }
 
     setTimeout(() => {
-        window.scrollTo({
-            top: scrollTarget - 50, // Уменьшила и отступ сверху до 50px, чтобы было компактнее
-            behavior: 'smooth'
-        });
-    }, 100);
-    // ----------------------------
+        requestAnimationFrame(smoothStep);
+    }, 150); // Чуть увеличила задержку старта скролла относительно шторки
+    // ------------------------------------------
 
     // Логика облачка
     bubble.classList.add('hidden');
@@ -320,7 +337,8 @@ function handleAction(e) {
         }
     }, 800);
 }
-    // Инициализация позиции агента (ставим его в начало контента)
+
+// Инициализация позиции агента (ставим его в начало контента)
     window.onload = () => {
         const headerHeight = document.querySelector('.header').offsetHeight;
         agent.style.transform = `translateY(${headerHeight}px)`;
