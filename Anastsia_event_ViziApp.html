@@ -282,19 +282,19 @@ function handleAction(e) {
 
     const areaHeight = contentArea.offsetHeight;
     const targetY = (currentTap / TOTAL_TAPS) * areaHeight;
-
+ 
     // 1. Двигаем элементы (оставляем без изменений)
     curtain.style.transform = `translateY(${targetY}px)`;
     const headerHeight = document.querySelector('.header').offsetHeight;
     agent.style.transform = `translateY(${headerHeight + targetY}px)`;
     rope.style.transform = `translateY(calc(-100% + ${headerHeight + targetY + 10}px))`;
-
+ 
     // --- МИКРО-СКРОЛЛ (ЕЩЕ МЕНЬШЕ И ПЛАВНЕЕ) ---
     const startY = window.pageYOffset;
     
     // Вместо привязки к координатам контента, просто сдвигаем на 40-60 пикселей вниз за тап
     // Это даст предсказуемый и короткий результат на любом устройстве
-    const scrollStep = 180; 
+    const scrollStep = 210; 
     const targetScrollY = startY + scrollStep;
     
     const distance = targetScrollY - startY;
