@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Иноземцев Владислав — Архитектор бизнес-процессов, Project Manager. Превращаю операционный хаос в стратегические активы.">
+    <meta name="description" content="Иноземцев Владислав — Архитектор цифровой трансформации. Превращаю операционный хаос в измеримую прибыль через связь бизнеса и IT.">
     
-    <meta property="og:title" content="Иноземцев Владислав — Архитектор бизнес-процессов">
-    <meta property="og:description" content="6+ лет трансформации бизнеса в InfoSec, HR-tech и автоматизации">
+    <meta property="og:title" content="Иноземцев Владислав — Архитектор цифровой трансформации">
+    <meta property="og:description" content="Мост между амбициями бизнеса и возможностями IT. Аудит, архитектура, внедрение.">
     
-    <title>Иноземцев Владислав — Архитектор процессов</title>
+    <title>Иноземцев Владислав — Архитектор цифровой трансформации</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     
     <style>
+        /* ---- стили остаются без изменений (как в исходном коде) ---- */
         :root {
             --bg-primary: #0a0e1a;
             --bg-secondary: #111827;
@@ -51,7 +52,6 @@
             overflow-x: hidden;
         }
 
-        /* Grain Overlay */
         .grain {
             position: fixed;
             top: 0;
@@ -64,7 +64,6 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
         }
 
-        /* Navigation */
         .nav {
             position: fixed;
             top: 0;
@@ -114,7 +113,6 @@
             cursor: pointer;
         }
 
-        /* Hero Section */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -254,7 +252,6 @@
             border-color: var(--accent-primary);
         }
 
-        /* Hero Visual with Photo */
         .hero-visual {
             position: relative;
             display: flex;
@@ -339,7 +336,6 @@
             line-height: 1.4;
         }
 
-        /* Marquee */
         .marquee {
             background: var(--bg-secondary);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -373,7 +369,6 @@
             100% { transform: translateX(-50%); }
         }
 
-        /* Sections */
         .section {
             padding: 6rem 2rem;
             position: relative;
@@ -402,7 +397,6 @@
             line-height: 1.2;
         }
 
-        /* Experience Grid */
         .experience-grid {
             max-width: 1200px;
             margin: 0 auto;
@@ -469,7 +463,6 @@
             font-weight: 700;
         }
 
-        /* Skills Grid - Fixed Layout */
         .skills-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -538,7 +531,6 @@
             border-color: var(--accent-primary);
         }
 
-        /* Contact Section */
         .contact-section {
             background: var(--bg-secondary);
             border-radius: 32px 32px 0 0;
@@ -619,7 +611,6 @@
             letter-spacing: 0.1em;
         }
 
-        /* Footer */
         footer {
             padding: 3rem 2rem;
             text-align: center;
@@ -633,7 +624,6 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Animations */
         .reveal {
             opacity: 0;
             transform: translateY(30px);
@@ -645,7 +635,6 @@
             transform: translateY(0);
         }
 
-        /* Mobile Menu */
         .mobile-menu {
             display: none;
             position: fixed;
@@ -673,7 +662,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Scroll Progress */
         .scroll-progress {
             position: fixed;
             top: 0;
@@ -684,7 +672,6 @@
             width: 0%;
         }
 
-        /* Mobile Adaptation */
         @media (max-width: 968px) {
             .hero-content {
                 grid-template-columns: 1fr;
@@ -784,9 +771,10 @@
 
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
-        <a href="#about" onclick="closeMobileMenu()">Обо мне</a>
+        <a href="#about" onclick="closeMobileMenu()">Миссия</a>
         <a href="#experience" onclick="closeMobileMenu()">Опыт</a>
-        <a href="#skills" onclick="closeMobileMenu()">Навыки</a>
+        <a href="#products" onclick="closeMobileMenu()">Продукты</a>
+        <a href="#skills" onclick="closeMobileMenu()">Компетенции</a>
         <a href="#contact" onclick="closeMobileMenu()">Контакты</a>
     </div>
 
@@ -794,9 +782,10 @@
     <nav class="nav">
         <div class="nav-logo">Иноземцев Владислав</div>
         <ul class="nav-links">
-            <li><a href="#about" class="nav-link">Обо мне</a></li>
+            <li><a href="#about" class="nav-link">Миссия</a></li>
             <li><a href="#experience" class="nav-link">Опыт</a></li>
-            <li><a href="#skills" class="nav-link">Навыки</a></li>
+            <li><a href="#products" class="nav-link">Продукты</a></li>
+            <li><a href="#skills" class="nav-link">Компетенции</a></li>
             <li><a href="#contact" class="nav-link">Контакты</a></li>
         </ul>
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
@@ -816,15 +805,13 @@
         
         <div class="hero-content">
             <div class="hero-text">
-                <div class="hero-label">Доступен для проектов</div>
+                <div class="hero-label">Мост между бизнесом и IT</div>
                 <h1 class="hero-title">
-                    Иноземцев
-                    <span>Владислав</span>
+                    Архитектор цифровой
+                    <span>трансформации</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Архитектор бизнес-процессов с 6+ годами опыта трансформации 
-                    в InfoSec, HR-tech и автоматизации. Превращаю операционный хаос 
-                    в стратегические активы.
+                    Превращаю операционный хаос в измеримую прибыль. 
                 </p>
                 <div class="hero-cta">
                     <a href="#contact" class="btn-primary">
@@ -834,9 +821,7 @@
                             <polyline points="12 5 19 12 12 19"/>
                         </svg>
                     </a>
-                    <a href="#experience" class="btn-secondary">
-                        Смотреть опыт
-                    </a>
+
                 </div>
             </div>
 
@@ -845,19 +830,19 @@
                     <div class="photo-ring"></div>
                     <div class="photo-ring"></div>
                     <div class="photo-wrapper">
-                        <!-- Замените src на путь к вашему фото -->
+                        <!-- Замените src на путь к вашему актуальному фото -->
                         <img src="https://static.tildacdn.com/tild3137-6665-4036-a438-643764636463/17701549093661_17701.png" alt="Иноземцев Владислав">
                     </div>
                 </div>
                 
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <div class="stat-value">27%</div>
-                        <div class="stat-label">Экономия<br>расходов</div>
+                        <div class="stat-value">50+</div>
+                        <div class="stat-label">Проектов<br>внедрения</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-value">95%</div>
-                        <div class="stat-label">В срок<br>и бюджет</div>
+                        <div class="stat-value">30%</div>
+                        <div class="stat-label">Снижение<br>задержек</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-value">6+</div>
@@ -871,59 +856,59 @@
     <!-- Marquee -->
     <div class="marquee">
         <div class="marquee-content">
-            <span class="marquee-item">Process Architecture</span>
-            <span class="marquee-item active">Business Transformation</span>
-            <span class="marquee-item">InfoSec</span>
-            <span class="marquee-item active">HR Tech</span>
-            <span class="marquee-item">Automation</span>
-            <span class="marquee-item active">Project Management</span>
-            <span class="marquee-item">BPMN 2.0</span>
-            <span class="marquee-item active">System Integration</span>
-            <span class="marquee-item">Process Architecture</span>
-            <span class="marquee-item active">Business Transformation</span>
-            <span class="marquee-item">InfoSec</span>
-            <span class="marquee-item active">HR Tech</span>
-            <span class="marquee-item">Automation</span>
-            <span class="marquee-item active">Project Management</span>
-            <span class="marquee-item">BPMN 2.0</span>
-            <span class="marquee-item active">System Integration</span>
+            <span class="marquee-item">Business-IT bridge</span>
+            <span class="marquee-item active">Digital Ecosystem</span>
+            <span class="marquee-item">As Is → To Be</span>
+            <span class="marquee-item active">Process Mining</span>
+            <span class="marquee-item">Change Management</span>
+            <span class="marquee-item active">ROI automation</span>
+            <span class="marquee-item">ERP integration</span>
+            <span class="marquee-item active">No-code / SaaS</span>
+            <span class="marquee-item">Business-IT bridge</span>
+            <span class="marquee-item active">Digital Ecosystem</span>
+            <span class="marquee-item">As Is → To Be</span>
+            <span class="marquee-item active">Process Mining</span>
+            <span class="marquee-item">Change Management</span>
+            <span class="marquee-item active">ROI automation</span>
+            <span class="marquee-item">ERP integration</span>
+            <span class="marquee-item active">No-code / SaaS</span>
         </div>
     </div>
 
-    <!-- About Section -->
+    <!-- About / Mission Section (три столпа) -->
     <section class="section" id="about">
         <div class="section-header reveal">
-            <span class="section-label">Философия</span>
-            <h2 class="section-title">Цифровой двойник бизнеса для точных решений</h2>
+            <span class="section-label">Три столпа</span>
+            <h2 class="section-title">Как я соединяю бизнес и IT</h2>
         </div>
         
         <div class="experience-grid">
             <div class="experience-card reveal">
-                <div class="exp-company">Стратегия</div>
+                <div class="exp-company">Бизнес‑аналитика</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Проектирование масштабируемых процессов, которые работают на уровне компании, 
-                    а не отдельных отделов. Создаю архитектуру, устойчивую к росту.
+                    Вижу процесс как конвейер. Нахожу узкие места, где теряются деньги, 
+                    и просчитываю ROI каждого улучшения ещё до внедрения.
                 </p>
             </div>
             <div class="experience-card reveal">
-                <div class="exp-company">Аналитика</div>
+                <div class="exp-company">IT‑экспертиза</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Исключение интуитивных решений в пользу data-driven подхода. 
-                    Точный расчёт ROI автоматизации до начала внедрения.
+                    Знаю рынок SaaS, No‑code, ERP, API. Подбираю софт под задачу, 
+                    а не наоборот. Интегрирую без переплат и «зоопарка» систем.
                 </p>
             </div>
             <div class="experience-card reveal">
-                <div class="exp-company">Реализация</div>
+                <div class="exp-company">Управление изменениями</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Не только описываю процессы, но и внедряю их с гарантированным результатом. 
-                    Управление изменениями и обучение команд.
+                    Проектирую процессы так, чтобы люди хотели в них работать. 
+                    Снимаю сопротивление сотрудников и довожу внедрение до результата.
                 </p>
             </div>
             <div class="experience-card reveal">
-                <div class="exp-company">Интеграция</div>
+                <div class="exp-company">Интеграция экосистем</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Проектирование взаимодействий между системами: SIEM, SOAR, ERP, 
-                    CRM, HR-tech. Создание единой экосистемы.
+                    Связываю CRM, ERP, телеграм-ботов, 1С и Битрикс24 в единый 
+                    организм. Данные перестают теряться, отчёты сходятся за секунды.
                 </p>
             </div>
         </div>
@@ -933,7 +918,7 @@
     <section class="section" id="experience" style="background: var(--bg-secondary);">
         <div class="section-header reveal">
             <span class="section-label">Траектория</span>
-            <h2 class="section-title">Опыт трансформации</h2>
+            <h2 class="section-title">Опыт цифровой трансформации</h2>
         </div>
 
         <div class="experience-grid">
@@ -941,10 +926,8 @@
                 <div class="exp-period">2024 — наст. время</div>
                 <div class="exp-company">IZ:SOC (Информзащита)</div>
                 <ul class="exp-list">
-                    <li>Архитектура E2E процессов для SOC-услуг (мониторинг, реагирование)</li>
-                    <li>Редизайн 15+ cross-functional процессов InfoSec</li>
-                    <li>Разработка BPMN-стандартов и шаблонов</li>
-                    <li>Интеграции SIEM, SOAR, тикет-системы</li>
+                    <li>Архитектура E2E процессов для SOC-услуг, связка SIEM, SOAR, тикетных систем</li>
+                    <li>Редизайн 15+ cross-functional процессов InfoSec с прицелом на прозрачность SLA</li>
                 </ul>
             </div>
 
@@ -952,21 +935,18 @@
                 <div class="exp-period">2023 — 2024</div>
                 <div class="exp-company">Security Vision</div>
                 <ul class="exp-list">
-                    <li>Процессное проектирование внедрения ИБ-систем</li>
-                    <li>Метрики качества на всех этапах (pre-sale → post-support)</li>
-                    <li>Интеграции с ERP, CRM, HR-системами заказчиков</li>
-                    <li>Оптимизация delivery-процессов</li>
+                    <li>Процессное проектирование внедрения ИБ-систем (pre-sale → post-support)</li>
+                    <li>Оптимизация delivery-процессов, сокращение time-to-market на 20%</li>
                 </ul>
             </div>
 
             <div class="experience-card reveal">
                 <div class="exp-period">2022 — 2023</div>
-                <div class="exp-company">Skillaz</div>
+                <div class="exp-company">Skillaz (HR-tech)</div>
                 <ul class="exp-list">
                     <li>Дизайн HR-процессов найма и адаптации в B2B SaaS</li>
-                    <li>Архитектура интеграций с 1С, SAP, корп. порталами</li>
-                    <li>Процессные цепочки «клиент → продукт → реализация»</li>
-                    <li>Согласование HR, Finance, Legal процессов</li>
+                    <li>Архитектура интеграций с 1С, SAP, корпоративными порталами</li>
+                    <li>Согласование цепочек HR, Finance, Legal</li>
                 </ul>
             </div>
 
@@ -974,20 +954,61 @@
                 <div class="exp-period">2021 — 2022</div>
                 <div class="exp-company">Таймлизинг</div>
                 <ul class="exp-list">
-                    <li>Архитектура документооборота от документа до архива</li>
-                    <li>Интеграционные схемы CRM → ERP → Банк → ЭДО</li>
-                    <li>Реинжиниринг продаж, логистики, сервиса</li>
-                    <li>Библиотека типовых процессов для франчайзи</li>
+                    <li>Архитектура документооборота от заявки до архива (CRM → ERP → Банк → ЭДО)</li>
+                    <li>Реинжиниринг продаж, логистики, сервиса для франчайзи</li>
+                    <li>Библиотека типовых процессов, сократившая время запуска новых точек</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- Skills Section - Fixed Grid -->
-    <section class="section" id="skills">
+    <!-- Products Section (новый блок) -->
+    <section class="section" id="products">
         <div class="section-header reveal">
-            <span class="section-label">Компетенции</span>
-            <h2 class="section-title">Инструментарий архитектора</h2>
+            <span class="section-label">Что я продаю</span>
+            <h2 class="section-title">Цифровая экосистема без хаоса</h2>
+        </div>
+        <div class="experience-grid">
+            <div class="experience-card reveal">
+                <div class="exp-period">Этап 1</div>
+                <div class="exp-company">Аудит «As Is»</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
+                    Карта текущего состояния: где бизнес теряет деньги, где данные застревают, 
+                    какие интеграции отсутствуют. Конкретные точки приложения усилий.
+                </p>
+            </div>
+            <div class="experience-card reveal">
+                <div class="exp-period">Этап 2</div>
+                <div class="exp-company">Проект «To Be»</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
+                    Архитектурный план новой цифровой реальности: процессы + софт + интеграции. 
+                    Расчёт ROI и дорожная карта внедрения.
+                </p>
+            </div>
+            <div class="experience-card reveal">
+                <div class="exp-period">Этап 3</div>
+                <div class="exp-company">Внедрение и авторский надзор</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
+                    Не просто ставлю софт, а довожу систему до работающего состояния. 
+                    Обучение команд, снятие сопротивления, корректировка под реальные бизнес-показатели.
+                </p>
+            </div>
+            <div class="experience-card reveal">
+                <div class="exp-period">Бонус</div>
+                <div class="exp-company">Поддержка и развитие</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
+                    После запуска остаюсь на связи: помогаю масштабировать, дорабатывать 
+                    и адаптировать экосистему под новые вызовы бизнеса.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section (расширенный арсенал) -->
+    <section class="section" id="skills" style="background: var(--bg-secondary);">
+        <div class="section-header reveal">
+            <span class="section-label">Арсенал</span>
+            <h2 class="section-title">Инструменты архитектора</h2>
         </div>
 
         <div class="skills-container">
@@ -998,15 +1019,56 @@
                             <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
                         </svg>
                     </div>
-                    <div class="skill-cat-title">Архитектура процессов</div>
+                    <div class="skill-cat-title">Бизнес‑аналитика</div>
                 </div>
                 <div class="skill-tags">
                     <span class="skill-tag">BPMN 2.0</span>
                     <span class="skill-tag">IDEF0</span>
-                    <span class="skill-tag">SADT</span>
                     <span class="skill-tag">Process Mining</span>
                     <span class="skill-tag">Value Stream Mapping</span>
                     <span class="skill-tag">AS-IS / TO-BE</span>
+                    <span class="skill-tag">SWOT / PEST</span>
+                    <span class="skill-tag">ROI Calculation</span>
+                </div>
+            </div>
+
+            <div class="skill-category reveal">
+                <div class="skill-cat-header">
+                    <div class="skill-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                    </div>
+                    <div class="skill-cat-title">IT‑экспертиза & интеграции</div>
+                </div>
+                <div class="skill-tags">
+                    <span class="skill-tag">SaaS / No-code</span>
+                    <span class="skill-tag">ERP (1С, SAP)</span>
+                    <span class="skill-tag">CRM (Bitrix24, Amo)</span>
+                    <span class="skill-tag">API / REST / GraphQL</span>
+                    <span class="skill-tag">SIEM / SOAR</span>
+                    <span class="skill-tag">SQL / NoSQL</span>
+                </div>
+            </div>
+
+            <div class="skill-category reveal">
+                <div class="skill-cat-header">
+                    <div class="skill-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="20" x2="18" y2="10"/>
+                            <line x1="12" y1="20" x2="12" y2="4"/>
+                            <line x1="6" y1="20" x2="6" y2="14"/>
+                        </svg>
+                    </div>
+                    <div class="skill-cat-title">Управление изменениями</div>
+                </div>
+                <div class="skill-tags">
+                    <span class="skill-tag">Change Management</span>
+                    <span class="skill-tag">Adoption Strategies</span>
+                    <span class="skill-tag">Stakeholder Analysis</span>
+                    <span class="skill-tag">Training & Support</span>
+                    <span class="skill-tag">KPI Design</span>
                 </div>
             </div>
 
@@ -1025,48 +1087,9 @@
                 <div class="skill-tags">
                     <span class="skill-tag">PMI/PMBOK</span>
                     <span class="skill-tag">Agile/Scrum</span>
-                    <span class="skill-tag">Waterfall</span>
                     <span class="skill-tag">SAFe</span>
                     <span class="skill-tag">Risk Management</span>
-                    <span class="skill-tag">Change Management</span>
-                </div>
-            </div>
-
-            <div class="skill-category reveal">
-                <div class="skill-cat-header">
-                    <div class="skill-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="16 18 22 12 16 6"/>
-                            <polyline points="8 6 2 12 8 18"/>
-                        </svg>
-                    </div>
-                    <div class="skill-cat-title">Технологии</div>
-                </div>
-                <div class="skill-tags">
                     <span class="skill-tag">JIRA/Confluence</span>
-                    <span class="skill-tag">Visio/Figma</span>
-                    <span class="skill-tag">SQL/NoSQL</span>
-                    <span class="skill-tag">Power BI</span>
-                </div>
-            </div>
-
-            <div class="skill-category reveal">
-                <div class="skill-cat-header">
-                    <div class="skill-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <line x1="18" y1="20" x2="18" y2="10"/>
-                            <line x1="12" y1="20" x2="12" y2="4"/>
-                            <line x1="6" y1="20" x2="6" y2="14"/>
-                        </svg>
-                    </div>
-                    <div class="skill-cat-title">Бизнес-анализ</div>
-                </div>
-                <div class="skill-tags">
-                    <span class="skill-tag">SWOT/PEST</span>
-                    <span class="skill-tag">Stakeholder Analysis</span>
-                    <span class="skill-tag">Requirements Engineering</span>
-                    <span class="skill-tag">ROI Calculation</span>
-                    <span class="skill-tag">KPI Design</span>
                 </div>
             </div>
         </div>
@@ -1076,11 +1099,8 @@
     <section class="contact-section" id="contact">
         <div class="contact-content">
             <span class="section-label" style="justify-content: center; display: flex;">Контакты</span>
-            <h2 class="contact-title reveal">Давайте создадим систему, которая работает</h2>
-            <p class="contact-subtitle reveal">
-                Открыт для амбициозных проектов по трансформации бизнес-процессов, 
-                автоматизации и построения цифровых экосистем.
-            </p>
+            <h2 class="contact-title reveal">Давайте спроектируем вашу цифровую экосистему</h2>
+
             
             <div class="contact-links reveal">
                 <a href="https://t.me/inozemtsev_ba" class="contact-link" target="_blank">
@@ -1108,7 +1128,7 @@
     </section>
 
     <footer>
-        <p>© 2026 Иноземцев Владислав. Архитектор бизнес-процессов.</p>
+        <p>© 2026 Иноземцев Владислав — Архитектор цифровой трансформации.</p>
         <p style="opacity: 0.6; font-size: 0.8rem;">Москва</p>
     </footer>
 
@@ -1147,7 +1167,7 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // WebGL Hero Background
+        // WebGL Hero Background (без изменений)
         const canvas = document.getElementById('heroCanvas');
         const ctx = canvas.getContext('2d');
         let width, height;
