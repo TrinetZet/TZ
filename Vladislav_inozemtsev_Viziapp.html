@@ -3,19 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Иноземцев Владислав — Архитектор цифровой трансформации. Превращаю операционный хаос в измеримую прибыль через связь бизнеса и IT.">
+    <meta name="description" content="Иноземцев Владислав — Архитектор цифровой и AI трансформации. Превращаю операционный хаос в измеримую прибыль через связь бизнеса, IT и автономных ИИ-агентов.">
     
-    <meta property="og:title" content="Иноземцев Владислав — Архитектор цифровой трансформации">
-    <meta property="og:description" content="Мост между амбициями бизнеса и возможностями IT. Аудит, архитектура, внедрение.">
+    <meta property="og:title" content="Иноземцев Владислав — Архитектор цифровой и AI трансформации">
+    <meta property="og:description" content="Мост между амбициями бизнеса, возможностями IT и нейросетей. Аудит, архитектура, внедрение RAG и агентов.">
     
     <title>Иноземцев Владислав — Архитектор цифровой трансформации</title>
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
     <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet">
     
     <style>
-        /* ---- стили остаются без изменений (как в исходном коде) ---- */
         :root {
             --bg-primary: #0a0e1a;
             --bg-secondary: #111827;
@@ -347,7 +345,7 @@
 
         .marquee-content {
             display: inline-flex;
-            animation: marquee 25s linear infinite;
+            animation: marquee 30s linear infinite;
         }
 
         .marquee-item {
@@ -769,7 +767,6 @@
     <div class="scroll-progress" id="scrollProgress"></div>
     <div class="grain"></div>
 
-    <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="#about" onclick="closeMobileMenu()">Миссия</a>
         <a href="#experience" onclick="closeMobileMenu()">Опыт</a>
@@ -778,7 +775,6 @@
         <a href="#contact" onclick="closeMobileMenu()">Контакты</a>
     </div>
 
-    <!-- Navigation -->
     <nav class="nav">
         <div class="nav-logo">Иноземцев Владислав</div>
         <ul class="nav-links">
@@ -797,7 +793,6 @@
         </button>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-bg">
             <canvas id="heroCanvas"></canvas>
@@ -807,11 +802,11 @@
             <div class="hero-text">
                 <div class="hero-label">Мост между бизнесом и IT</div>
                 <h1 class="hero-title">
-                    Архитектор цифровой
+                    Архитектор цифровой и AI
                     <span>трансформации</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Превращаю операционный хаос в измеримую прибыль. 
+                    Превращаю операционный хаос в измеримую прибыль через системную архитектуру и внедрение ИИ-агентов.
                 </p>
                 <div class="hero-cta">
                     <a href="#contact" class="btn-primary">
@@ -821,7 +816,6 @@
                             <polyline points="12 5 19 12 12 19"/>
                         </svg>
                     </a>
-
                 </div>
             </div>
 
@@ -830,7 +824,6 @@
                     <div class="photo-ring"></div>
                     <div class="photo-ring"></div>
                     <div class="photo-wrapper">
-                        <!-- Замените src на путь к вашему актуальному фото -->
                         <img src="https://static.tildacdn.com/tild3137-6665-4036-a438-643764636463/17701549093661_17701.png" alt="Иноземцев Владислав">
                     </div>
                 </div>
@@ -853,36 +846,37 @@
         </div>
     </section>
 
-    <!-- Marquee -->
     <div class="marquee">
         <div class="marquee-content">
             <span class="marquee-item">Business-IT bridge</span>
-            <span class="marquee-item active">Digital Ecosystem</span>
-            <span class="marquee-item">As Is → To Be</span>
-            <span class="marquee-item active">Process Mining</span>
+            <span class="marquee-item active">AI Agents</span>
+            <span class="marquee-item">Process Mining</span>
+            <span class="marquee-item active">Vector Databases</span>
             <span class="marquee-item">Change Management</span>
-            <span class="marquee-item active">ROI automation</span>
+            <span class="marquee-item active">Make / n8n</span>
             <span class="marquee-item">ERP integration</span>
-            <span class="marquee-item active">No-code / SaaS</span>
+            <span class="marquee-item active">RAG Architecture</span>
             <span class="marquee-item">Business-IT bridge</span>
-            <span class="marquee-item active">Digital Ecosystem</span>
-            <span class="marquee-item">As Is → To Be</span>
-            <span class="marquee-item active">Process Mining</span>
+            <span class="marquee-item active">AI Agents</span>
+            <span class="marquee-item">Process Mining</span>
+            <span class="marquee-item active">Vector Databases</span>
             <span class="marquee-item">Change Management</span>
-            <span class="marquee-item active">ROI automation</span>
+            <span class="marquee-item active">Make / n8n</span>
             <span class="marquee-item">ERP integration</span>
-            <span class="marquee-item active">No-code / SaaS</span>
+            <span class="marquee-item active">RAG Architecture</span>
         </div>
     </div>
 
-    <!-- About / Mission Section (три столпа) -->
     <section class="section" id="about">
-        <div class="section-header reveal">
-            <span class="section-label">Три столпа</span>
-            <h2 class="section-title">Как я соединяю бизнес и IT</h2>
-        </div>
+
         
         <div class="experience-grid">
+            <div class="experience-card reveal" style="grid-column: 1 / -1; border-color: rgba(6, 182, 212, 0.3); background: rgba(6, 182, 212, 0.03);">
+                <div class="exp-company" style="color: var(--accent-secondary);">AI‑Трансформация и ИИ-Агенты</div>
+                <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
+                    Проектирую и внедряю отказоустойчивую архитектуру на базе искусственного интеллекта. Разрабатываю автономных ИИ-агентов, интегрирую векторные базы данных (RAG) для семантического поиска по корпоративным знаниям и автоматизирую бизнес-процессы с помощью Make и n8n, бесшовно связывая нейросети с классическим софтом.
+                </p>
+            </div>
             <div class="experience-card reveal">
                 <div class="exp-company">Бизнес‑аналитика</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
@@ -914,7 +908,6 @@
         </div>
     </section>
 
-    <!-- Experience Section -->
     <section class="section" id="experience" style="background: var(--bg-secondary);">
         <div class="section-header reveal">
             <span class="section-label">Траектория</span>
@@ -962,7 +955,6 @@
         </div>
     </section>
 
-    <!-- Products Section (новый блок) -->
     <section class="section" id="products">
         <div class="section-header reveal">
             <span class="section-label">Что я продаю</span>
@@ -979,10 +971,10 @@
             </div>
             <div class="experience-card reveal">
                 <div class="exp-period">Этап 2</div>
-                <div class="exp-company">Проект «To Be»</div>
+                <div class="exp-company">Проект «To Be» & AI</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
-                    Архитектурный план новой цифровой реальности: процессы + софт + интеграции. 
-                    Расчёт ROI и дорожная карта внедрения.
+                    Архитектурный план новой цифровой реальности: процессы + софт + интеграции агентов. 
+                    Расчёт ROI и дорожная карта внедрения автоматизации.
                 </p>
             </div>
             <div class="experience-card reveal">
@@ -998,13 +990,12 @@
                 <div class="exp-company">Поддержка и развитие</div>
                 <p style="color: var(--text-secondary); line-height: 1.7; font-size: 0.95rem;">
                     После запуска остаюсь на связи: помогаю масштабировать, дорабатывать 
-                    и адаптировать экосистему под новые вызовы бизнеса.
+                    и адаптировать экосистему под новые вызовы бизнеса и технологии ИИ.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- Skills Section (расширенный арсенал) -->
     <section class="section" id="skills" style="background: var(--bg-secondary);">
         <div class="section-header reveal">
             <span class="section-label">Арсенал</span>
@@ -1012,6 +1003,26 @@
         </div>
 
         <div class="skills-container">
+            <div class="skill-category reveal" style="grid-column: 1 / -1; border-color: rgba(6, 182, 212, 0.3);">
+                <div class="skill-cat-header">
+                    <div class="skill-icon" style="color: var(--accent-secondary); background: rgba(6, 182, 212, 0.1);">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12c-2.4 0-4.6-1-6.4-2.6C13 7.6 12 5.4 12 3c0 2.4-1 4.6-2.6 6.4C7.6 11 5.4 12 3 12c2.4 0 4.6 1 6.4 2.6C11 16.4 12 18.6 12 21c0-2.4 1-4.6 2.6-6.4C16.4 13 18.6 12 21 12z"/>
+                        </svg>
+                    </div>
+                    <div class="skill-cat-title">AI-Автоматизация & Инженерия данных</div>
+                </div>
+                <div class="skill-tags">
+                    <span class="skill-tag">AI Agents</span>
+                    <span class="skill-tag">Vector Databases (Pinecone, Qdrant)</span>
+                    <span class="skill-tag">RAG Architecture</span>
+                    <span class="skill-tag">Make (Integromat)</span>
+                    <span class="skill-tag">n8n</span>
+                    <span class="skill-tag">LLM Orchestration</span>
+                    <span class="skill-tag">Prompt Engineering</span>
+                </div>
+            </div>
+
             <div class="skill-category reveal">
                 <div class="skill-cat-header">
                     <div class="skill-icon">
@@ -1095,13 +1106,11 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section class="contact-section" id="contact">
         <div class="contact-content">
             <span class="section-label" style="justify-content: center; display: flex;">Контакты</span>
             <h2 class="contact-title reveal">Давайте спроектируем вашу цифровую экосистему</h2>
 
-            
             <div class="contact-links reveal">
                 <a href="https://t.me/inozemtsev_ba" class="contact-link" target="_blank">
                     <span>Telegram для связи</span>
@@ -1128,7 +1137,7 @@
     </section>
 
     <footer>
-        <p>© 2026 Иноземцев Владислав — Архитектор цифровой трансформации.</p>
+        <p>© 2026 Иноземцев Владислав — Архитектор цифровой и AI трансформации.</p>
         <p style="opacity: 0.6; font-size: 0.8rem;">Москва</p>
     </footer>
 
@@ -1167,7 +1176,7 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // WebGL Hero Background (без изменений)
+        // WebGL Hero Background
         const canvas = document.getElementById('heroCanvas');
         const ctx = canvas.getContext('2d');
         let width, height;
