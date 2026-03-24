@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IZ:SOC - Агент первой линии поддержки</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      background: linear-gradient(135deg, #0a0118 0%, #1a0a2e 50%, #2d1b4e 100%);
+      color: #e5e7eb;
+      line-height: 1.6;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .messenger-container {
+      display: flex;
+      height: 100vh;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    /* Левая панель - список чатов */
+    .sidebar {
+      width: 380px;
+      background: rgba(15, 10, 30, 0.95);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(168, 85, 247, 0.2);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+      background: rgba(30, 20, 50, 0.6);
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+
+    .logo-mini {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #6b21a8, #4c1d95);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .logo-text {
+      flex: 1;
+    }
+
+    .logo-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+    }
+
+    .logo-subtitle {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+
+    .search-box {
+      margin-top: 16px;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      background: rgba(30, 20, 50, 0.6);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 12px;
+      color: #e5e7eb;
+      font-size: 14px;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+      border-color: #a855f7;
+      background: rgba(30, 20, 50, 0.8);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #9ca3af;
+    }
+
+    .chats-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .chat-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 4px;
+      border: 1px solid transparent;
+    }
+
+    .chat-item:hover {
+      background: rgba(168, 85, 247, 0.08);
+      border-color: rgba(168, 85, 247, 0.2);
+    }
+
+    .chat-item.active {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.15));
+      border-color: rgba(168, 85, 247, 0.4);
+      box-shadow: 0 4px 16px rgba(168, 85, 247, 0.2);
+    }
+
+    .chat-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #a855f7, #8b5cf6);
+      position: relative;
+    }
+
+    .chat-item.active .chat-avatar {
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.4);
+    }
+
+    .chat-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #a855f7, #c084fc);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: white;
+      border: 2px solid rgba(15, 10, 30, 0.95);
+    }
+
+    .chat-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .chat-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .chat-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .chat-time {
+      font-size: 12px;
+      color: #9ca3af;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .chat-preview {
+      font-size: 13px;
+      color: #9ca3af;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.4;
+    }
+
+    .chat-item.active .chat-preview {
+      color: #d1d5db;
+    }
+
+    /* Правая панель - содержимое чата */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: rgba(10, 5, 20, 0.8);
+      position: relative;
+    }
+
+    .content-header {
+      padding: 20px 32px;
+      background: rgba(15, 10, 30, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(168, 85, 247, 0.2);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .mobile-menu-btn {
+      display: none;
+      width: 40px;
+      height: 40px;
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 10px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #a855f7;
+      transition: all 0.2s ease;
+    }
+
+    .mobile-menu-btn:hover {
+      background: rgba(168, 85, 247, 0.2);
+    }
+
+    .header-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      background: linear-gradient(135deg, #a855f7, #8b5cf6);
+      flex-shrink: 0;
+    }
+
+    .header-info {
+      flex: 1;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 2px;
+    }
+
+    .header-status {
+      font-size: 13px;
+      color: #9ca3af;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .content-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 32px;
+      padding-bottom: 120px;
+    }
+
+    .chat-section {
+      opacity: 0;
+      display: none;
+      animation: fadeIn 0.4s ease forwards;
+    }
+
+    .chat-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .messages-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .message.agent .message-avatar {
+      background: linear-gradient(135deg, #a855f7, #8b5cf6);
+    }
+
+    .message.user .message-avatar {
+      background: rgba(168, 85, 247, 0.2);
+      border: 1px solid rgba(168, 85, 247, 0.4);
+    }
+
+    .message-content {
+      max-width: 70%;
+      background: rgba(30, 20, 50, 0.8);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 16px;
+      padding: 16px 20px;
+      position: relative;
+    }
+
+    .message.agent .message-content {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(139, 92, 246, 0.1));
+      border-color: rgba(168, 85, 247, 0.3);
+    }
+
+    .message.user .message-content {
+      background: rgba(30, 20, 50, 0.6);
+      border-color: rgba(168, 85, 247, 0.2);
+    }
+
+    .message-text {
+      color: #e5e7eb;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .message-text strong {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .message-text ul {
+      margin: 12px 0;
+      padding-left: 20px;
+    }
+
+    .message-text li {
+      margin: 8px 0;
+      color: #d1d5db;
+    }
+
+    .message-text code {
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace;
+      font-size: 13px;
+      color: #c084fc;
+    }
+
+    .info-box {
+      background: rgba(168, 85, 247, 0.1);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 12px;
+      padding: 16px;
+      margin: 12px 0;
+    }
+
+    .info-box-title {
+      font-weight: 600;
+      color: #c084fc;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-box-content {
+      color: #d1d5db;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .stat-card {
+      background: rgba(30, 20, 50, 0.6);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      background: rgba(168, 85, 247, 0.1);
+      border-color: rgba(168, 85, 247, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #a855f7, #e879f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(30, 20, 50, 0.5);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #a855f7, #c084fc);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #9333ea, #a855f7);
+    }
+
+    /* Mobile adaptations */
+    @media (max-width: 968px) {
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        z-index: 1000;
+        transform: translateX(-100%);
+      }
+
+      .sidebar.mobile-open {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.5);
+      }
+
+      .mobile-menu-btn {
+        display: flex;
+      }
+
+      .message-content {
+        max-width: 85%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .sidebar {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .content-header {
+        padding: 16px 20px;
+      }
+
+      .content-body {
+        padding: 20px 16px;
+      }
+
+      .message-content {
+        max-width: 90%;
+        padding: 12px 16px;
+      }
+
+      .message-text {
+        font-size: 14px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    /* Message Input Footer */
+    .message-input-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 10, 30, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(168, 85, 247, 0.2);
+      padding: 20px 32px;
+      display: none;
+    }
+
+    .message-input-container.active {
+      display: block;
+    }
+
+    .input-wrapper {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .message-input {
+      flex: 1;
+      background: rgba(30, 20, 50, 0.8);
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 16px;
+      padding: 14px 20px;
+      color: #e5e7eb;
+      font-size: 15px;
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      line-height: 1.5;
+      resize: none;
+      outline: none;
+      transition: all 0.3s ease;
+      min-height: 52px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    .message-input:focus {
+      border-color: #a855f7;
+      background: rgba(30, 20, 50, 0.95);
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+    }
+
+    .message-input::placeholder {
+      color: #6b7280;
+    }
+
+    .send-button {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #a855f7, #8b5cf6);
+      border: none;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(168, 85, 247, 0.3);
+    }
+
+    .send-button:hover:not(:disabled) {
+      background: linear-gradient(135deg, #9333ea, #7c3aed);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(168, 85, 247, 0.4);
+    }
+
+    .send-button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .send-button:disabled {
+      background: rgba(168, 85, 247, 0.2);
+      cursor: not-allowed;
+      opacity: 0.5;
+      box-shadow: none;
+    }
+
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .typing-indicator.active {
+      display: flex;
+    }
+
+    .typing-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #a855f7, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .typing-dots {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(139, 92, 246, 0.1));
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: #a855f7;
+      border-radius: 50%;
+      animation: typingBounce 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typingBounce {
+      0%, 60%, 100% {
+        transform: translateY(0);
+      }
+      30% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .message-input-container {
+        padding: 16px 20px;
+      }
+
+      .send-button {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+      }
+
+      .message-input {
+        font-size: 14px;
+        padding: 12px 16px;
+        min-height: 48px;
+      }
+    }
+    
+    .logo-section img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Именно это свойство вписывает картинку в рамки без сплющивания */
+  display: block;
+}
+    
+  </style>
+</head>
+<body>
+  <div class="messenger-container">
+    <!-- Левая панель - список чатов -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-section">
+          <div class="logo-mini"><img src="https://optim.tildacdn.com/tild6638-3566-4737-a636-346637643930/-/resize/252x/-/format/webp/image-no-bg-preview_.png.webp" alt="Логотип" /></div>
+          <div class="logo-text">
+            <div class="logo-title">IZ:SOC АФИНА</div>
+            <div class="logo-subtitle">Агент первой линии</div>
+          </div>
+        </div>
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" placeholder="Поиск по чатам...">
+        </div>
+      </div>
+
+      <div class="chats-list">
+        <div class="chat-item active" data-chat="1">
+          <div class="chat-avatar">
+            🤖
+          </div>
+          <div class="chat-info">
+            <div class="chat-header">
+              <div class="chat-name">Диалог с Афиной</div>
+              <div class="chat-time">14:32</div>
+            </div>
+            <div class="chat-preview">Живая база знаний</div>
+          </div>
+        </div>
+
+        <div class="chat-item" data-chat="2">
+          <div class="chat-avatar">
+            👨‍💻
+          </div>
+          <div class="chat-info">
+            <div class="chat-header">
+              <div class="chat-name">Чат эскалации</div>
+              <div class="chat-time">14:15</div>
+            </div>
+            <div class="chat-preview">Вызов специалиста</div>
+          </div>
+        </div>
+
+        <div class="chat-item" data-chat="3">
+          <div class="chat-avatar">
+            ⚙️
+          </div>
+          <div class="chat-info">
+            <div class="chat-header">
+              <div class="chat-name">Как работает агент</div>
+              <div class="chat-time">13:50</div>
+            </div>
+            <div class="chat-preview">Описание процесса работы</div>
+          </div>
+        </div>
+
+        <div class="chat-item" data-chat="4">
+          <div class="chat-avatar">
+            🧠
+          </div>
+          <div class="chat-info">
+            <div class="chat-header">
+              <div class="chat-name">Технология RAG</div>
+              <div class="chat-time">13:20</div>
+            </div>
+            <div class="chat-preview">Как работает БД</div>
+          </div>
+        </div>
+
+        <div class="chat-item" data-chat="5">
+          <div class="chat-avatar">
+            💾
+          </div>
+          <div class="chat-info">
+            <div class="chat-header">
+              <div class="chat-name">Системные требования</div>
+              <div class="chat-time">12:45</div>
+            </div>
+            <div class="chat-preview">Что нам нужно для установки</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Правая панель - содержимое чата -->
+    <div class="main-content">
+      <div class="content-header">
+        <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+        <div class="header-avatar" id="headerAvatar">🤖</div>
+        <div class="header-info">
+          <div class="header-title" id="headerTitle">Диалог с Афиной</div>
+          <div class="header-status">
+            <span class="status-dot"></span>
+            <span>Агент онлайн</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-body" id="contentBody">
+        <!-- Чат 1: Диалог с агентом -->
+        <div class="chat-section active" data-section="1">
+          
+        </div>
+
+        <!-- Чат 2: Эскалация к специалисту -->
+        <div class="chat-section" data-section="2">
+          
+        </div>
+
+        <!-- Чат 3: Как работает агент -->
+        <div class="chat-section" data-section="3">
+          <div class="messages-container">
+            
+            <div class="message user">
+              <div class="message-avatar">👤</div>
+              <div class="message-content">
+                <div class="message-text">
+                  Как технически устроена Афина? Какой пайплайн обработки запросов вы используете?
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <strong>Архитектура пайплайна Афины (IZ SOC) на базе n8n</strong>
+                  <div class="info-box" style="margin-top: 12px;">
+                    <div class="info-box-title">📥 Этап 1: Маршрутизация (Webhook & Classifier)</div>
+                    <div class="info-box-content">
+                      Запрос поступает в систему и моментально проходит через AI-классификатор текста:
+                      <ul style="margin-top: 8px;">
+                        <li><strong>Технический запрос:</strong> направляется по ветке автономного решения.</li>
+                        <li><strong>Запрос эскалации:</strong> если клиент просит человека, система сразу переводит диалог инженеру и собирает историю контекста.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <div class="info-box">
+                    <div class="info-box-title">🧠 Этап 2: Строгий поиск фактов (RAG + Qdrant)</div>
+                    <div class="info-box-content">
+                      Агент подчиняется правилу <strong>ZERO HALLUCINATION RULE</strong>. Прежде чем ответить, он обращается к векторной базе данных (Qdrant), где извлекает:
+                      <ul style="margin-top: 8px;">
+                        <li>Официальную документацию MaxPatrol EDR.</li>
+                        <li>Внутренние плейбуки и архитектуру IZ SOC.</li>
+                        <li>Точные IP-адреса, ключи реестра и рабочие порты (например, 8444).</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <div class="info-box">
+                    <div class="info-box-title">🌐 Этап 3: Валидация и безопасность (DeepSeek + Tavily)</div>
+                    <div class="info-box-content">
+                      За логику отвечает модель <strong>DeepSeek-Reasoner</strong>. Если проблема системная (ОС, права доступа, сеть), агент автономно идет в интернет через поисковый инструмент (Tavily) для валидации команд. <br><br>При этом работает <strong>SAFETY GATE</strong>: агенту категорически запрещено рекомендовать отключение штатных механизмов защиты (UAC, Defender, SELinux).
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <div class="info-box">
+                    <div class="info-box-title">🎯 Этап 4: Anti-Water Корректура и вывод</div>
+                    <div class="info-box-content">
+                      Финальный этап формирования ответа перед отправкой в веб-интерфейс:
+                      <ul style="margin-top: 8px;">
+                        <li><strong>AI-Корректор:</strong> отдельный агент забирает сырой текст, вырезает лишние вступления ("воду") и упаковывает факты в строгий UI-формат.</li>
+                        <li><strong>Safe-Эскалация:</strong> если операция несет высокий риск (массовое удаление, изменение системных политик), нейросеть формирует техническое саммари для специалиста и блокирует опасное действие.</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="stats-grid" style="margin-top: 16px;">
+                    <div class="stat-card">
+                      <div class="stat-value">100%</div>
+                      <div class="stat-label">Опора на факты (RAG)</div>
+                    </div>
+
+                    <div class="stat-card">
+                      <div class="stat-value">n8n</div>
+                      <div class="stat-label">Ядро автоматизации</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="chat-section" data-section="4">
+          <div class="messages-container">
+            <div class="message user">
+              <div class="message-avatar">👤</div>
+              <div class="message-content">
+                <div class="message-text">
+                  Что такое RAG и почему надо использовать именно эту технологию для агента техподдержки?
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <strong>RAG (Retrieval-Augmented Generation)</strong> — это технология, которая дает нейросети доступ к закрытым корпоративным данным. 
+                  <div class="info-box" style="margin-top: 12px;">
+                    <div class="info-box-title">🎓 Простая аналогия</div>
+                    <div class="info-box-content">
+                      Представьте себе экзамен. Обычная нейросеть (ChatGPT) — это студент, который отвечает по памяти. Если он что-то забыл, он может начать фантазировать (галлюцинировать). <br><br>
+                      <strong>Нейросеть с RAG</strong> — это отличник, которому разрешили пользоваться официальными конспектами прямо на экзамене. Прежде чем ответить, он находит нужную страницу в правилах и цитирует точные факты.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <strong>Как это работает под капотом (3 шага):</strong>
+                  <div class="info-box" style="margin-top: 12px;">
+                    <div class="info-box-title">1️⃣ Векторная база знаний (Сбор данных)</div>
+                    <div class="info-box-content">
+                      Мы загружаем все официальные регламенты IZ SOC, мануалы MaxPatrol EDR и плейбуки в специальную базу данных (Qdrant). Текст превращается в числа (векторы), чтобы ИИ понимал смысл слов, а не просто искал точные совпадения.
+                    </div>
+                  </div>
+                  <div class="info-box" style="margin-top: 12px;">
+                    <div class="info-box-title">2️⃣ Умный поиск (Retrieval)</div>
+                    <div class="info-box-content">
+                      Вы пишете: <i>"Как открыть порт 8444?"</i>. Система мгновенно сканирует базу и достает конкретные абзацы из документации, где описан этот процесс.
+                    </div>
+                  </div>
+                  <div class="info-box" style="margin-top: 12px;">
+                    <div class="info-box-title">3️⃣ Генерация ответа (Generation)</div>
+                    <div class="info-box-content">
+                      Языковая модель берет ваш вопрос и найденные сухие инструкции. Затем она объединяет их и пишет для вас понятный, пошаговый ответ без лишней воды.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <strong>Главные преимущества для вас:</strong>
+                  <ul>
+                    <li><strong>Никаких выдумок:</strong> Я использую только те команды и IP-адреса, которые есть в нашей документации.</li>
+                    <li><strong>Актуальность:</strong> Если выходит новый патч, инженеры просто добавляют файл в базу, и я сразу знаю новые правила.</li>
+                    <li><strong>Контроль доступа:</strong> Я отдаю только ту информацию, которая разрешена политиками безопасности.</li>
+                  </ul>
+                  <div class="stats-grid" style="margin-top: 16px;">
+                    <div class="stat-card">
+                      <div class="stat-value">0%</div>
+                      <div class="stat-label">Галлюцинаций</div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-value">Qdrant</div>
+                      <div class="stat-label">Векторная БД</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-section" data-section="5">
+          <div class="messages-container">
+            <div class="message user">
+              <div class="message-avatar">👤</div>
+              <div class="message-content">
+                <div class="message-text">
+                  Какие системные требования для развертывания Афины на наших локальных серверах и сколько это будет стоить?
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <strong>Технические требования (Self-Hosted стек)</strong>
+                  <div class="info-box" style="margin-top: 12px;">
+                    <div class="info-box-title">🖥️ Необходимые мощности</div>
+                    <div class="info-box-content">
+                      Для стабильной работы связки <strong>n8n + Ollama + Qdrant</strong> рекомендуются следующие ресурсы:
+                      <ul style="margin-top: 8px;">
+                        <li><strong>CPU:</strong> 4-8 ядер (Ollama активно использует процессор при отсутствии GPU).</li>
+                        <li><strong>RAM:</strong> 16-32 GB (8GB для n8n/Qdrant и 8GB+ под модель эмбеддингов <code>nomic-embed-text</code>).</li>
+                        <li><strong>Диск:</strong> 100 GB NVMe SSD (для хранения векторных индексов и логов n8n).</li>
+                        <li><strong>GPU:</strong> Опционально (NVIDIA 8GB+ VRAM значительно ускорит обработку векторов).</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <div class="info-box">
+                    <div class="info-box-title">💿 Программный стек (Open Source)</div>
+                    <div class="info-box-content">
+                      Весь базовый софт является бесплатным и разворачивается через Docker:
+                      <ul style="margin-top: 8px;">
+                        <li><strong>n8n:</strong> Оркестрация логики (Community Edition).</li>
+                        <li><strong>Ollama:</strong> Локальный запуск эмбеддингов.</li>
+                        <li><strong>Qdrant:</strong> Высокопроизводительная векторная БД.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="message agent">
+              <div class="message-avatar">🤖</div>
+              <div class="message-content">
+                <div class="message-text">
+                  <div class="info-box">
+                    <div class="info-box-title">💰 Операционный бюджет</div>
+                    <div class="info-box-content">
+                      Важное преимущество Афины — <strong>минимальные затраты</strong>. Бюджет расходуется только на внешние API для "высшего разума" и поиска:
+                      <ul style="margin-top: 8px;">
+                        <li><strong>DeepSeek API:</strong> Оплата только за токены (самый дешевый и мощный Reasoner на рынке).</li>
+                        <li><strong>Tavily API:</strong> Поиск актуальной инфы в сети (есть бесплатный лимит запросов).</li>
+                        <li><strong>Все остальное:</strong> n8n, Ollama и Qdrant работают на нашем железе <u>бесплатно</u>.</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="stats-grid" style="margin-top: 16px;">
+                    <div class="stat-card">
+                      <div class="stat-value">Low Cost</div>
+                      <div class="stat-label">Только за API</div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-value">Local</div>
+                      <div class="stat-label">Данные у вас</div>
+                    </div>
+                    <div class="stat-card">
+                      <div class="stat-value">Open-Source</div>
+                      <div class="stat-label">Ядро системы</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+          </div>
+        </div>
+        
+        
+        
+        
+        
+        
+      </div>
+
+      <!-- Message Input (only for chat #1) -->
+      <div class="message-input-container" id="messageInputContainer">
+        <div class="input-wrapper">
+          <textarea
+            id="messageInput"
+            class="message-input"
+            placeholder="Напишите сообщение..."
+            rows="1"></textarea>
+          <button id="sendButton" class="send-button" disabled>
+            ➤
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <script>
+      
+      // 1. ВСТАВЬ СЮДА TEST URL (должен содержать /webhook-test/)
+    const WEBHOOK_URL = 'https://macbook-pro.tailf3e226.ts.net/webhook/chat-agent'; 
+    
+    window.userSessionId = 'web_' + Math.random().toString(36).substr(2, 9);
+
+    let currentChat = '1';
+    
+    const chatData = {
+      '1': { title: 'Диалог с Афиной', avatar: '🤖', status: 'Агент онлайн' },
+      '2': { title: 'Чат эскалации', avatar: '👨‍💻', status: 'Специалист онлайн' },
+      '3': { title: 'Как работает агент', avatar: '⚙️', status: 'Информационный раздел' },
+      '4': { title: 'Технология RAG', avatar: '🧠', status: 'Информационный раздел' },
+      '5': { title: 'Системные требования', avatar: '💾', status: 'Информационный раздел' }
+    };
+
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const chatItems = document.querySelectorAll('.chat-item');
+    const chatSections = document.querySelectorAll('.chat-section');
+    const headerAvatar = document.getElementById('headerAvatar');
+    const headerTitle = document.getElementById('headerTitle');
+    const contentBody = document.getElementById('contentBody');
+    const messageInputContainer = document.getElementById('messageInputContainer');
+    const messageInput = document.getElementById('messageInput');
+    const sendButton = document.getElementById('sendButton');
+
+    // --- ИНИЦИАЛИЗАЦИЯ ЧАТОВ ---
+function initChats() {
+  chatSections.forEach(section => {
+    let container = section.querySelector('.messages-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.className = 'messages-container';
+      section.appendChild(container);
+    }
+    // Очищаем только для 1 и 2 чата (остальные оставляем как есть)
+    if (section.dataset.section === '1') {
+      container.innerHTML = '';
+      container.appendChild(createMessage("Привет! Меня зовут Афина! Есть вопросы по подключению? Напишите что вас интересует, я с радостью помогу.", false));
+    } else if (section.dataset.section === '2') {
+      container.innerHTML = '';
+    }
+  });
+}
+    // --- ПЕРЕКЛЮЧЕНИЕ ЧАТОВ ---
+    function switchChat(chatId) {
+      currentChat = chatId;
+      
+      chatItems.forEach(item => item.classList.toggle('active', item.dataset.chat === chatId));
+      chatSections.forEach(section => section.classList.toggle('active', section.dataset.section === chatId));
+
+      const chat = chatData[chatId];
+      if (chat) {
+          headerAvatar.textContent = chat.avatar;
+          headerTitle.textContent = chat.title;
+      }
+
+      if (chatId === '1') {
+        messageInputContainer.classList.add('active');
+        setTimeout(() => messageInput.focus(), 100);
+      } else {
+        messageInputContainer.classList.remove('active');
+      }
+
+      contentBody.scrollTop = 0;
+      closeMobileMenu();
+      scrollToBottom('auto');
+    }
+
+    function openMobileMenu() {
+      sidebar.classList.add('mobile-open');
+      overlay.classList.add('active');
+    }
+
+    function closeMobileMenu() {
+      sidebar.classList.remove('mobile-open');
+      overlay.classList.remove('active');
+    }
+
+    // --- UI ФУНКЦИИ ---
+function scrollToBottom(behavior = 'smooth') {
+  const contentBody = document.getElementById('contentBody');
+  if (contentBody) {
+    setTimeout(() => {
+      contentBody.scrollTo({
+        top: contentBody.scrollHeight,
+        behavior: behavior
+      });
+    }, 50);
+  }
+}
+    function createMessage(text, isUser = true) {
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `message ${isUser ? 'user' : 'agent'}`;
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'message-avatar';
+      avatar.textContent = isUser ? '👤' : '🤖';
+      
+      const content = document.createElement('div');
+      content.className = 'message-content';
+      
+      const textDiv = document.createElement('div');
+      textDiv.className = 'message-text';
+      
+      if (!isUser) {
+          textDiv.innerHTML = text.replace(/\n/g, '<br>'); 
+      } else {
+          textDiv.textContent = text;
+      }
+      
+      content.appendChild(textDiv);
+      messageDiv.appendChild(avatar);
+      messageDiv.appendChild(content);
+      
+      return messageDiv;
+    }
+
+    function createTypingIndicator() {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'typing-indicator active';
+      typingDiv.innerHTML = `
+        <div class="typing-avatar">🤖</div>
+        <div class="typing-dots">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>`;
+      return typingDiv;
+    }
+
+    // --- ЛОГИКА ОТПРАВКИ (СВЯЗЬ С N8N) ---
+    async function sendMessage(e) {
+      if (e) e.preventDefault(); 
+
+      const text = messageInput.value.trim();
+      if (!text) return;
+      
+      const activeSection = document.querySelector('.chat-section.active');
+      if (!activeSection) return;
+      
+      const agentChat = activeSection.querySelector('.messages-container') || activeSection.querySelector('.chat-messages');
+      if (!agentChat) return;
+
+      const escalationSection = Array.from(chatSections).find(s => s.dataset.section === '2');
+      const escalationChat = escalationSection ? (escalationSection.querySelector('.messages-container') || escalationSection.querySelector('.chat-messages')) : null;
+      
+      // Блокируем ввод и выводим сообщение пользователя
+      agentChat.appendChild(createMessage(text, true));
+      messageInput.value = '';
+      messageInput.style.height = 'auto';
+      sendButton.disabled = true;
+      scrollToBottom();
+      
+      // Индикатор загрузки
+      const typingIndicator = createTypingIndicator();
+      agentChat.appendChild(typingIndicator);
+      scrollToBottom();
+
+      try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                message: { 
+                    text: text,
+                    from: {
+                        id: window.userSessionId,
+                        username: "Web_Client"
+                    }
+                }
+            })
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        
+        const data = await response.json();
+        typingIndicator.remove();
+
+        // Маршрутизация ответа n8n
+      // Маршрутизация ответа n8n
+if (data.escalated) {
+    // В основном чате показываем системное уведомление
+    agentChat.appendChild(createMessage("Системное уведомление: Запрос передан инженеру IZ SOC. Специалист скоро подключится к диалогу.", false));
+    if (escalationChat) {
+        // В чат эскалации добавляем только ответ от ИИ
+        if (data.reply) {
+            escalationChat.appendChild(createMessage(data.reply, false));
+        }
+        const escTab = Array.from(chatItems).find(i => i.dataset.chat === '2');
+        if (escTab && currentChat !== '2') escTab.style.borderLeft = "4px solid #ef4444";
+    }
+} else {
+    agentChat.appendChild(createMessage(data.reply, false));
+}
+
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        typingIndicator.remove();
+        agentChat.appendChild(createMessage("⚠️ Ошибка сети. Убедитесь, что в ноде Webhook включена опция 'Respond to OPTIONS' (CORS) и запущен Test-режим.", false));
+      }
+      
+      scrollToBottom();
+    }
+
+    // --- СЛУШАТЕЛИ СОБЫТИЙ ---
+    chatItems.forEach(item => {
+      item.addEventListener('click', () => switchChat(item.dataset.chat));
+    });
+
+    mobileMenuBtn.addEventListener('click', openMobileMenu);
+    overlay.addEventListener('click', closeMobileMenu);
+
+    messageInput.addEventListener('input', (e) => {
+      sendButton.disabled = !e.target.value.trim();
+      e.target.style.height = 'auto';
+      e.target.style.height = Math.min(e.target.scrollHeight, 150) + 'px';
+    });
+
+    messageInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        if (!sendButton.disabled) sendMessage(e);
+      }
+    });
+
+    sendButton.addEventListener('click', sendMessage);
+
+    // Снимаем красную полоску эскалации при клике
+    chatItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (item.dataset.chat === '2') item.style.borderLeft = "none";
+        });
+    });
+
+    // Восстановление сессии при обновлении страницы
+    window.addEventListener('beforeunload', () => localStorage.setItem('currentChat', currentChat));
+    
+    // СТАРТ
+    initChats();
+    const savedChat = localStorage.getItem('currentChat');
+    switchChat(savedChat && chatData[savedChat] ? savedChat : '1');
+
+</script>
+</body>
+</html>
