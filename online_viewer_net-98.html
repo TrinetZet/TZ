@@ -739,6 +739,44 @@
   object-fit: contain; /* Именно это свойство вписывает картинку в рамки без сплющивания */
   display: block;
 }
+
+.thinking-text {
+    background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 16px;
+    padding: 16px 20px;
+    color: #e5e7eb;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.thinking-text .dots {
+    display: inline-block;
+    margin-left: 4px;
+}
+.thinking-text .dots span {
+    display: inline-block;
+    width: 8px;
+    text-align: center;
+    font-size: 18px;
+    line-height: 1;
+    animation: dotWave 1.2s infinite;
+    opacity: 0;
+}
+.thinking-text .dots span:nth-child(1) { animation-delay: 0s; }
+.thinking-text .dots span:nth-child(2) { animation-delay: 0.2s; }
+.thinking-text .dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotWave {
+    0%, 60%, 100% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+    30% {
+        opacity: 1;
+        transform: translateY(-4px);
+    }
+}
     
   </style>
 </head>
@@ -1151,6 +1189,7 @@
     const WEBHOOK_URL = 'https://macbook-pro.tailf3e226.ts.net/webhook/chat-agent'; 
     
     window.userSessionId = 'web_' + Math.random().toString(36).substr(2, 9);
+    let currentThinkingIndicator = null;
 
     let currentChat = '1';
     
@@ -1266,18 +1305,97 @@ function scrollToBottom(behavior = 'smooth') {
       return messageDiv;
     }
 
-    function createTypingIndicator() {
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'typing-indicator active';
-      typingDiv.innerHTML = `
-        <div class="typing-avatar">🤖</div>
-        <div class="typing-dots">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-        </div>`;
-      return typingDiv;
+function createThinkingIndicator(container) {
+    const element = document.createElement('div');
+    element.className = 'typing-indicator active';
+    const avatar = document.createElement('div');
+    avatar.className = 'typing-avatar';
+    avatar.textContent = '🤖';
+    const textContainer = document.createElement('div');
+    textContainer.className = 'thinking-text';
+    
+    const textSpan = document.createElement('span');
+    const dotsSpan = document.createElement('span');
+    dotsSpan.className = 'dots';
+    dotsSpan.style.display = 'none'; // изначально скрыты
+    for (let i = 0; i < 3; i++) {
+        const dot = document.createElement('span');
+        dot.textContent = '.';
+        dotsSpan.appendChild(dot);
     }
+    
+    textContainer.appendChild(textSpan);
+    textContainer.appendChild(dotsSpan);
+    element.appendChild(avatar);
+    element.appendChild(textContainer);
+    
+    container.appendChild(element);
+    
+    let currentTimeout = null;
+    let currentInterval = null;
+    let currentIndex = 0;
+    const phrases = [
+        "Размышляю над вашим вопросом",
+        "Готовлю ответ в ближайшее время",
+        "Еще немного времени на размышления",
+        "Анализирую информацию",
+        "Ищу ответ в базе знаний",
+        "Подготавливаю структурированный ответ",
+        "Секунду, обрабатываю данные",
+        "Формирую решение",
+        "Проверяю актуальность данных",
+        "Собираю рекомендации"
+    ];
+    
+    function stopTyping() {
+        if (currentInterval) {
+            clearInterval(currentInterval);
+            currentInterval = null;
+        }
+    }
+    
+    function startTyping(text, callback) {
+        stopTyping();
+        textSpan.textContent = '';
+        dotsSpan.style.display = 'none'; // скрываем точки, пока печатается текст
+        let i = 0;
+        currentInterval = setInterval(() => {
+            if (i < text.length) {
+                textSpan.textContent += text[i];
+                i++;
+            } else {
+                clearInterval(currentInterval);
+                currentInterval = null;
+                dotsSpan.style.display = 'inline-block'; // показываем точки после окончания печати
+                if (callback) callback();
+            }
+        }, 50);
+    }
+    
+    function rotatePhrase() {
+        if (!element.parentNode) return;
+        const phrase = phrases[currentIndex % phrases.length];
+        startTyping(phrase, () => {
+            currentTimeout = setTimeout(() => {
+                currentIndex++;
+                rotatePhrase();
+            }, 12000); // 12 секунд вместо 15
+        });
+        currentIndex++;
+    }
+    
+    function start() {
+        rotatePhrase();
+    }
+    
+    function stop() {
+        if (currentTimeout) clearTimeout(currentTimeout);
+        stopTyping();
+        if (element.parentNode) element.remove();
+    }
+    
+    return { start, stop, element };
+}
 
     // --- ЛОГИКА ОТПРАВКИ (СВЯЗЬ С N8N) ---
     async function sendMessage(e) {
@@ -1303,9 +1421,17 @@ function scrollToBottom(behavior = 'smooth') {
       scrollToBottom();
       
       // Индикатор загрузки
-      const typingIndicator = createTypingIndicator();
-      agentChat.appendChild(typingIndicator);
-      scrollToBottom();
+// Остановить предыдущий индикатор
+if (currentThinkingIndicator) {
+    currentThinkingIndicator.stop();
+    currentThinkingIndicator = null;
+}
+
+// Создать новый индикатор
+const thinkingIndicatorObj = createThinkingIndicator(agentChat);
+currentThinkingIndicator = thinkingIndicatorObj;
+thinkingIndicatorObj.start();
+scrollToBottom();
 
       try {
         const response = await fetch(WEBHOOK_URL, {
@@ -1325,8 +1451,10 @@ function scrollToBottom(behavior = 'smooth') {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
         const data = await response.json();
-        typingIndicator.remove();
-
+if (currentThinkingIndicator) {
+    currentThinkingIndicator.stop();
+    currentThinkingIndicator = null;
+}
         // Маршрутизация ответа n8n
       // Маршрутизация ответа n8n
 if (data.escalated) {
@@ -1346,7 +1474,10 @@ if (data.escalated) {
 
       } catch (error) {
         console.error("Fetch Error:", error);
-        typingIndicator.remove();
+        if (currentThinkingIndicator) {
+    currentThinkingIndicator.stop();
+    currentThinkingIndicator = null;
+}
         agentChat.appendChild(createMessage("⚠️ Ошибка сети. Убедитесь, что в ноде Webhook включена опция 'Respond to OPTIONS' (CORS) и запущен Test-режим.", false));
       }
       
