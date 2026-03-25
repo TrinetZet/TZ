@@ -1478,7 +1478,7 @@ if (data.escalated) {
     currentThinkingIndicator.stop();
     currentThinkingIndicator = null;
 }
-        agentChat.appendChild(createMessage("⚠️ Ошибка сети. Убедитесь, что в ноде Webhook включена опция 'Respond to OPTIONS' (CORS) и запущен Test-режим.", false));
+        agentChat.appendChild(createMessage("Ваш запрос не соответсвует контексту задачи, которую я могу выполнить. Переформулируйте вопрос или спросите меня о чем-то другом", false));
       }
       
       scrollToBottom();
