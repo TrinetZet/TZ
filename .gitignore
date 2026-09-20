@@ -1,0 +1,4 @@
+.superpowers/
+android-calculator/.gradle/
+android-calculator/**/build/
+android-calculator/local.properties
