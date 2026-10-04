@@ -22,6 +22,7 @@ public class OfflineTest {
  private WebView web;
  private final UiDevice device=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
  private String js(String code) throws Exception {
+  scenario.onActivity(a->{android.view.ViewGroup content=a.findViewById(android.R.id.content);web=(WebView)((android.view.ViewGroup)content.getChildAt(0)).getChildAt(0);});
   CountDownLatch latch=new CountDownLatch(1);String[] result={null};
   InstrumentationRegistry.getInstrumentation().runOnMainSync(()->web.evaluateJavascript(code,r->{result[0]=r;latch.countDown();}));
   assertTrue("JavaScript callback",latch.await(10,TimeUnit.SECONDS));return result[0];
@@ -52,7 +53,9 @@ public class OfflineTest {
   assertEquals("8",js("Object.keys(JSON.parse(localStorage.getItem('clientbridge.progress.v1')).reviews).length"));
   route("emails","#client-email");js("const area=document.querySelector('#client-email');area.value='ClientBridge native email — offline test';area.dispatchEvent(new Event('input',{bubbles:true}))");click("[data-copy]");waitFor("document.querySelector('#toast').textContent.includes('Email copied')");
   Context ctx=InstrumentationRegistry.getInstrumentation().getTargetContext();String[] clip={null};InstrumentationRegistry.getInstrumentation().runOnMainSync(()->{ClipboardManager c=(ClipboardManager)ctx.getSystemService(Context.CLIPBOARD_SERVICE);clip[0]=c.getPrimaryClip().getItemAt(0).getText().toString();});assertEquals("ClientBridge native email — offline test",clip[0]);shot("03-email");
+  device.executeShellCommand("settings put global always_finish_activities 1");
   click("[data-download]");saveDocument("clientbridge-native-test.txt");
+  device.executeShellCommand("settings put global always_finish_activities 0");
   route("progress","[data-export]");assertEquals("12",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).history.length"));click("[data-export]");saveDocument("clientbridge-progress.json");
   click("[data-export]");device.wait(Until.hasObject(By.pkg("com.google.android.documentsui")),10000);device.pressBack();waitFor("document.querySelector('#toast').textContent.includes('cancelled')");
   click("[data-reset]");click("#reset-confirm");waitFor("document.querySelector('#rail-fraction').textContent==='0 / 12'");route("progress","[data-import]");click("[data-import]");

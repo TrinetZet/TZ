@@ -28,6 +28,8 @@ def bundleWeb = tasks.register('bundleWeb', Sync) {
     into layout.buildDirectory.dir('generated/offline-assets/clientbridge')
     doLast {
         def index = layout.buildDirectory.file('generated/offline-assets/clientbridge/index.html').get().asFile
+        def app = layout.buildDirectory.file('generated/offline-assets/clientbridge/app.mjs').get().asFile
+        app.append('\nwindow.addEventListener("clientbridge-state-request",()=>window.dispatchEvent(new CustomEvent("clientbridge-state",{detail:JSON.stringify(state,null,2)})));\n', 'UTF-8')
         index.text = index.getText('UTF-8').replace('<script type="module"', '<script src="./android-adapter.js"></script>\n  <script type="module"')
     }
 }
