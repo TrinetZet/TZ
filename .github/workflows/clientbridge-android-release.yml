@@ -2,7 +2,7 @@ name: Publish ClientBridge Android release
 on:
   push:
     branches: [master, feat/clientbridge-android]
-    paths: ['clientbridge-android/distribution/**', '.github/workflows/clientbridge-android-release.yml']
+    paths: ['clientbridge-android/distribution/**', 'clientbridge-android/scripts/release-smoke.sh', '.github/workflows/clientbridge-android-release.yml']
   workflow_dispatch:
 permissions:
   contents: write
