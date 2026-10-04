@@ -1,0 +1,55 @@
+name: ClientBridge Android
+on:
+  push:
+    paths: ['clientbridge-android/**', 'clientbridge/**', '.github/workflows/clientbridge-android.yml']
+  pull_request:
+    paths: ['clientbridge-android/**', 'clientbridge/**', '.github/workflows/clientbridge-android.yml']
+  workflow_dispatch:
+concurrency:
+  group: clientbridge-android-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Unit tests and APK builds
+        working-directory: clientbridge-android
+        run: ./gradlew --no-daemon testDebugUnitTest assembleDebug assembleRelease assembleDebugAndroidTest
+      - name: Enable hardware acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Offline Android emulator checks
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          script: bash clientbridge-android/scripts/emulator-check.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: clientbridge-android-build-and-evidence
+          path: |
+            clientbridge-android/app/build/outputs/apk
+            clientbridge-android/app/build/reports/tests
+            clientbridge-android/emulator-*.txt
+            clientbridge-android/emulator-screenshots
+            clientbridge-android/emulator-logcat.txt
+            clientbridge-android/emulator-screen.png
