@@ -32,7 +32,8 @@ public final class MainActivity extends Activity {
    else v.setPadding(insets.getSystemWindowInsetLeft(),insets.getSystemWindowInsetTop(),insets.getSystemWindowInsetRight(),insets.getSystemWindowInsetBottom());return insets;
   });root.requestApplyInsets();
   if(!WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)){TextView notice=new TextView(this);notice.setText("Please update Android System WebView to open ClientBridge.");notice.setTextColor(Color.WHITE);notice.setPadding(32,64,32,32);root.addView(notice);return;}
-  try {if(pendingSaveFile().exists()){JSONObject pending=new JSONObject(new String(java.nio.file.Files.readAllBytes(pendingSaveFile().toPath()),StandardCharsets.UTF_8));saveId=pending.getString("id");saveText=pending.getString("text");}}catch(Exception ignored){pendingSaveFile().delete();}
+  if(state==null || !state.getBoolean("pendingSave",false))pendingSaveFile().delete();
+  try {if(state!=null && state.getBoolean("pendingSave",false) && pendingSaveFile().exists()){JSONObject pending=new JSONObject(new String(java.nio.file.Files.readAllBytes(pendingSaveFile().toPath()),StandardCharsets.UTF_8));saveId=pending.getString("id");saveText=pending.getString("text");}}catch(Exception ignored){pendingSaveFile().delete();}
   web=new WebView(this);root.addView(web,new FrameLayout.LayoutParams(-1,-1));
   WebSettings settings=web.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);settings.setAllowFileAccess(false);settings.setAllowContentAccess(true);settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
   WebViewAssetLoader loader=new WebViewAssetLoader.Builder().addPathHandler("/assets/clientbridge/",path->{
@@ -95,7 +96,7 @@ public final class MainActivity extends Activity {
    try(OutputStream out=getContentResolver().openOutputStream(data.getData(),"wt")){if(out==null)throw new IOException();out.write(saveText.getBytes(StandardCharsets.UTF_8));clearSave(true,false,null);}catch(Exception e){clearSave(false,false,"The file could not be saved.");}
   }
  }
- @Override protected void onSaveInstanceState(Bundle state){super.onSaveInstanceState(state);if(web!=null)web.saveState(state);}
+ @Override protected void onSaveInstanceState(Bundle state){super.onSaveInstanceState(state);state.putBoolean("pendingSave",saveText!=null);if(web!=null)web.saveState(state);}
  @Override public void onBackPressed(){if(web!=null && web.canGoBack())web.goBack();else super.onBackPressed();}
  @Override protected void onDestroy(){if(importCallback!=null)importCallback.onReceiveValue(null);if(isFinishing() && saveText!=null)clearSave(false,true,null);if(web!=null){WebViewCompat.removeWebMessageListener(web,"ClientBridgeAndroid");web.destroy();}super.onDestroy();}
 }

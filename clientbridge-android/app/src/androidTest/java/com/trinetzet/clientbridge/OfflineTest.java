@@ -22,9 +22,13 @@ public class OfflineTest {
  private WebView web;
  private final UiDevice device=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
  private String js(String code) throws Exception {
-  scenario.onActivity(a->{android.view.ViewGroup content=a.findViewById(android.R.id.content);web=(WebView)((android.view.ViewGroup)content.getChildAt(0)).getChildAt(0);});
   CountDownLatch latch=new CountDownLatch(1);String[] result={null};
-  InstrumentationRegistry.getInstrumentation().runOnMainSync(()->web.evaluateJavascript(code,r->{result[0]=r;latch.countDown();}));
+  InstrumentationRegistry.getInstrumentation().runOnMainSync(()->{
+   MainActivity active=null;for(android.app.Activity a:androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(androidx.test.runner.lifecycle.Stage.RESUMED))if(a instanceof MainActivity)active=(MainActivity)a;
+   if(active==null){result[0]="false";latch.countDown();return;}
+   android.view.ViewGroup content=active.findViewById(android.R.id.content);web=(WebView)((android.view.ViewGroup)content.getChildAt(0)).getChildAt(0);
+   web.evaluateJavascript(code,r->{result[0]=r;latch.countDown();});
+  });
   assertTrue("JavaScript callback",latch.await(10,TimeUnit.SECONDS));return result[0];
  }
  private void open() throws Exception {
@@ -66,6 +70,6 @@ public class OfflineTest {
   assertEquals("null",js("document.querySelector('iframe')"));scenario.close();
  }
  @Test public void persistedAfterForceStop() throws Exception {
-  open();assertEquals("12",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).history.length"));route("emails","#client-email");assertEquals("\"ClientBridge native email — offline test\"",js("document.querySelector('#client-email').value"));shot("05-restarted");scenario.close();
+  open();assertEquals("12",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).history.length"));route("emails","#client-email");assertEquals("\"ClientBridge native email — offline test\"",js("document.querySelector('#client-email').value"));shot("05-restarted");route("progress","[data-export]");click("[data-export]");assertTrue("Abandoned save does not block new export",device.wait(Until.hasObject(By.pkg("com.google.android.documentsui")),10000));device.pressBack();waitFor("document.querySelector('#toast').textContent.includes('cancelled')");scenario.close();
  }
 }

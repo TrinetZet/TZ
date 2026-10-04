@@ -14,5 +14,6 @@ adb shell svc data disable
 adb shell am instrument -w -r -e class 'com.trinetzet.clientbridge.OfflineTest#learningAndNativeFiles' com.trinetzet.clientbridge.test/androidx.test.runner.AndroidJUnitRunner | tee clientbridge-android/emulator-learning.txt
 grep -q 'OK (1 test)' clientbridge-android/emulator-learning.txt
 adb shell am force-stop com.trinetzet.clientbridge
+printf '%s' '{"id":"9","text":"abandoned"}' | adb shell "run-as com.trinetzet.clientbridge sh -c 'cat > files/pending-export.json'"
 adb shell am instrument -w -r -e class 'com.trinetzet.clientbridge.OfflineTest#persistedAfterForceStop' com.trinetzet.clientbridge.test/androidx.test.runner.AndroidJUnitRunner | tee clientbridge-android/emulator-restart.txt
 grep -q 'OK (1 test)' clientbridge-android/emulator-restart.txt
