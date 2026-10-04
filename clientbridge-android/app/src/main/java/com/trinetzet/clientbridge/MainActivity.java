@@ -71,6 +71,7 @@ public final class MainActivity extends Activity {
     }else throw new IllegalArgumentException();
    }catch(Exception e){respond(reply,id,false,false,"Invalid native request.");}
   });
+  if(android.os.Build.VERSION.SDK_INT>=33)getOnBackInvokedDispatcher().registerOnBackInvokedCallback(android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT,()->{if(web.canGoBack())web.goBack();else finish();});
   if(state==null || web.restoreState(state)==null)web.loadUrl(BridgePolicy.HOME+"#practice");
  }
  private static WebResourceResponse denied(){return new WebResourceResponse("text/plain","UTF-8",403,"Blocked",java.util.Collections.emptyMap(),new ByteArrayInputStream(new byte[0]));}

@@ -6,7 +6,7 @@ on:
     paths: ['clientbridge-android/**', 'clientbridge/**', '.github/workflows/clientbridge-android.yml']
   workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
@@ -33,7 +33,7 @@ jobs:
       - name: Offline Android emulator checks
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 35
+          api-level: 36
           target: google_apis
           arch: x86_64
           profile: pixel_2
@@ -50,12 +50,3 @@ jobs:
             clientbridge-android/emulator-screenshots
             clientbridge-android/emulator-logcat.txt
             clientbridge-android/emulator-screen.png
-      - name: Publish unsigned CI candidate and evidence
-        if: github.event_name == 'push' && github.ref == 'refs/heads/feat/clientbridge-android'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          cp clientbridge-android/app/build/outputs/apk/release/app-release-unsigned.apk ClientBridge-unsigned-ci.apk
-          zip -r ClientBridge-ci-evidence.zip clientbridge-android/emulator-*.txt clientbridge-android/emulator-screenshots clientbridge-android/app/build/reports/tests
-          gh release view clientbridge-android-ci >/dev/null 2>&1 || gh release create clientbridge-android-ci --prerelease --target "$GITHUB_SHA" --title 'ClientBridge unsigned CI candidate' --notes 'Build verification only. Unsigned APK is not the user installation release.'
-          gh release upload clientbridge-android-ci ClientBridge-unsigned-ci.apk ClientBridge-ci-evidence.zip --clobber
