@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#151d29">
+  <meta name="description" content="Practise business English for real IT client conversations. Twelve interactive missions with instant coaching and model emails.">
+  <title>ClientBridge — Better conversations, together.</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%23151d29'/%3E%3Cpath d='M13 12H9v16h4M27 12h4v16h-4M15 23l10-6' stroke='%23b5f1cb' stroke-width='3' fill='none'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.mjs"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <aside class="sidebar">
+    <a class="brand" href="#practice" aria-label="ClientBridge home"><span class="brand-mark" aria-hidden="true">[↗]</span><span>ClientBridge<span class="brand-sub">WORDS THAT WORK.</span></span></a>
+    <div class="rail-caption">YOUR WORKSPACE</div>
+    <nav aria-label="Main navigation">
+      <a href="#practice" data-nav="practice"><span aria-hidden="true">◫</span> Practice room <span class="nav-count">12</span></a>
+      <a href="#phrasebook" data-nav="phrasebook"><span aria-hidden="true">▤</span> Phrasebook</a>
+      <a href="#flashcards" data-nav="flashcards"><span aria-hidden="true">▱</span> Review cards</a>
+      <a href="#emails" data-nav="emails"><span aria-hidden="true">✉</span> Email studio</a>
+      <a href="#progress" data-nav="progress"><span aria-hidden="true">↗</span> My progress</a>
+      <a href="#project" data-nav="project"><span aria-hidden="true">◇</span> The project</a>
+    </nav>
+    <div class="rail-note"><span class="live-dot"></span> REAL SKILLS. SAFE SPACE.<p>Make mistakes here.<br>Build confidence out there.</p><div class="mini-conversation" aria-hidden="true"><i></i><i></i><i></i></div></div>
+    <div class="rail-bottom"><div class="rail-progress-label"><span>Your journey</span><span id="rail-fraction">0 / 12</span></div><div class="rail-progress"><div id="rail-bar"></div></div><p>Progress stays on this device.</p><button class="reset-link" id="reset-open">↺ Reset progress</button><div class="rail-user"><span class="team-avatar">VI</span><div>Vladislav & Timofey<small>Business English · IT team</small></div></div></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><span id="breadcrumb">Workspace <span>/</span> Practice room</span><span class="course-badge"><span class="live-dot"></span> BUSINESS ENGLISH LAB</span></header>
+    <main id="main" tabindex="-1"></main>
+    <footer class="footer"><span>Built for conversations that move projects forward.</span><span>ClientBridge <span class="footer-dot">·</span> Student project / 2026</span></footer>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <dialog id="reset-dialog" aria-labelledby="reset-title"><div class="dialog-icon">↺</div><h2 id="reset-title">Start with a clean slate?</h2><p>This removes all saved answers, review schedules, drafts and results on this device. You can practise every mission again.</p><div class="dialog-actions"><button class="button secondary" id="reset-cancel">Keep my progress</button><button class="button primary" id="reset-confirm">Reset everything</button></div></dialog>
+  <dialog id="import-dialog" aria-labelledby="import-title"><div class="dialog-icon">↓</div><h2 id="import-title">Restore a learning backup?</h2><p id="import-description"></p><p>This replaces the progress and email drafts currently stored on this device.</p><div class="dialog-actions"><button class="button secondary" id="import-cancel">Cancel</button><button class="button primary" id="import-confirm">Restore backup</button></div></dialog>
+  <noscript><p class="no-script">ClientBridge needs JavaScript for interactive missions. Please enable it and reload.</p></noscript>
+</body>
+</html>
