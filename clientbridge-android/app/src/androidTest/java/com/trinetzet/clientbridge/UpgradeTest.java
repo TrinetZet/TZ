@@ -1,0 +1,19 @@
+package com.trinetzet.clientbridge;
+import android.webkit.WebView;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import java.util.concurrent.*;
+import static org.junit.Assert.*;
+@RunWith(AndroidJUnit4.class)
+public class UpgradeTest {
+ ActivityScenario<MainActivity> scenario;
+ String js(String script)throws Exception{String[] result={null};CountDownLatch latch=new CountDownLatch(1);scenario.onActivity(a->{android.view.ViewGroup root=(android.view.ViewGroup)((android.view.ViewGroup)a.findViewById(android.R.id.content)).getChildAt(0);((WebView)root.getChildAt(0)).evaluateJavascript(script,r->{result[0]=r;latch.countDown();});});assertTrue(latch.await(10,TimeUnit.SECONDS));return result[0];}
+ void waitFor(String expression)throws Exception{long end=System.currentTimeMillis()+15000;while(System.currentTimeMillis()<end){if("true".equals(js("Boolean("+expression+")")))return;Thread.sleep(150);}fail(expression);}
+ void open()throws Exception{scenario=ActivityScenario.launch(MainActivity.class);waitFor("document.querySelector('[data-start]')");}
+ @Test public void seedOldVersion()throws Exception{open();js("(async()=>{const {freshState}=await import('https://appassets.androidplatform.net/assets/clientbridge/core.mjs');const {phrases}=await import('https://appassets.androidplatform.net/assets/clientbridge/scenarios.mjs');const state=freshState();state.answers.requirements=[1,1,1];state.history=[{id:'requirements',at:Date.now(),choices:[1,1,1]}];state.drafts.builder='Upgrade preserved';state.reviews[phrases[0].id]={due:Date.now()+86400000,interval:1,rating:'good',reviewedAt:Date.now()};localStorage.setItem('clientbridge.progress.v1',JSON.stringify(state));window.seeded=true;})()");waitFor("window.seeded");scenario.close();}
+ @Test public void verifyUpgradeGuide()throws Exception{open();assertEquals("3",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).answers.requirements.length"));assertEquals("1",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).history.length"));assertEquals("1",js("Object.keys(JSON.parse(localStorage.getItem('clientbridge.progress.v1')).reviews).length"));assertEquals("\"Upgrade preserved\"",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).drafts.builder"));js("window.liveState=null;window.addEventListener('clientbridge-state',e=>window.liveState=JSON.parse(e.detail),{once:true});window.dispatchEvent(new Event('clientbridge-state-request'))");assertEquals("1",js("Object.keys(window.liveState.reviews).length"));assertEquals("1",js("window.liveState.history.length"));assertEquals("\"Upgrade preserved\"",js("window.liveState.drafts.builder"));js("location.hash='project'");waitFor("document.querySelector('#guide-content')");assertEquals("\"ru\"",js("document.querySelector('#guide-content').lang"));js("document.querySelector('[data-guide-lang=en]').click()");assertEquals("\"en\"",js("document.querySelector('#guide-content').lang"));assertEquals("false",js("document.documentElement.scrollWidth>innerWidth"));scenario.close();}
+ @Test public void verifyRestartLanguage()throws Exception{open();js("location.hash='project'");waitFor("document.querySelector('#guide-content')");assertEquals("\"en\"",js("document.querySelector('#guide-content').lang"));assertEquals("\"Upgrade preserved\"",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).drafts.builder"));scenario.close();}
+}
