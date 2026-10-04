@@ -1,42 +1,21 @@
-# ClientBridge Android verification
+# ClientBridge Android 1.1.0 verification
 
-Verified version 1.0.0 (code 1), package com.trinetzet.clientbridge, minimum API 26 / Android 8.0, target API 36.
+Version 1.1.0, code3, package com.trinetzet.clientbridge, Android8.0/API26 minimum, target36.
 
-## Completed source and emulator checks
+## Completed source checks
 
-[GitHub Actions run 37219361436](https://github.com/TrinetZet/TZ/actions/runs/37219361436), source commit ca20799, completed successfully. Java 17, Gradle 8.13, AGP 8.13.2, SDK/build tools 36.0.0. Unit tests and debug/release/test APK compilation passed. Android 16 / API 36 x86_64 Pixel 2 emulator, Wi-Fi and mobile data disabled; APK requests no permissions.
+[Run37225709696](https://github.com/TrinetZet/TZ/actions/runs/37225709696), source e135ee1, passed web content/state tests, Android unit tests, debug/release/instrumentation builds and Android16/API36 Pixel2 emulator checks offline. All36missionversions/108decisions produce mapped correct feedback and100% for strongest replies. Flashcards, clipboard, real.txt/JSONSave, cancellation, realImport, Activityrecreation, keyboard/back and force-stop persistence passed. Both instrumentation invocations reported OK(1test).
 
-Both instrumentation invocations reported `OK (1 test)`:
+Local browser tests additionally cover weaker replies, stable shuffled order before/after choice, separate progress, legacyv1migration, v2roundtrip, import/reset cancellation, blocked-storage current export, keyboard focus, reduced motion and mobile widths320/390/768/1440. Independent content/code review found and corrected rubric bias, contextual ambiguity, unsafe action credit, missing native module allowlist, retry evidence loss and invaliddates, with regression tests.
 
-- All 12 missions completed with correct feedback and 100% best-response results; catalog contains 36 phrases.
-- Eight-card flashcard session updates review scheduling.
-- Email edits persisted; native clipboard contains the exact email text.
-- Actual Android system Save picker writes .txt and JSON; saved bytes were read back and checked.
-- Save survives Activity destruction with “Don't keep activities”. Cancellation is reported honestly.
-- Actual touched Import button opens system document picker; selected JSON restores all 12 history attempts and the edited draft after Activity recreation, with the original import confirmation.
-- Actual textarea touch opens Android keyboard; Back hides keyboard and navigates through hash routes. No horizontal document overflow.
-- Force-stop/relaunch retains all 12 history attempts and draft text. An abandoned pending export file is discarded; a new export opens normally.
-
-Screenshots were visually inspected for practice, results, email studio, restored progress and restart. The standalone Android adapter browser test also verifies current in-memory backup export when storage writes fail.
+Best-reply accuracy is separate from partial points; no proficiency claim. Character-longest690/972=70.99%, strongest36/108=33.33%; random expected695.67/972=71.57%points and33.33%accuracy. Eachlevel's best positions and lengthranks are12/12/12; tested char/word ties conservatively, shortest, allpositions and eachdecisionordinal. The full machine-readable audit is a CI artifact and deliverable.
 
 ## Signed binary
 
-The tested unsigned release was aligned for 16 KB pages and signed locally using a stable private test distribution key, kept outside Git and deliverables. Every compiled APK ZIP entry remains byte-identical after signing.
+All 73 compiled ZIP entries remain byte-identical after alignment/signing. APK size 1082349bytes. SHA256 `faca686dad386b1ff6f11771ac10720b84418e8784ca84b514ecfa752a0addc0`. CertificateSHA256 `de4c3b4fb4a6cf8e2e820eda1574d9bbe310b1af2e2117cc47a26cfe1c492d61`, same as1.0.1/1.0.0, RSA3072, v2/v3 verified, one signer. Private key/password stay outside source/deliverables. Validation APK is only the CI runner.
 
-APK SHA-256: `d6fc2d37ced24870487def8cb3e48d02587fb13f7573fe833b8147edfb3fef06`.
-Certificate SHA-256: `de4c3b4fb4a6cf8e2e820eda1574d9bbe310b1af2e2117cc47a26cfe1c492d61`.
-RSA 3072; APK signature schemes v2 and v3 verified; one signer. Signed APK size 1,024,689 bytes. Direct APK installation; no Google Play publication.
+The release workflow seeds signed1.0.1, updates with install-r, verifies hydrated oldanswers/history/reviews/drafts and emptynewprofiles, levelpicker/Legacy/guide, restart language; then exercises fullnativefeatures on the exactsignedAPK. Its completed run and public re-download hash/signature are recorded in the delivered final report after publication.
 
-The release workflow verifies checksum/certificate and installs the exact signed APK offline on Android 16 before the PR is merged; the master publication step re-verifies the same bytes. Its actual run and public re-download comparison are recorded in the delivered verification report after publication.
+## Preservation and limits
 
-## Scope and preservation
-
-All existing `clientbridge/` files and root HTML remain unchanged. APK copies the seven web runtime assets; only generated index/app files gain Android adapter integration. No private keys, signing passwords or developer caches are in source/archive outputs. The bridge is origin/main-frame scoped and blocks external navigation/assets, validates payload sizes and filenames, and uses only explicit system-selected file URIs.
-
-API 26 and physical/OEM devices were not runtime-tested. Android 8+ requires an up-to-date compatible Android System WebView supporting the message bridge; older providers show an update message. Hardware/OEM picker behavior remains outside emulator coverage.
-
-## Version 1.0.1 guide update
-
-Version name 1.0.1, code 2. Source build and the complete offline Android suite passed in [run 37221834310](https://github.com/TrinetZet/TZ/actions/runs/37221834310). The web guide checks passed for Russian default, keyboard language switching, persisted English preference, unchanged progress, 320/390/768/1440 px layouts and reduced motion. All existing browser and unit checks passed.
-
-The new APK uses the same certificate as 1.0.0. SHA-256: `f4a4b4956054d4e9551d0509a31f9dee1beb5cb9df96e4b285dc7215106ceb01`. Every compiled ZIP entry remains identical after signing. Only app.mjs and styles.css change in the website; original root homework pages remain intact. The signed upgrade run is linked in the final delivered report after completion.
+Original tenrootHTML homework pages and olderAPKreleases remain intact. Only ClientBridge assets and dedicated Android/docs/workflows change. Elevenwebassets plus Androidadapter are bundled/allowed; noInternet permission or externalassets. Same scopedbridge and explicit system-selected fileURIs. API26 and physical/OEMdevices not runtime-tested; recent compatible WebView required. Shared devices don't sync automatically. Previous learning results remain Legacy and never grant newlevel credit.
