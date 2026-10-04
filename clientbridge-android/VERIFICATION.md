@@ -34,3 +34,9 @@ The release workflow verifies checksum/certificate and installs the exact signed
 All existing `clientbridge/` files and root HTML remain unchanged. APK copies the seven web runtime assets; only generated index/app files gain Android adapter integration. No private keys, signing passwords or developer caches are in source/archive outputs. The bridge is origin/main-frame scoped and blocks external navigation/assets, validates payload sizes and filenames, and uses only explicit system-selected file URIs.
 
 API 26 and physical/OEM devices were not runtime-tested. Android 8+ requires an up-to-date compatible Android System WebView supporting the message bridge; older providers show an update message. Hardware/OEM picker behavior remains outside emulator coverage.
+
+## Version 1.0.1 guide update
+
+Version name 1.0.1, code 2. Source build and the complete offline Android suite passed in [run 37221834310](https://github.com/TrinetZet/TZ/actions/runs/37221834310). The web guide checks passed for Russian default, keyboard language switching, persisted English preference, unchanged progress, 320/390/768/1440 px layouts and reduced motion. All existing browser and unit checks passed.
+
+The new APK uses the same certificate as 1.0.0. SHA-256: `f4a4b4956054d4e9551d0509a31f9dee1beb5cb9df96e4b285dc7215106ceb01`. Every compiled ZIP entry remains identical after signing. Only app.mjs and styles.css change in the website; original root homework pages remain intact. The signed upgrade run is linked in the final delivered report after completion.
