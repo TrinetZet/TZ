@@ -52,17 +52,15 @@ node tests/browser-check.cjs
 
 `CLIENTBRIDGE_URL` overrides the base URL. `CLIENTBRIDGE_SCREENSHOTS` optionally selects a directory for screenshots. `PLAYWRIGHT_MODULE_PATH` can point to an existing Playwright installation. The browser suite exercises all 12 missions, reload/locks, weak replies, phrase filters, a complete review session, email copy/export, history backups/import/reset, responsive routes, reduced motion and blocked/corrupt storage. Playwright is a test-only tool; it is not shipped to the website.
 
-## Safe deployment in TZ
+## Published demo and deployment
 
-All existing root HTML sites and hosting settings are preserved. This PR adds `clientbridge/` and its design/plan documents only, without merging or enabling a new deployment configuration.
+**Open the working application:** https://trinetzet.github.io/TZ/clientbridge/
 
-After review and merge into `master`:
+This is the running website, not a GitHub source-file page. It opens directly on desktop and mobile without an account or local server.
 
-1. Inspect **Settings → Pages** before changing any source. If this repository already publishes `master` from `/ (root)`, ClientBridge will be available under the existing Pages domain at `/TZ/clientbridge/`. If it uses a custom domain, use that domain’s matching `clientbridge/` path.
-2. If Pages is not enabled, publishing `master` from `/ (root)` would make this folder available at `https://trinetzet.github.io/TZ/clientbridge/`. This is an anticipated URL, not a verified live deployment.
-3. If the repository publishes `/docs` or uses a workflow/custom site, do not switch its source just for this project. Add the seven ClientBridge assets to that existing output under `clientbridge/`, or deploy `dist/` to a separate static site after agreeing on the destination.
+Published on 4 October 2026 after the user's explicit publication request. [PR #1](https://github.com/TrinetZet/TZ/pull/1) was merged into `master`. The existing GitHub Pages branch publication deployed it successfully: [deployment run](https://github.com/TrinetZet/TZ/actions/runs/37215864122). Existing root HTML sites and hosting settings were preserved. No separate repository or replacement hosting configuration was introduced.
 
-All asset URLs are relative, so a repository subpath works. Do not upload `node_modules`, `.git`, keys or local progress backups to hosting. A separate host can publish the contents of `dist/` at its root.
+All asset URLs are relative, so the `/TZ/clientbridge/` repository subpath works. Future approved changes merged or committed to `master` use the same existing Pages deployment. Keep the `clientbridge/` folder together; do not upload `node_modules`, `.git`, keys or private progress backups to hosting. If moving to another host, the contents of `dist/` can be published at its root.
 
 ## A 3–5 minute demonstration
 

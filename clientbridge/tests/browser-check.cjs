@@ -52,7 +52,7 @@ const shots=process.env.CLIENTBRIDGE_SCREENSHOTS;
  const [emailDownload]=await Promise.all([page.waitForEvent('download'),page.locator('[data-download]').click()]);assert.ok((await readFile(await emailDownload.path(),'utf8')).includes('Edited locally.'));
  await page.goto(base+'#progress');assert.equal(await page.locator('.history-row').count(),13);
  const [backup]=await Promise.all([page.waitForEvent('download'),page.locator('[data-export]').click()]);const backupPath=await backup.path();const backupData=JSON.parse(await readFile(backupPath,'utf8'));assert.equal(backupData.history.length,13);
- await page.locator('[data-import]').click();await page.locator('#import-file').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{}')});assert.ok((await page.locator('#toast').innerText()).includes('Could not import'));
+ await page.locator('[data-import]').click();await page.locator('#import-file').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from('{}')});await page.waitForFunction(()=>document.querySelector('#toast').textContent.includes('Could not import'));assert.ok((await page.locator('#toast').innerText()).includes('Could not import'));
  await page.locator('#import-file').setInputFiles(backupPath);await page.locator('#import-dialog').waitFor({state:'visible'});await page.locator('#import-cancel').click();assert.equal(await page.locator('.history-row').count(),13);
  await page.locator('#import-file').setInputFiles(backupPath);await page.locator('#import-confirm').click();assert.equal(await page.locator('.history-row').count(),13);
  await page.locator('[data-reset]').click();await page.locator('#reset-cancel').click();assert.equal(await page.locator('.history-row').count(),13);

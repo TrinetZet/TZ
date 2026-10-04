@@ -18,6 +18,16 @@
 
 ## Delivery boundaries
 
-Only `clientbridge/` and ClientBridge design/plan documents are added. Existing root HTML sites are unchanged. No hosting configuration changed, no merge performed, no teacher message sent. The local preview is verified; no public live deployment is claimed. PR and safe deployment steps are included in the delivery note.
+Only `clientbridge/` and ClientBridge design/plan documents were added. Existing root HTML sites are unchanged. After the user explicitly requested publication, PR #1 was merged and the existing GitHub Pages branch deployment published the app. Hosting settings were preserved; no teacher message was sent.
 
 Automated checks are meaningful smoke/logic coverage, not a claim of exhaustive linguistic validation or formal accessibility certification. Both students should review the wording and rehearse the explanation before presenting.
+
+## Verified public publication
+
+- Working public URL: https://trinetzet.github.io/TZ/clientbridge/ — HTTP 200.
+- PR #1 merged after the explicit publication request. Merge commit: `b14b2bf0608ffeee8f2aaaba5f16fffaf058a542`.
+- GitHub Pages deployment run `37215864122`: completed / success, publishing `master` to the existing `github-pages` environment. URL: https://github.com/TrinetZet/TZ/actions/runs/37215864122 .
+- All 10 pre-existing root HTML pages and all 7 ClientBridge runtime assets returned HTTP 200 and exactly matched local source hashes. Existing routes were preserved.
+- The **complete Chromium smoke suite passed on the public URL**, including all 12 missions, phrase review, email copy/download, backup export/import/reset, 28 responsive route/viewport checks and blocked/corrupt storage. No uncaught browser errors. Desktop and 390px screenshots were captured from the public site and inspected.
+- During the live test, an asynchronous file-import assertion ran before the file read completed. The test now waits for the error status; no application code change was required, and the subsequent full live run passed.
+- Local preview and public site have separate browser origins and therefore separate local progress. Export/import transfers a learning backup if desired.
