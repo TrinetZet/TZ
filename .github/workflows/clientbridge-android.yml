@@ -5,6 +5,9 @@ on:
   pull_request:
     paths: ['clientbridge-android/**', 'clientbridge/**', '.github/workflows/clientbridge-android.yml']
   workflow_dispatch:
+concurrency:
+  group: clientbridge-android-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
 permissions:
   contents: read
 jobs:
