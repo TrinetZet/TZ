@@ -17,6 +17,7 @@ export function recommendMission(state) {
 export function validateProgress(raw) {
   if(raw.length>1000000) throw new Error('Progress file is too large.');
   const value=JSON.parse(raw);
-  if(value?.version!==1 || !value.answers || typeof value.answers!=='object' || Array.isArray(value.answers)) throw new Error('This is not a ClientBridge progress file.');
+  if(![1,2].includes(value?.version) || !value.answers || typeof value.answers!=='object' || Array.isArray(value.answers)) throw new Error('This is not a ClientBridge progress file.');
+  if(value.version===2 && (!value.levels || typeof value.levels!=='object' || ['beginner','advanced','expert'].some(l=>!value.levels[l]?.answers || typeof value.levels[l].answers!=='object' || Array.isArray(value.levels[l].answers))))throw new Error('This backup is missing difficulty profiles.');
   return readState(raw);
 }

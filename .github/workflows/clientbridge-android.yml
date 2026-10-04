@@ -25,6 +25,10 @@ jobs:
           packages: platform-tools
           log-accepted-android-sdk-licenses: false
       - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - name: Web learning and content checks
+        run: |
+          node --test clientbridge/tests/*.test.mjs
+          node clientbridge/tests/strategy-audit.mjs > clientbridge-android/strategy-audit.json
       - name: Unit tests and APK builds
         working-directory: clientbridge-android
         run: ./gradlew --no-daemon testDebugUnitTest assembleDebug assembleRelease assembleDebugAndroidTest
@@ -49,6 +53,7 @@ jobs:
           path: |
             clientbridge-android/app/build/outputs/apk
             clientbridge-android/app/build/reports/tests
+            clientbridge-android/strategy-audit.json
             clientbridge-android/emulator-*.txt
             clientbridge-android/emulator-screenshots
             clientbridge-android/emulator-logcat.txt
