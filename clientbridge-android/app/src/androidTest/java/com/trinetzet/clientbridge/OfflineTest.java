@@ -38,6 +38,12 @@ public class OfflineTest {
  }
  private void waitFor(String condition) throws Exception {long until=System.currentTimeMillis()+15000;do{if("true".equals(js("Boolean("+condition+")")))return;Thread.sleep(150);}while(System.currentTimeMillis()<until);fail("Timed out: "+condition+"; "+js("document.body.innerText"));}
  private void click(String selector) throws Exception {waitFor("document.querySelector("+JSONObject.quote(selector)+")!==null");js("document.querySelector("+JSONObject.quote(selector)+").click()");}
+ private void touch(String selector) throws Exception {
+  js("document.querySelector("+JSONObject.quote(selector)+").scrollIntoView({block:'center'})");Thread.sleep(500);
+  JSONObject rect=new JSONObject(js("(()=>{const r=document.querySelector("+JSONObject.quote(selector)+").getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2,scale:devicePixelRatio};})()"));
+  int[] offset=new int[2];InstrumentationRegistry.getInstrumentation().runOnMainSync(()->web.getLocationOnScreen(offset));
+  device.click(offset[0]+(int)(rect.getDouble("x")*rect.getDouble("scale")),offset[1]+(int)(rect.getDouble("y")*rect.getDouble("scale")));
+ }
  private void route(String hash,String selector) throws Exception {js("location.hash="+JSONObject.quote(hash));waitFor("document.querySelector("+JSONObject.quote(selector)+")!==null");}
  private void shot(String name) throws Exception {Thread.sleep(700);Bitmap bitmap=InstrumentationRegistry.getInstrumentation().getUiAutomation().takeScreenshot();File dir=new File(InstrumentationRegistry.getInstrumentation().getTargetContext().getExternalFilesDir(null),"screenshots");dir.mkdirs();try(FileOutputStream out=new FileOutputStream(new File(dir,name+".png"))){bitmap.compress(Bitmap.CompressFormat.PNG,100,out);}bitmap.recycle();}
  private UiObject2 findText(String text) {return device.wait(Until.findObject(By.text(text)),10000);}
@@ -58,14 +64,14 @@ public class OfflineTest {
   route("emails","#client-email");js("const area=document.querySelector('#client-email');area.value='ClientBridge native email — offline test';area.dispatchEvent(new Event('input',{bubbles:true}))");click("[data-copy]");waitFor("document.querySelector('#toast').textContent.includes('Email copied')");
   Context ctx=InstrumentationRegistry.getInstrumentation().getTargetContext();String[] clip={null};InstrumentationRegistry.getInstrumentation().runOnMainSync(()->{ClipboardManager c=(ClipboardManager)ctx.getSystemService(Context.CLIPBOARD_SERVICE);clip[0]=c.getPrimaryClip().getItemAt(0).getText().toString();});assertEquals("ClientBridge native email — offline test",clip[0]);shot("03-email");
   device.executeShellCommand("settings put global always_finish_activities 1");
-  click("[data-download]");saveDocument("clientbridge-native-test.txt");
+  click("[data-download]");saveDocument("clientbridge-native-test.txt");assertEquals("ClientBridge native email — offline test",device.executeShellCommand("cat /sdcard/Download/clientbridge-native-test.txt"));
   device.executeShellCommand("settings put global always_finish_activities 0");
-  route("progress","[data-export]");assertEquals("12",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).history.length"));click("[data-export]");saveDocument("clientbridge-progress.json");
+  route("progress","[data-export]");assertEquals("12",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).history.length"));click("[data-export]");saveDocument("clientbridge-progress.json");assertEquals(12,new JSONObject(device.executeShellCommand("cat /sdcard/Download/clientbridge-progress.json")).getJSONArray("history").length());
   click("[data-export]");device.wait(Until.hasObject(By.pkg("com.google.android.documentsui")),10000);device.pressBack();waitFor("document.querySelector('#toast').textContent.includes('cancelled')");
-  click("[data-reset]");click("#reset-confirm");waitFor("document.querySelector('#rail-fraction').textContent==='0 / 12'");route("progress","[data-import]");click("[data-import]");
-  UiObject2 file=findText("clientbridge-progress.json");if(file==null){UiObject2 menu=device.wait(Until.findObject(By.desc("Show roots")),3000);if(menu!=null){menu.click();UiObject2 downloads=findText("Downloads");if(downloads!=null)downloads.click();}file=findText("clientbridge-progress.json");}assertNotNull("Real JSON document in picker",file);file.click();waitFor("document.querySelector('#import-dialog').open");click("#import-confirm");waitFor("document.querySelector('.history-row')!==null");assertEquals("12",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).history.length"));shot("04-progress-restored");
+  click("[data-reset]");click("#reset-confirm");waitFor("document.querySelector('#rail-fraction').textContent==='0 / 12'");route("progress","[data-import]");device.executeShellCommand("settings put global always_finish_activities 1");touch("[data-import]");assertTrue("System import chooser",device.wait(Until.hasObject(By.pkg("com.google.android.documentsui")),10000));
+  UiObject2 file=findText("clientbridge-progress.json");if(file==null){UiObject2 menu=device.wait(Until.findObject(By.desc("Show roots")),3000);if(menu!=null){menu.click();UiObject2 downloads=findText("Downloads");if(downloads!=null)downloads.click();}file=findText("clientbridge-progress.json");}if(file==null)shot("04-picker-failure");assertNotNull("Real JSON document in picker",file);file.click();waitFor("document.querySelector('#import-dialog').open");device.executeShellCommand("settings put global always_finish_activities 0");click("#import-confirm");waitFor("document.querySelector('.history-row')!==null");assertEquals("12",js("JSON.parse(localStorage.getItem('clientbridge.progress.v1')).history.length"));shot("04-progress-restored");
   route("emails","#client-email");assertEquals("\"ClientBridge native email — offline test\"",js("document.querySelector('#client-email').value"));
-  js("document.querySelector('#client-email').focus()");device.pressBack();route("phrasebook","#phrase-search");device.pressBack();waitFor("location.hash==='#emails'");
+  touch("#client-email");assertTrue("Android keyboard",device.wait(Until.hasObject(By.pkg("com.google.android.inputmethod.latin")),10000));device.pressBack();route("phrasebook","#phrase-search");device.pressBack();waitFor("location.hash==='#emails'");
   assertEquals("false",js("document.documentElement.scrollWidth>innerWidth"));
   assertEquals("null",js("document.querySelector('iframe')"));scenario.close();
  }
