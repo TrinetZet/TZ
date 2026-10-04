@@ -38,17 +38,7 @@ jobs:
           arch: x86_64
           profile: pixel_2
           disable-animations: true
-          script: |
-            adb install -r clientbridge-android/app/build/outputs/apk/debug/app-debug.apk
-            adb install -r clientbridge-android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-            adb shell svc wifi disable
-            adb shell svc data disable
-            adb shell am instrument -w -r -e class 'com.trinetzet.clientbridge.OfflineTest#learningAndNativeFiles' com.trinetzet.clientbridge.test/androidx.test.runner.AndroidJUnitRunner | tee clientbridge-android/emulator-learning.txt
-            test "$(grep -c 'OK (1 test)' clientbridge-android/emulator-learning.txt)" = 1
-            adb shell am force-stop com.trinetzet.clientbridge
-            adb shell am instrument -w -r -e class 'com.trinetzet.clientbridge.OfflineTest#persistedAfterForceStop' com.trinetzet.clientbridge.test/androidx.test.runner.AndroidJUnitRunner | tee clientbridge-android/emulator-restart.txt
-            test "$(grep -c 'OK (1 test)' clientbridge-android/emulator-restart.txt)" = 1
-            adb pull /sdcard/Android/data/com.trinetzet.clientbridge/files/screenshots clientbridge-android/emulator-screenshots
+          script: bash clientbridge-android/scripts/emulator-check.sh
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -58,6 +48,8 @@ jobs:
             clientbridge-android/app/build/reports/tests
             clientbridge-android/emulator-*.txt
             clientbridge-android/emulator-screenshots
+            clientbridge-android/emulator-logcat.txt
+            clientbridge-android/emulator-screen.png
       - name: Publish unsigned CI candidate and evidence
         if: github.event_name == 'push' && github.ref == 'refs/heads/feat/clientbridge-android'
         env:
