@@ -1,1 +1,1 @@
-f4a4b4956054d4e9551d0509a31f9dee1beb5cb9df96e4b285dc7215106ceb01  ClientBridge-v1.0.1.apk
+faca686dad386b1ff6f11771ac10720b84418e8784ca84b514ecfa752a0addc0  ClientBridge-v1.1.0.apk

@@ -37,7 +37,7 @@ public final class MainActivity extends Activity {
   web=new WebView(this);root.addView(web,new FrameLayout.LayoutParams(-1,-1));
   WebSettings settings=web.getSettings();settings.setJavaScriptEnabled(true);settings.setDomStorageEnabled(true);settings.setAllowFileAccess(false);settings.setAllowContentAccess(true);settings.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
   WebViewAssetLoader loader=new WebViewAssetLoader.Builder().addPathHandler("/assets/clientbridge/",path->{
-   if(!java.util.Arrays.asList("index.html","styles.css","app.mjs","core.mjs","practice.mjs","scenarios.mjs","extra-scenarios.mjs","android-adapter.js").contains(path))return denied();
+   if(!java.util.Arrays.asList("index.html","styles.css","app.mjs","core.mjs","practice.mjs","scenarios.mjs","extra-scenarios.mjs","curriculum.mjs","content-a.mjs","content-b.mjs","learning.mjs","android-adapter.js").contains(path))return denied();
    try {String mime=path.endsWith(".html")?"text/html":path.endsWith(".css")?"text/css":"text/javascript";return new WebResourceResponse(mime,"UTF-8",getAssets().open("clientbridge/"+path));}catch(IOException e){return denied();}
   }).build();
   web.setWebViewClient(new WebViewClient(){

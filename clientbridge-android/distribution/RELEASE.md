@@ -1,22 +1,20 @@
-# ClientBridge Android 1.0.1
+# ClientBridge Android 1.1.0
 
-Offline business English practice: 12 missions, 36 phrases, spaced flashcards, email studio, history and local backups.
+Three independently authored practice levels: Beginner, Advanced and Expert. Twelve topics × three levels × three decisions = 36 mission versions, 108 contextual decisions and 324 credible replies. Expert explores pragmatic nuance, not a CEFR/native certificate.
 
-Download **ClientBridge-v1.0.1.apk** and open it on **Android 8.0 or newer** with an up-to-date compatible Android System WebView. Allow installation from your browser/file manager when Android asks.
+Choose difficulty in Practice room or My progress. Reply order is shuffled once per attempt and saved. Profiles, accuracy, attempts and recommendations are separate per level. Best-reply accuracy is shown alongside partial-credit points: longest-response selection now yields 36/108 best replies (33.33%) and 690/972 practice points (70.99%), versus uniformly random expected 71.57% points. The old library allowed 100% from length alone.
 
-System clipboard, .txt/JSON Save picker and real JSON import picker are supported. No connection is needed to practise; the APK requests no permissions. Keep a JSON backup before clearing app data or uninstalling.
+Previous answers, partial attempts, history and drafts remain Legacy; shared reviews/drafts stay intact. Old v1 backups migrate without granting new-level mastery. Russian/English instructions under The project are updated, Russian by default; their preference stays independent.
 
-Package: `com.trinetzet.clientbridge`; versionName 1.0.1; versionCode 2; target API 36; minimum API 26. Stable private test distribution certificate, RSA 3072, APK signature v2/v3. Direct installation release, not a Google Play publication.
+Install **ClientBridge-v1.1.0.apk** over 1.0.1 without uninstalling. Android 8.0+ with an up-to-date compatible Android System WebView. Clipboard and actual system Save/Open pickers support .txt and JSON; no network or permissions are required. Export a backup before clearing data/uninstalling.
+
+Package `com.trinetzet.clientbridge`; versionName 1.1.0; versionCode 3; min API 26; target API 36. Same stable private test distribution certificate, RSA3072, APK v2/v3. Direct installation, not Google Play.
 
 Certificate SHA-256: `de4c3b4fb4a6cf8e2e820eda1574d9bbe310b1af2e2117cc47a26cfe1c492d61`.
-APK SHA-256: `f4a4b4956054d4e9551d0509a31f9dee1beb5cb9df96e4b285dc7215106ceb01`.
+APK SHA-256: `faca686dad386b1ff6f11771ac10720b84418e8784ca84b514ecfa752a0addc0`.
 
-Verified source/build: [Android 16 emulator run](https://github.com/TrinetZet/TZ/actions/runs/37221834310), including all missions, review scheduling, clipboard, saved file bytes, import/export/cancellation with Activity recreation, keyboard/back and force-stop persistence. Before merge, the release check installs signed 1.0.0, seeds valid learning data, updates to this signed APK, and verifies loaded answers, reviews, history, drafts and the offline guide after restart. API 26 and physical/OEM devices were not runtime-tested.
+[Full offline build/emulator checks](https://github.com/TrinetZet/TZ/actions/runs/37225709696) passed, including all36missions, native files/clipboard, recreation, import, keyboard/back and force-stop persistence. Before merge the release workflow tests the exact signed APK updating 1.0.1, verifies loaded Legacy/empty new profiles, guide/difficulty restart, then repeats full native checks. Physical/OEM devices and API26 were not runtime-tested.
 
-Team: Иноземцев Владислав Сергеевич — ОVМП-104ивс; Грушко Тимофей Андреевич — ОVМП-102ивс.
+Team: Иноземцев Владислав Сергеевич — ОVМП-104ивс; Грушко Тимофей Андреевич — ОVМП-102ивс. Unverified partner contributions are not attributed.
 
-[Web version](https://trinetzet.github.io/TZ/clientbridge/) · [Source repository](https://github.com/TrinetZet/TZ/tree/master/clientbridge-android)
-
-## New in 1.0.1
-
-The project now contains equivalent Russian and English instructions. Russian is the default; the language choice survives restart independently of learning progress and JSON backups. The rest of the interface remains English. Install over 1.0.0 without uninstalling to retain data. The old release remains available.
+[Website](https://trinetzet.github.io/TZ/clientbridge/) · [Source](https://github.com/TrinetZet/TZ/tree/master/clientbridge-android)
