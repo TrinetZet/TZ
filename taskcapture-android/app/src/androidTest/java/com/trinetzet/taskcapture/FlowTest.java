@@ -20,7 +20,7 @@ public class FlowTest {
   c.startActivity(new Intent(c,MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   UiDevice device=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
   assertTrue(device.wait(Until.hasObject(By.text("TaskCapture")),10000));
-  assertTrue(device.wait(Until.hasObject(By.textContains("БЭКЛОГ · 2")),10000));
+  assertTrue(device.wait(Until.hasObject(By.desc("Всего задач: 2. Выполнено: 0")),10000));
   try(TaskRepository repo=new TaskRepository(c)){assertEquals(2,repo.list().size());}
  }
  private Task waitFor(Context c,int expected){

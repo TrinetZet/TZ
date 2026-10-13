@@ -1,11 +1,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove"/>
- <application android:label="TaskCapture" android:icon="@drawable/icon" android:allowBackup="false" android:fullBackupContent="false" android:theme="@android:style/Theme.Material.Light.NoActionBar" android:supportsRtl="true">
+ <queries>
+  <intent><action android:name="android.intent.action.SEND"/><data android:mimeType="text/markdown"/></intent>
+  <intent><action android:name="android.intent.action.SEND"/><data android:mimeType="text/plain"/></intent>
+ </queries>
+ <application android:label="TaskCapture Glass" android:icon="@drawable/icon" android:allowBackup="false" android:fullBackupContent="false" android:theme="@style/GlassTheme" android:supportsRtl="true">
+  <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.exports" android:exported="false" android:grantUriPermissions="true">
+   <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/export_paths"/>
+  </provider>
   <activity android:name=".MainActivity" android:exported="true">
    <intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter>
   </activity>
   <activity android:name=".TaskDetailActivity" android:exported="false"/>
-  <activity android:name=".CaptureActivity" android:label="Создать задачу" android:exported="true" android:excludeFromRecents="true" android:theme="@android:style/Theme.Material.Light.NoActionBar">
+  <activity android:name=".ClipboardActivity" android:exported="false" android:excludeFromRecents="true" android:taskAffinity="" android:theme="@style/CaptureGlassTheme"/>
+  <service android:name=".TaskTileService" android:label="TC" android:icon="@drawable/tile_icon" android:exported="true" android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+   <intent-filter><action android:name="android.service.quicksettings.action.QS_TILE"/></intent-filter>
+  </service>
+  <activity android:name=".CaptureActivity" android:label="Создать задачу" android:exported="true" android:excludeFromRecents="true" android:taskAffinity="" android:theme="@style/CaptureGlassTheme">
    <intent-filter><action android:name="android.intent.action.PROCESS_TEXT"/><category android:name="android.intent.category.DEFAULT"/><data android:mimeType="text/plain"/></intent-filter>
    <intent-filter><action android:name="android.intent.action.SEND"/><category android:name="android.intent.category.DEFAULT"/><data android:mimeType="text/plain"/></intent-filter>
   </activity>

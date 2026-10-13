@@ -1,5 +1,13 @@
 #!/usr/bin/env python3
-import sys,json,pathlib,hashlib,zipfile,subprocess
+import sys,json,pathlib,hashlib,zipfile,subprocess,re
+def verify_manifest(xml):
+ if 'android.permission.INTERNET' in xml:raise ValueError('INTERNET permission detected')
+ package=re.search(r'A: package="([^"]+)"',xml)
+ if not package or package.group(1)!='com.trinetzet.taskcapture.glass':raise ValueError('Wrong application id')
+ if not re.search(r'versionName[^\n]*="0\.2\.0"',xml):raise ValueError('Wrong version name')
+ if not re.search(r'versionCode[^\n]*\)0x2(?:\s|$)',xml):raise ValueError('Wrong version code')
+ if not re.search(r'allowBackup[^\n]*\)0x0(?:\s|$)',xml):raise ValueError('Backup not disabled')
+ return {'package':package.group(1),'version':'0.2.0','version_code':2}
 def verify(path):
  lock=json.loads((pathlib.Path(__file__).resolve().parents[1]/'dependencies.lock.json').read_text())
  with zipfile.ZipFile(path) as apk:
@@ -16,8 +24,9 @@ if __name__=='__main__':
  report=verify(sys.argv[1])
  aapt=sys.argv[2];signer=sys.argv[3]
  xml=subprocess.check_output([aapt,'dump','xmltree',sys.argv[1],'AndroidManifest.xml'],text=True)
- if 'android.permission.INTERNET' in xml:raise ValueError('INTERNET permission detected')
- if 'com.trinetzet.taskcapture' not in xml:raise ValueError('Wrong application id')
- if not any('allowBackup' in line and '0x0' in line for line in xml.splitlines()):raise ValueError('Backup not disabled')
- subprocess.run([signer,'verify','--verbose',sys.argv[1]],check=True,stdout=sys.stderr)
+ report.update(verify_manifest(xml))
+ certificate=subprocess.check_output([signer,'verify','--verbose','--print-certs',sys.argv[1]],text=True,stderr=subprocess.STDOUT)
+ digest=re.search(r'certificate SHA-256 digest: ([0-9a-fA-F]{64})',certificate)
+ if not digest:raise ValueError('Signing certificate digest missing')
+ report['certificate_sha256']=digest.group(1).lower()
  print(json.dumps(report))

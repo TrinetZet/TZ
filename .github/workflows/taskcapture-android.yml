@@ -35,12 +35,12 @@ jobs:
      working-directory: taskcapture-android
      run: |
       mkdir -p distribution
-      cp app/build/outputs/apk/debug/app-debug.apk distribution/TaskCapture-0.1.0-arm64.apk
+      cp app/build/outputs/apk/debug/app-debug.apk distribution/TaskCapture-0.2.0-arm64.apk
       python3 scripts/test-verification.py
-      python3 scripts/verify-apk.py distribution/TaskCapture-0.1.0-arm64.apk "$ANDROID_HOME/build-tools/36.0.0/aapt" "$ANDROID_HOME/build-tools/36.0.0/apksigner" > distribution/verification.json
+      python3 scripts/verify-apk.py distribution/TaskCapture-0.2.0-arm64.apk "$ANDROID_HOME/build-tools/36.0.0/aapt" "$ANDROID_HOME/build-tools/36.0.0/apksigner" > distribution/verification.json
       python3 -m json.tool distribution/verification.json > /dev/null
       cd distribution
-      sha256sum TaskCapture-0.1.0-arm64.apk > SHA256SUMS.txt
+      sha256sum TaskCapture-0.2.0-arm64.apk > SHA256SUMS.txt
    - name: Test actual model on ten Russian inputs
      working-directory: taskcapture-android
      run: |
@@ -104,8 +104,8 @@ jobs:
       path: |
        taskcapture-android/app/build/reports/androidTests
        taskcapture-android/app/build/outputs/androidTest-results
-       taskcapture-android/emulator-ui.xml
  publish:
+  if: startsWith(github.event.head_commit.message, 'release:') || github.event_name == 'workflow_dispatch'
   needs: [apk, emulator]
   runs-on: ubuntu-latest
   permissions:
@@ -120,14 +120,14 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
      run: |
-      tag="taskcapture-android-0.1.0-$GITHUB_RUN_ID"
+      tag="taskcapture-android-0.2.0-$GITHUB_RUN_ID"
       cat > release-notes.md <<'NOTES'
-      TaskCapture Android — тестовая версия 0.1.0.
-      Выделите текст → «Создать задачу» → задача автоматически в локальном бэклоге.
-      Альтернативный вход: «Поделиться» → TaskCapture.
-      Модель Qwen3 0.6B встроена, интернет на телефоне не нужен.
-      Android 8.0+, arm64-v8a. Нужен запас свободного места для APK и копии модели.
-      В этой версии модель обрабатывает первые 600 символов; полный исходник сохранён.
-      APK подписан тестовым ключом. Windows — следующим отдельным этапом.
+      TaskCapture Glass 0.2.0 — плитка TC, стеклянный интерфейс, статусы и Markdown.
+      Скопируйте текст → нажмите TC в шторке → задача сразу сохранена.
+      Статусы: Бэклог / В работе / Выполнено. Экспорт всех задач: сохранить или поделиться .md.
+      Модель Qwen3 0.6B встроена; интернет на телефоне не нужен.
+      Android 8.0+, arm64-v8a. Модель обрабатывает первые 600 символов; полный исходник сохранён.
+      Устанавливается рядом с TaskCapture 0.1.0: старое приложение и его задачи остаются отдельно.
+      Подпись тестовая и временная; бесшовные будущие обновления пока не гарантируются.
       NOTES
-      gh release create "$tag" release-artifact/distribution/TaskCapture-0.1.0-arm64.apk release-artifact/distribution/SHA256SUMS.txt --repo "$GH_REPO" --target "$GITHUB_SHA" --prerelease --title "TaskCapture Android 0.1.0" --notes-file release-notes.md
+      gh release create "$tag" release-artifact/distribution/TaskCapture-0.2.0-arm64.apk release-artifact/distribution/SHA256SUMS.txt --repo "$GH_REPO" --target "$GITHUB_SHA" --prerelease --title "TaskCapture Android 0.2.0" --notes-file release-notes.md

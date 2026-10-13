@@ -10,6 +10,7 @@ import org.junit.*;
 import org.junit.runner.RunWith;
 import java.lang.reflect.*;
 import java.util.*;
+import java.io.*;
 import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class) public class UpdateContractTest {
  Context c;
@@ -42,6 +43,16 @@ import static org.junit.Assert.*;
   android.content.pm.ProviderInfo provider=c.getPackageManager().resolveContentProvider(c.getPackageName()+".exports",0);
   assertNotNull(provider);assertFalse(provider.exported);assertTrue(provider.grantUriPermissions);
  }
+ @Test public void exportUriContainsReadGrantAndOnlyExportsAreShared()throws Exception{
+  Class<?> files=feature("ExportFiles");
+  File file=(File)files.getMethod("writeSnapshot",Context.class,String.class).invoke(null,c,"# TaskCapture\n\nКириллица 🐶");
+  Intent send=(Intent)files.getMethod("shareIntent",Context.class,File.class,String.class).invoke(null,c,file,"text/markdown");
+  assertEquals(Intent.ACTION_SEND,send.getAction());assertEquals("text/markdown",send.getType());
+  assertTrue((send.getFlags()&Intent.FLAG_GRANT_READ_URI_PERMISSION)!=0);assertNotNull(send.getClipData());
+  Uri uri=send.getParcelableExtra(Intent.EXTRA_STREAM);assertNotNull(uri);assertEquals("content",uri.getScheme());
+  try(InputStream in=c.getContentResolver().openInputStream(uri)){assertEquals("# TaskCapture\n\nКириллица 🐶",new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8));}
+  try{files.getMethod("shareIntent",Context.class,File.class,String.class).invoke(null,c,c.getDatabasePath("tasks.db"),"text/markdown");fail("Database shared");}catch(InvocationTargetException e){assertTrue(e.getCause() instanceof IllegalArgumentException);}
+ }
  @Test public void canCompleteAndRestoreFromInterface()throws Exception{
   String id;try(TaskRepository r=new TaskRepository(c)){id=r.capture("UI fixture task","ui");r.complete(r.claimNext(),new NormalizedTask("UI fixture task","Описание"));}
   UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
@@ -53,5 +64,31 @@ import static org.junit.Assert.*;
    d.findObject(By.desc("Вернуть в бэклог: UI fixture task")).click();
    try(TaskRepository r=new TaskRepository(c)){assertEquals("backlog",status(r.get(id)));}
   }
+ }
+ @Test public void focusedClipboardCaptureSurvivesRecreation()throws Exception{
+  try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
+   main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Проверить список дел")));
+   try(ActivityScenario<?> capture=ActivityScenario.launch(new Intent(c,feature("ClipboardActivity")))){
+    UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());assertTrue(d.wait(Until.hasObject(By.text("Добавлено в бэклог")),5000));
+    capture.recreate();try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Проверить список дел",r.get(r.list().get(0).id).source);}
+   }
+  }
+  waitUntilProcessed();
+ }
+ @Test public void quickSettingsTileCreatesTaskWithoutConfirmation()throws Exception{
+  UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());String component=new ComponentName(c,feature("TaskTileService")).flattenToString();
+  try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
+   main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Подготовить список покупок")));
+   d.executeShellCommand("cmd statusbar add-tile "+component);d.executeShellCommand("cmd statusbar expand-settings");d.waitForIdle();
+   d.executeShellCommand("cmd statusbar click-tile "+component);
+   assertTrue(d.wait(Until.hasObject(By.text("Добавлено в бэклог")),10000));
+   try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Подготовить список покупок",r.get(r.list().get(0).id).source);}
+  }finally{d.executeShellCommand("cmd statusbar collapse");d.executeShellCommand("cmd statusbar remove-tile "+component);}
+  waitUntilProcessed();
+ }
+ private void waitUntilProcessed(){
+  long end=android.os.SystemClock.elapsedRealtime()+180000;
+  while(android.os.SystemClock.elapsedRealtime()<end){try(TaskRepository r=new TaskRepository(c)){if(!r.list().isEmpty()){String state=r.list().get(0).state;if(state.equals("ready")||state.equals("error"))return;}}android.os.SystemClock.sleep(250);}
+  fail("Worker did not settle after capture");
  }
 }

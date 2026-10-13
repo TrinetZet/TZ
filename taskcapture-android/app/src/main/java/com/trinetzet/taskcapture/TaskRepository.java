@@ -22,13 +22,13 @@ public final class TaskRepository implements AutoCloseable {
    db.setTransactionSuccessful();return id;
   }finally{db.endTransaction();}
  }
- private Task read(Cursor c){return new Task(c.getString(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getLong(6),c.getString(7));}
+ private Task read(Cursor c){return new Task(c.getString(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getLong(6),c.getString(7),c.getString(8));}
  public Task get(String id){
-  try(Cursor c=helper.getReadableDatabase().rawQuery("SELECT id,title,description,source,state,error,created,claim FROM tasks WHERE id=?",new String[]{id})){return c.moveToFirst()?read(c):null;}
+  try(Cursor c=helper.getReadableDatabase().rawQuery("SELECT id,title,description,source,state,error,created,claim,status FROM tasks WHERE id=?",new String[]{id})){return c.moveToFirst()?read(c):null;}
  }
  public List<Task> list(){
   List<Task> out=new ArrayList<>();
-  try(Cursor c=helper.getReadableDatabase().rawQuery("SELECT id,title,description,'' AS source,state,error,created,claim FROM tasks ORDER BY created DESC,rowid DESC",null)){while(c.moveToNext())out.add(read(c));}
+  try(Cursor c=helper.getReadableDatabase().rawQuery("SELECT id,title,description,'' AS source,state,error,created,claim,status FROM tasks ORDER BY created DESC,rowid DESC",null)){while(c.moveToNext())out.add(read(c));}
   return out;
  }
  // All callers belong to the same serialized unique WorkManager chain.
@@ -56,6 +56,17 @@ public final class TaskRepository implements AutoCloseable {
  public void retry(String id){
   ContentValues v=new ContentValues();v.put("state","pending");v.put("error","");v.put("attempts",0);v.put("claim","");
   helper.getWritableDatabase().update("tasks",v,"id=? AND state='error'",new String[]{id});
+ }
+ public boolean setStatus(String id,String status){
+  ContentValues v=new ContentValues();v.put("status",TaskStatus.requireValid(status));
+  return helper.getWritableDatabase().update("tasks",v,"id=?",new String[]{id})==1;
+ }
+ public List<Task> exportSnapshot(){
+  SQLiteDatabase db=helper.getReadableDatabase();db.beginTransactionNonExclusive();
+  try{List<Task> out=new ArrayList<>();
+   try(Cursor c=db.rawQuery("SELECT id,title,description,source,state,error,created,claim,status FROM tasks ORDER BY created DESC,rowid DESC",null)){while(c.moveToNext())out.add(read(c));}
+   db.setTransactionSuccessful();return out;
+  }finally{db.endTransaction();}
  }
  @Override public void close(){helper.close();}
 }
