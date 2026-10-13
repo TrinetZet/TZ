@@ -7,9 +7,9 @@ on:
 permissions:
  contents: read
 jobs:
- test:
+ apk:
   runs-on: ubuntu-latest
-  timeout-minutes: 30
+  timeout-minutes: 45
   steps:
    - uses: actions/checkout@v5
    - uses: actions/setup-java@v5
@@ -21,7 +21,56 @@ jobs:
       packages: platform-tools
       log-accepted-android-sdk-licenses: false
    - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;28.2.13676358' 'cmake;3.22.1'
-   - run: ./gradlew --no-daemon testDebugUnitTest assembleDebug assembleDebugAndroidTest -PtestAbi=x86_64
+   - name: Prepare pinned local model and runtime
+     run: python3 scripts/prepare-dependencies.py
+     working-directory: taskcapture-android
+   - name: Unit tests and arm64 APK
+     run: ./gradlew --no-daemon --max-workers=2 testDebugUnitTest assembleDebug
+     working-directory: taskcapture-android
+   - name: Verify packaged offline APK
+     working-directory: taskcapture-android
+     run: |
+      mkdir -p distribution
+      cp app/build/outputs/apk/debug/app-debug.apk distribution/TaskCapture-0.1.0-arm64.apk
+      python3 scripts/test-verification.py
+      python3 scripts/verify-apk.py distribution/TaskCapture-0.1.0-arm64.apk "$ANDROID_HOME/build-tools/36.0.0/aapt" "$ANDROID_HOME/build-tools/36.0.0/apksigner" > distribution/verification.json
+      cd distribution
+      sha256sum TaskCapture-0.1.0-arm64.apk > SHA256SUMS.txt
+   - name: Test actual model on ten Russian inputs
+     working-directory: taskcapture-android
+     run: |
+      cmake -S app/src/main/cpp -B host-build -DCMAKE_BUILD_TYPE=Release
+      cmake --build host-build -j2 --target taskcapture-host
+      python3 scripts/check-inference.py host-build/taskcapture-host app/src/main/assets/model.gguf
+   - uses: actions/upload-artifact@v4
+     with:
+      name: TaskCapture-Android-APK
+      compression-level: 0
+      retention-days: 30
+      if-no-files-found: error
+      path: |
+       taskcapture-android/distribution/*
+       taskcapture-android/inference-report.json
+       taskcapture-android/app/build/reports/tests
+ emulator:
+  runs-on: ubuntu-latest
+  timeout-minutes: 45
+  steps:
+   - uses: actions/checkout@v5
+   - uses: actions/setup-java@v5
+     with:
+      distribution: temurin
+      java-version: '17'
+   - uses: android-actions/setup-android@v3
+     with:
+      packages: platform-tools
+      log-accepted-android-sdk-licenses: false
+   - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;28.2.13676358' 'cmake;3.22.1'
+   - name: Prepare pinned local model and runtime
+     run: python3 scripts/prepare-dependencies.py
+     working-directory: taskcapture-android
+   - name: Build Android test APKs
+     run: ./gradlew --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest -PtestAbi=x86_64
      working-directory: taskcapture-android
    - name: Enable KVM
      run: |
@@ -35,9 +84,13 @@ jobs:
       arch: x86_64
       profile: pixel_2
       disable-animations: true
-      script: cd taskcapture-android && ./gradlew --no-daemon connectedDebugAndroidTest -PtestAbi=x86_64
+      emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -memory 4096 -camera-back none
+      script: cd taskcapture-android && bash scripts/emulator-check.sh
    - uses: actions/upload-artifact@v4
      if: always()
      with:
-      name: taskcapture-tests
-      path: taskcapture-android/app/build/reports
+      name: TaskCapture-Android-Checks
+      path: |
+       taskcapture-android/app/build/reports/androidTests
+       taskcapture-android/app/build/outputs/androidTest-results
+       taskcapture-android/emulator-ui.xml

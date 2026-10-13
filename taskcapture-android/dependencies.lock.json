@@ -1,0 +1,9 @@
+{
+ "llama_commit": "1b70350c92563449576bcbbf552994b1d1ed847d",
+ "model_repository": "unsloth/Qwen3-0.6B-GGUF",
+ "model_revision": "50968a4468ef4233ed78cd7c3de230dd1d61a56b",
+ "model_filename": "Qwen3-0.6B-Q4_K_M.gguf",
+ "model_sha256": "ac2d97712095a558e31573f62f466a3f9d93990898b0ec79d7c974c1780d524a",
+ "model_size": 396705472,
+ "model_license": "Apache-2.0"
+}

@@ -15,10 +15,10 @@ public class StorageTest {
   assertEquals(1,r.list().size());assertEquals("Позвонить Кате 🐶",r.get(id).source);
  }
  @Test public void failureRetainsSourceAndRetry(){
-  String id=r.capture("Подготовить план","a");Task t=r.claimNext();assertEquals(id,t.id);
+  String id=r.capture("Подготовить план","a");Task t=r.claimNext();assertNotNull(t);assertEquals(id,t.id);
   r.fail(id,"model");assertEquals("error",r.get(id).state);assertEquals("Подготовить план",r.get(id).source);
   r.retry(id);assertEquals("pending",r.get(id).state);
-  r.complete(id,new NormalizedTask("Подготовить план","Составить план"));
+  assertNotNull(r.claimNext());r.complete(id,new NormalizedTask("Подготовить план","Составить план"));
   assertEquals("ready",r.get(id).state);assertEquals("Подготовить план",r.get(id).source);
  }
  @Test public void interruptedClaimIsRecoverable(){
@@ -28,6 +28,6 @@ public class StorageTest {
  @Test public void lateResultDoesNotOverwriteReadyTask(){
   String id=r.capture("Источник","c");
   r.complete(id,new NormalizedTask("Без claim","не сохранится"));
-  assertEquals("pending",r.get(id).state);
+  assertNotNull(r.get(id));assertEquals("pending",r.get(id).state);
  }
 }

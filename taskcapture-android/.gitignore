@@ -4,3 +4,9 @@ build/
 app/build/
 third_party/
 app/src/main/assets/model.gguf
+
+__pycache__/
+host-build/
+distribution/
+*-report.json
+emulator-*
