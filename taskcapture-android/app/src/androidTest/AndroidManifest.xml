@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+ <application>
+  <activity android:name="com.trinetzet.taskcapture.MarkdownReceiver" android:label="QA Markdown" android:exported="true" android:theme="@android:style/Theme.Material.NoActionBar">
+   <intent-filter><action android:name="android.intent.action.SEND"/><category android:name="android.intent.category.DEFAULT"/><data android:mimeType="text/markdown"/></intent-filter>
+  </activity>
+ </application>
+</manifest>

@@ -19,14 +19,16 @@ public class MainActivity extends Activity {
  @Override public void onCreate(Bundle saved){
   super.onCreate(saved);repo=new TaskRepository(this);exports=new ExportController(this);exports.restore(saved);
   if(saved!=null)filter=saved.getString("filter","all");
-  LinearLayout root=GlassUi.column(this,24);root.setPadding(dp(22),dp(22),dp(22),dp(14));root.setBackground(new GlassBackground());
+  boolean compact=getResources().getConfiguration().screenHeightDp<520;
+  LinearLayout root=GlassUi.column(this,24);root.setPadding(dp(compact?18:22),dp(compact?10:22),dp(compact?18:22),dp(compact?8:14));root.setBackground(new GlassBackground());
   LinearLayout header=new LinearLayout(this);header.setGravity(Gravity.CENTER_VERTICAL);
   TextView name=GlassUi.text(this,"TaskCapture",31);name.setTypeface(Typeface.create("sans-serif-light",0));name.setLetterSpacing(-.035f);name.setMaxLines(1);name.setAutoSizeTextTypeUniformWithConfiguration(20,31,1,android.util.TypedValue.COMPLEX_UNIT_SP);
   header.addView(name,new LinearLayout.LayoutParams(0,-2,1));
-  TextView export=GlassUi.button(this,"↑  Экспорт",exports::showOptions);export.setContentDescription("Экспорт всех задач");header.addView(export);
+  if(compact){TextView tc=GlassUi.button(this,"TC",this::showTileHelp);tc.setContentDescription("Добавить TC в шторку");LinearLayout.LayoutParams tp=new LinearLayout.LayoutParams(-2,-2);tp.rightMargin=dp(8);header.addView(tc,tp);}
+  TextView export=GlassUi.button(this,compact?"↑":"↑  Экспорт",exports::showOptions);export.setContentDescription("Экспорт всех задач");header.addView(export);
   root.addView(header);
-  TextView subtitle=GlassUi.text(this,"Локальный бэклог",13);subtitle.setTextColor(GlassUi.MUTED);subtitle.setLetterSpacing(.06f);root.addView(subtitle,GlassUi.spaced(this,9));
-  counter=GlassUi.text(this,"",26);counter.setTypeface(Typeface.create("sans-serif-light",0));counter.setId(R.id.task_counter);root.addView(counter,GlassUi.spaced(this,26));
+  TextView subtitle=GlassUi.text(this,"Локальный бэклог",13);subtitle.setTextColor(GlassUi.MUTED);subtitle.setLetterSpacing(.06f);if(!compact)root.addView(subtitle,GlassUi.spaced(this,9));
+  counter=GlassUi.text(this,"",26);counter.setTypeface(Typeface.create("sans-serif-light",0));counter.setId(R.id.task_counter);root.addView(counter,GlassUi.spaced(this,26));if(compact)counter.setVisibility(View.GONE);
   HorizontalScrollView filters=new HorizontalScrollView(this);filters.setHorizontalScrollBarEnabled(false);filters.setClipToPadding(false);
   LinearLayout rail=new LinearLayout(this);rail.setPadding(0,0,dp(4),0);
   String[] values={"all","backlog","in_progress","done"};
@@ -35,13 +37,13 @@ public class MainActivity extends Activity {
    chip.setTag(value);chip.setPadding(dp(16),dp(13),dp(16),dp(13));chips.add(chip);
    LinearLayout.LayoutParams p=new LinearLayout.LayoutParams(-2,-2);p.rightMargin=dp(7);rail.addView(chip,p);
   }
-  filters.addView(rail);root.addView(filters,GlassUi.spaced(this,16));
+  filters.addView(rail);root.addView(filters,GlassUi.spaced(this,compact?8:16));
   FrameLayout content=new FrameLayout(this);root.addView(content,new LinearLayout.LayoutParams(-1,0,1));
-  list=new ListView(this);list.setDivider(null);list.setDividerHeight(dp(12));list.setPadding(0,dp(18),0,dp(14));list.setClipToPadding(false);list.setSelector(android.R.color.transparent);list.setAdapter(adapter);
+  list=new ListView(this);list.setId(R.id.task_list);list.setDivider(null);list.setDividerHeight(dp(12));list.setPadding(0,dp(compact?10:18),0,dp(14));list.setClipToPadding(false);list.setSelector(android.R.color.transparent);list.setAdapter(adapter);
   content.addView(list,new FrameLayout.LayoutParams(-1,-1));
   empty=GlassUi.text(this,"",17);empty.setGravity(Gravity.CENTER);empty.setTextColor(GlassUi.MUTED);empty.setLineSpacing(dp(7),1);empty.setPadding(dp(18),dp(24),dp(18),dp(24));content.addView(empty,new FrameLayout.LayoutParams(-1,-1));list.setEmptyView(empty);
-  TextView tile=GlassUi.button(this,"＋  TC в шторке",this::showTileHelp);tile.setContentDescription("Добавить TC в шторку");root.addView(tile);
-  TextView hint=GlassUi.text(this,"Скопируйте текст → нажмите TC",12);hint.setGravity(Gravity.CENTER);hint.setTextColor(GlassUi.MUTED);root.addView(hint,GlassUi.spaced(this,10));
+  if(!compact){TextView tile=GlassUi.button(this,"＋  TC в шторке",this::showTileHelp);tile.setContentDescription("Добавить TC в шторку");root.addView(tile);
+   TextView hint=GlassUi.text(this,"Скопируйте текст → нажмите TC",12);hint.setGravity(Gravity.CENTER);hint.setTextColor(GlassUi.MUTED);root.addView(hint,GlassUi.spaced(this,10));}
   setContentView(root);Insets.apply(root);reload(false);
   int waiting=0;for(Task t:all)if(t.state.equals("pending")||t.state.equals("processing"))waiting++;
   for(int i=0;i<waiting;i++)try{QueueScheduler.enqueue(this);}catch(Exception ignored){break;}

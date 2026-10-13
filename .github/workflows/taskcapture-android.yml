@@ -104,6 +104,8 @@ jobs:
       path: |
        taskcapture-android/app/build/reports/androidTests
        taskcapture-android/app/build/outputs/androidTest-results
+       taskcapture-android/ui-artifacts/**
+       taskcapture-android/visual-test.log
  publish:
   if: startsWith(github.event.head_commit.message, 'release:') || github.event_name == 'workflow_dispatch'
   needs: [apk, emulator]

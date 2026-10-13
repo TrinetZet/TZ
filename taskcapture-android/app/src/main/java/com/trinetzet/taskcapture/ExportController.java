@@ -53,8 +53,8 @@ public final class ExportController {
   if(snapshot==null||uri==null){message("Не удалось сохранить файл. Повторите экспорт.");return true;}
   busy=true;executor.execute(()->{
    boolean ok=false;
-   try(InputStream in=new FileInputStream(snapshot);OutputStream out=app.getContentResolver().openOutputStream(uri,"wt")){
-    if(out==null)throw new IOException("export_destination");byte[] buffer=new byte[16384];int n;while((n=in.read(buffer))!=-1)out.write(buffer,0,n);out.flush();ok=true;
+   try{
+    ExportTransfer.write(snapshot,app.getContentResolver().openOutputStream(uri,"wt"));ok=true;
    }catch(Exception ignored){}
    boolean saved=ok;activity.runOnUiThread(()->{busy=false;message(saved?"Markdown сохранён":"Не удалось сохранить файл. Проверьте место и доступ к папке.");});
   });return true;

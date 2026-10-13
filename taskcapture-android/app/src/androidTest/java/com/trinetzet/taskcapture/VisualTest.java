@@ -21,7 +21,9 @@ public class VisualTest {
    d.findObject(By.text("Подготовить презентацию")).click();assertTrue(d.wait(Until.hasObject(By.desc("Изменить статус задачи")),5000));d.waitForIdle();shot(d,"detail");d.pressBack();
    d.executeShellCommand("settings put system font_scale 1.3");SystemClock.sleep(500);d.waitForIdle();shot(d,"large-text");d.executeShellCommand("settings put system font_scale 1.0");
    d.executeShellCommand("wm size 1768x2208");SystemClock.sleep(500);d.waitForIdle();shot(d,"wide");d.executeShellCommand("wm size reset");SystemClock.sleep(500);
-  }finally{d.executeShellCommand("settings put system font_scale 1.0");d.executeShellCommand("wm size reset");}
+   d.setOrientationLeft();SystemClock.sleep(500);d.waitForIdle();
+   main.onActivity(a->{android.widget.ListView list=a.findViewById(R.id.task_list);assertTrue("Task viewport lost in landscape",list.getHeight()>GlassUi.dp(a,80));});shot(d,"landscape");d.setOrientationNatural();
+  }finally{d.setOrientationNatural();d.unfreezeRotation();d.executeShellCommand("settings put system font_scale 1.0");d.executeShellCommand("wm size reset");}
   c.startActivity(new Intent(CaptureInput.SEND).setClass(c,CaptureActivity.class).setType("text/plain").putExtra(Intent.EXTRA_TEXT,"Созвониться с командой завтра").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   assertTrue(d.wait(Until.hasObject(By.text("Добавлено в бэклог")),5000));shot(d,"capture");
  }

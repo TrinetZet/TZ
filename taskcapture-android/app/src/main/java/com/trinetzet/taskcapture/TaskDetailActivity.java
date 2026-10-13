@@ -9,7 +9,7 @@ public class TaskDetailActivity extends Activity {
  private int dp(float n){return GlassUi.dp(this,n);}
  @Override public void onCreate(Bundle saved){
   super.onCreate(saved);repo=new TaskRepository(this);id=getIntent().getStringExtra("id");Task task=repo.get(id);if(task==null){finish();return;}
-  ScrollView scroll=new ScrollView(this);scroll.setFillViewport(true);scroll.setBackground(new GlassBackground());
+  ScrollView scroll=new ScrollView(this);scroll.setId(R.id.detail_scroll);scroll.setFillViewport(true);scroll.setBackground(new GlassBackground());
   LinearLayout content=GlassUi.column(this,24);scroll.addView(content);
   TextView back=GlassUi.button(this,"←  Задачи",this::finish);LinearLayout.LayoutParams bp=new LinearLayout.LayoutParams(-2,-2);content.addView(back,bp);
   title=GlassUi.text(this,task.title,29);title.setTypeface(android.graphics.Typeface.create("sans-serif-light",0));title.setTextIsSelectable(true);content.addView(title,GlassUi.spaced(this,26));

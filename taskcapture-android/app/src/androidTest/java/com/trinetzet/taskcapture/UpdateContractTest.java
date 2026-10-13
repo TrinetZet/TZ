@@ -91,4 +91,42 @@ import static org.junit.Assert.*;
   while(android.os.SystemClock.elapsedRealtime()<end){try(TaskRepository r=new TaskRepository(c)){if(!r.list().isEmpty()){String state=r.list().get(0).state;if(state.equals("ready")||state.equals("error"))return;}}android.os.SystemClock.sleep(250);}
   fail("Worker did not settle after capture");
  }
+ @Test public void readingPositionSurvivesRecreation()throws Exception{
+  try(TaskRepository r=new TaskRepository(c)){for(int i=0;i<30;i++){r.capture("Scroll fixture "+i,"scroll"+i);r.complete(r.claimNext(),new NormalizedTask("Scroll fixture "+i,"Описание"));}}
+  try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
+   main.onActivity(a->((android.widget.ListView)a.findViewById(R.id.task_list)).setSelectionFromTop(12,0));
+   UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();main.recreate();UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();
+   main.onActivity(a->assertEquals(12,((android.widget.ListView)a.findViewById(R.id.task_list)).getFirstVisiblePosition()));
+  }
+  String id;try(TaskRepository r=new TaskRepository(c)){id=r.capture("Длинный исходник\n".repeat(100),"long-scroll");r.complete(r.claimNext(),new NormalizedTask("Длинный исходник","Описание"));}
+  try(ActivityScenario<TaskDetailActivity> detail=ActivityScenario.launch(new Intent(c,TaskDetailActivity.class).putExtra("id",id))){
+   detail.onActivity(a->((android.widget.ScrollView)a.findViewById(R.id.detail_scroll)).scrollTo(0,500));
+   UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();detail.recreate();UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();
+   detail.onActivity(a->assertEquals(500,((android.widget.ScrollView)a.findViewById(R.id.detail_scroll)).getScrollY()));
+  }
+ }
+ @Test public void shareFromDoneFilterReachesAnotherUidWithAllStatuses()throws Exception{
+  try(TaskRepository r=new TaskRepository(c)){int i=0;for(String status:new String[]{"backlog","in_progress","done"}){String id=r.capture("Export fixture "+status,"share"+(i++));r.complete(r.claimNext(),new NormalizedTask("Export fixture "+status,"Описание"));r.setStatus(id,status);}}
+  UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+  try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
+   UiObject2 rail=d.findObject(By.clazz(android.widget.HorizontalScrollView.class));rail.scroll(Direction.RIGHT,1f);
+   d.findObject(By.desc("Фильтр: Выполнено")).click();d.findObject(By.desc("Экспорт всех задач")).click();
+   assertTrue(d.wait(Until.hasObject(By.text("Поделиться .md")),5000));d.findObject(By.text("Поделиться .md")).click();
+   assertTrue("Share receiver absent",d.wait(Until.hasObject(By.textContains("QA Markdown")),10000));d.findObject(By.textContains("QA Markdown")).click();
+   assertTrue("URI grant failed across UID",d.wait(Until.hasObject(By.desc("Markdown получен")),10000));String md=d.findObject(By.desc("Markdown получен")).getText();
+   for(String status:new String[]{"backlog","in_progress","done"})assertTrue("Filter omitted "+status,md.contains("Export fixture "+status));
+   d.pressBack();
+  }
+ }
+ @Test public void restoredDocumentSnapshotIsWrittenToSelectedUri()throws Exception{
+  File snapshot=ExportFiles.writeSnapshot(c,"# TaskCapture\n\nСнимок до поворота 🐶");File destination=ExportFiles.writeSnapshot(c,"");
+  Uri target=ExportFiles.shareIntent(c,destination,"text/markdown").getParcelableExtra(Intent.EXTRA_STREAM);
+  java.util.concurrent.atomic.AtomicReference<ExportController> controller=new java.util.concurrent.atomic.AtomicReference<>();
+  try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
+   main.onActivity(a->{ExportController export=new ExportController(a);android.os.Bundle saved=new android.os.Bundle();saved.putString("export_snapshot",snapshot.getName());export.restore(saved);controller.set(export);assertTrue(export.onActivityResult(402,android.app.Activity.RESULT_OK,new Intent().setData(target)));});
+   long end=android.os.SystemClock.elapsedRealtime()+5000;String content="";
+   while(android.os.SystemClock.elapsedRealtime()<end){try(InputStream in=new FileInputStream(destination)){content=new String(in.readAllBytes(),java.nio.charset.StandardCharsets.UTF_8);}if(content.contains("Снимок до поворота"))break;android.os.SystemClock.sleep(100);}
+   assertEquals("# TaskCapture\n\nСнимок до поворота 🐶",content);main.onActivity(a->controller.get().close());
+  }
+ }
 }

@@ -21,6 +21,14 @@ public class GlassContractTest {
   check(!md.contains("\n# Исходник"),"Source injected heading");
   check(md.contains("> # Исходник"),"Source lines not quoted");
   check(((String)render.invoke(null,Collections.emptyList(),0L)).startsWith("# TaskCapture"),"Empty export invalid");
+  Class<?> transfer=required("ExportTransfer");
+  java.io.File temporary=java.io.File.createTempFile("tc-export", ".md");java.nio.file.Files.writeString(temporary.toPath(),"Кириллица 🐶");
+  java.io.ByteArrayOutputStream normal=new java.io.ByteArrayOutputStream();
+  transfer.getMethod("write",java.io.File.class,java.io.OutputStream.class).invoke(null,temporary,normal);
+  check(normal.toString(java.nio.charset.StandardCharsets.UTF_8).equals("Кириллица 🐶"),"Export bytes changed");
+  java.io.OutputStream broken=new java.io.ByteArrayOutputStream(){@Override public void close()throws java.io.IOException{throw new java.io.IOException("destination_commit_failed");}};
+  try{transfer.getMethod("write",java.io.File.class,java.io.OutputStream.class).invoke(null,temporary,broken);throw new AssertionError("Close failure reported as success");}catch(InvocationTargetException e){check(e.getCause() instanceof java.io.IOException,"Commit error not propagated");}
+  temporary.delete();
   System.out.println("Glass contracts: statuses and all-status Markdown passed");
  }
 }
