@@ -10,3 +10,4 @@ host-build/
 distribution/
 *-report.json
 /emulator-*
+app/.cxx/

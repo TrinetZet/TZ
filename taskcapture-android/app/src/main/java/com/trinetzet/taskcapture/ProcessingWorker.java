@@ -15,7 +15,7 @@ public class ProcessingWorker extends Worker {
     repo.complete(task,result);
    }catch(OutOfMemoryError e){if(isStopped())return Result.retry();repo.fail(task,"memory");}
     catch(LinkageError e){if(isStopped())return Result.retry();repo.fail(task,"runtime");}
-    catch(Exception e){if(isStopped())return Result.retry();repo.fail(task,"model");}
+    catch(Exception e){if(isStopped())return Result.retry();String code=e.getMessage();repo.fail(task,code!=null&&code.matches("[a-z_]{1,40}")?code:"model");}
    return Result.success();
   }catch(Exception e){return getRunAttemptCount()<3?Result.retry():Result.failure();}
  }

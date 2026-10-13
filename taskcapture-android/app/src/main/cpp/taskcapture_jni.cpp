@@ -12,5 +12,5 @@ extern "C" JNIEXPORT jbyteArray JNICALL
 Java_com_trinetzet_taskcapture_NativeModel_run(JNIEnv *env,jclass,jbyteArray path,jbyteArray prompt) {
  try {auto result=extract_task(bytes(env,path),bytes(env,prompt));
   auto arr=env->NewByteArray(result.size());if(arr)env->SetByteArrayRegion(arr,0,result.size(),reinterpret_cast<const jbyte *>(result.data()));return arr;
- } catch(const std::exception &) {env->ThrowNew(env->FindClass("java/lang/IllegalStateException"),"local_inference_failed");return nullptr;}
+ } catch(const std::exception &e) {env->ThrowNew(env->FindClass("java/lang/IllegalStateException"),e.what());return nullptr;}
 }

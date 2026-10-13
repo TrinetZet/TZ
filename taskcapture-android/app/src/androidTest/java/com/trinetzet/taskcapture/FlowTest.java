@@ -28,7 +28,7 @@ public class FlowTest {
   while(SystemClock.elapsedRealtime()<until){
    try(TaskRepository repo=new TaskRepository(c)){
     if(repo.list().size()==expected){
-     Task t=repo.get(repo.list().get(0).id);assertNotEquals("error",t.state);
+     Task t=repo.get(repo.list().get(0).id);assertNotEquals("Processing error code: "+t.error,"error",t.state);
      if(t.state.equals("ready"))return t;
     }
    }

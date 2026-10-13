@@ -1,3 +1,2 @@
 #include "deadline.h"
-#include <cassert>
-int main(){Deadline expired(0),future;assert(expired.expired());assert(!future.expired());}
+int main(){Deadline expired(0),future;return expired.expired()&&!future.expired()?0:1;}
