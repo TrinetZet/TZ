@@ -69,21 +69,21 @@ import static org.junit.Assert.*;
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
    main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Проверить список дел")));
    try(ActivityScenario<?> capture=ActivityScenario.launch(new Intent(c,feature("ClipboardActivity")))){
-    UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());assertTrue(d.wait(Until.hasObject(By.text("Добавлено в бэклог")),5000));
+    waitForCaptured();capture.onActivity(a->assertTrue("Saved confirmation missing",containsView(a.getWindow().getDecorView(),SuccessView.class)));
     capture.recreate();try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Проверить список дел",r.get(r.list().get(0).id).source);}
    }
   }
   waitUntilProcessed();
  }
  @Test public void quickSettingsTileCreatesTaskWithoutConfirmation()throws Exception{
-  UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());String component=new ComponentName(c,feature("TaskTileService")).flattenToString();
+  UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());String component=new ComponentName(c,feature("TaskTileService")).flattenToString();String oldTiles=d.executeShellCommand("settings get secure sysui_qs_tiles").trim();
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
    main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Подготовить список покупок")));
-   d.executeShellCommand("cmd statusbar add-tile "+component);d.executeShellCommand("cmd statusbar expand-settings");d.waitForIdle();
-   d.executeShellCommand("cmd statusbar click-tile "+component);
-   assertTrue(d.wait(Until.hasObject(By.text("Добавлено в бэклог")),10000));
+   d.executeShellCommand("cmd statusbar set-tiles custom("+component+")");d.executeShellCommand("cmd statusbar expand-settings");
+   assertTrue("TC tile did not bind visibly",d.wait(Until.hasObject(By.text("TC")),10000));d.findObject(By.text("TC")).click();
+   waitForCaptured();
    try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Подготовить список покупок",r.get(r.list().get(0).id).source);}
-  }finally{d.executeShellCommand("cmd statusbar collapse");d.executeShellCommand("cmd statusbar remove-tile "+component);}
+  }finally{d.executeShellCommand("cmd statusbar collapse");d.executeShellCommand("cmd statusbar set-tiles "+oldTiles);}
   waitUntilProcessed();
  }
  private void waitUntilProcessed(){
@@ -91,6 +91,8 @@ import static org.junit.Assert.*;
   while(android.os.SystemClock.elapsedRealtime()<end){try(TaskRepository r=new TaskRepository(c)){if(!r.list().isEmpty()){String state=r.list().get(0).state;if(state.equals("ready")||state.equals("error"))return;}}android.os.SystemClock.sleep(250);}
   fail("Worker did not settle after capture");
  }
+ private void waitForCaptured(){long end=android.os.SystemClock.elapsedRealtime()+10000;while(android.os.SystemClock.elapsedRealtime()<end){try(TaskRepository r=new TaskRepository(c)){if(r.list().size()==1)return;}android.os.SystemClock.sleep(25);}fail("Clipboard task was not saved");}
+ private static boolean containsView(android.view.View view,Class<?> type){if(type.isInstance(view))return true;if(view instanceof android.view.ViewGroup){android.view.ViewGroup group=(android.view.ViewGroup)view;for(int i=0;i<group.getChildCount();i++)if(containsView(group.getChildAt(i),type))return true;}return false;}
  @Test public void readingPositionSurvivesRecreation()throws Exception{
   try(TaskRepository r=new TaskRepository(c)){for(int i=0;i<30;i++){r.capture("Scroll fixture "+i,"scroll"+i);r.complete(r.claimNext(),new NormalizedTask("Scroll fixture "+i,"Описание"));}}
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
