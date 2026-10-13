@@ -22,7 +22,7 @@ public class GlassContractTest {
   check(md.contains("> # Исходник"),"Source lines not quoted");
   check(((String)render.invoke(null,Collections.emptyList(),0L)).startsWith("# TaskCapture"),"Empty export invalid");
   Class<?> transfer=required("ExportTransfer");
-  java.io.File temporary=java.io.File.createTempFile("tc-export", ".md");java.nio.file.Files.writeString(temporary.toPath(),"Кириллица 🐶");
+  java.io.File temporary=java.io.File.createTempFile("tc-export", ".md");java.nio.file.Files.write(temporary.toPath(),"Кириллица 🐶".getBytes(java.nio.charset.StandardCharsets.UTF_8));
   java.io.ByteArrayOutputStream normal=new java.io.ByteArrayOutputStream();
   transfer.getMethod("write",java.io.File.class,java.io.OutputStream.class).invoke(null,temporary,normal);
   check(normal.toString(java.nio.charset.StandardCharsets.UTF_8).equals("Кириллица 🐶"),"Export bytes changed");
