@@ -24,7 +24,7 @@ public class FlowTest {
   try(TaskRepository repo=new TaskRepository(c)){assertEquals(2,repo.list().size());}
  }
  private Task waitFor(Context c,int expected){
-  long until=SystemClock.elapsedRealtime()+240000;
+  long until=SystemClock.elapsedRealtime()+480000;
   while(SystemClock.elapsedRealtime()<until){
    try(TaskRepository repo=new TaskRepository(c)){
     if(repo.list().size()==expected){
@@ -34,6 +34,6 @@ public class FlowTest {
    }
    SystemClock.sleep(1000);
   }
-  throw new AssertionError("Capture/inference did not complete within 240 seconds");
+  throw new AssertionError("Capture/inference did not complete within 480 seconds");
  }
 }

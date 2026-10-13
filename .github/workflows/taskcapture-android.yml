@@ -45,8 +45,9 @@ jobs:
      working-directory: taskcapture-android
      run: |
       cmake -S app/src/main/cpp -B host-build -DCMAKE_BUILD_TYPE=Release
-      cmake --build host-build -j2 --target taskcapture-host taskcapture-deadline-test
+      cmake --build host-build -j2 --target taskcapture-host taskcapture-deadline-test taskcapture-thread-test
       host-build/taskcapture-deadline-test
+      host-build/taskcapture-thread-test
       python3 scripts/check-inference.py host-build/taskcapture-host app/src/main/assets/model.gguf
    - uses: actions/upload-artifact@v4
      with:
