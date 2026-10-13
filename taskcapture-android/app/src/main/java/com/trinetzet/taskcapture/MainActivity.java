@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
   TextView empty=label("Пока задач нет\n\nВыделите текст в другом приложении и откройте меню ⋮.\n\nЕсли пункта нет: «Поделиться» → TaskCapture.",17,MUTED);
   empty.setPadding(0,dp(32),0,0);root.addView(empty);root.addView(list,new LinearLayout.LayoutParams(-1,0,1));list.setEmptyView(empty);
   list.setOnItemClickListener((p,v,pos,id)->startActivity(new Intent(this,TaskDetailActivity.class).putExtra("id",tasks.get(pos).id)));
-  setContentView(root);reload();
+  setContentView(root);Insets.apply(root);reload();
   int waiting=0;for(Task t:tasks)if(t.state.equals("pending")||t.state.equals("processing"))waiting++;
   for(int i=0;i<waiting;i++)try{QueueScheduler.enqueue(this);}catch(Exception ignored){break;}
  }

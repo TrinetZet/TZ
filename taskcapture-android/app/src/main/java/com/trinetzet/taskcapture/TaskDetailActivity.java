@@ -20,7 +20,7 @@ public class TaskDetailActivity extends Activity {
   });content.addView(retry);
   content.addView(text("ИСХОДНЫЙ ТЕКСТ",12,MainActivity.MUTED));content.addView(text(task.source,16,MainActivity.MUTED));
   if(task.source.codePointCount(0,task.source.length())>600)content.addView(text("Модель обработает первые 600 символов. Полный исходник сохранён выше.",13,MainActivity.MUTED));
-  setContentView(scroll);reload();
+  setContentView(scroll);Insets.apply(content);reload();
  }
  private void reload(){Task t=repo.get(id);if(t==null)return;title.setText(t.title);desc.setText(t.description);
   String message=MainActivity.stateLabel(t.state);

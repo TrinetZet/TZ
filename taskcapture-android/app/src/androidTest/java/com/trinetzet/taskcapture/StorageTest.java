@@ -16,10 +16,16 @@ public class StorageTest {
  }
  @Test public void failureRetainsSourceAndRetry(){
   String id=r.capture("Подготовить план","a");Task t=r.claimNext();assertNotNull(t);assertEquals(id,t.id);
-  r.fail(id,"model");assertEquals("error",r.get(id).state);assertEquals("Подготовить план",r.get(id).source);
+  r.fail(t,"model");assertEquals("error",r.get(id).state);assertEquals("Подготовить план",r.get(id).source);
   r.retry(id);assertEquals("pending",r.get(id).state);
-  assertNotNull(r.claimNext());r.complete(id,new NormalizedTask("Подготовить план","Составить план"));
+  Task retry=r.claimNext();assertNotNull(retry);r.complete(retry,new NormalizedTask("Подготовить план","Составить план"));
   assertEquals("ready",r.get(id).state);assertEquals("Подготовить план",r.get(id).source);
+ }
+ @Test public void staleClaimCannotOverwriteReplacement(){
+  String id=r.capture("Проверить отчёт","owners");Task old=r.claimNext();Task replacement=r.claimNext();
+  r.fail(old,"timeout");assertEquals("processing",r.get(id).state);
+  r.complete(old,new NormalizedTask("Старый результат","Не сохранять"));assertEquals("processing",r.get(id).state);
+  r.complete(replacement,new NormalizedTask("Проверить отчёт","Новая попытка"));assertEquals("ready",r.get(id).state);
  }
  @Test public void interruptedClaimIsRecoverable(){
   String id=r.capture("Проверить отчёт","b");assertNotNull(r.claimNext());
@@ -27,7 +33,7 @@ public class StorageTest {
  }
  @Test public void lateResultDoesNotOverwriteReadyTask(){
   String id=r.capture("Источник","c");
-  r.complete(id,new NormalizedTask("Без claim","не сохранится"));
+  r.complete(r.get(id),new NormalizedTask("Без claim","не сохранится"));
   assertNotNull(r.get(id));assertEquals("pending",r.get(id).state);
  }
 }

@@ -9,4 +9,4 @@ __pycache__/
 host-build/
 distribution/
 *-report.json
-emulator-*
+/emulator-*

@@ -22,37 +22,39 @@ public final class TaskRepository implements AutoCloseable {
    db.setTransactionSuccessful();return id;
   }finally{db.endTransaction();}
  }
- private Task read(Cursor c){return new Task(c.getString(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getLong(6));}
+ private Task read(Cursor c){return new Task(c.getString(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5),c.getLong(6),c.getString(7));}
  public Task get(String id){
-  try(Cursor c=helper.getReadableDatabase().rawQuery("SELECT id,title,description,source,state,error,created FROM tasks WHERE id=?",new String[]{id})){return c.moveToFirst()?read(c):null;}
+  try(Cursor c=helper.getReadableDatabase().rawQuery("SELECT id,title,description,source,state,error,created,claim FROM tasks WHERE id=?",new String[]{id})){return c.moveToFirst()?read(c):null;}
  }
  public List<Task> list(){
   List<Task> out=new ArrayList<>();
-  try(Cursor c=helper.getReadableDatabase().rawQuery("SELECT id,title,description,'' AS source,state,error,created FROM tasks ORDER BY created DESC,rowid DESC",null)){while(c.moveToNext())out.add(read(c));}
+  try(Cursor c=helper.getReadableDatabase().rawQuery("SELECT id,title,description,'' AS source,state,error,created,claim FROM tasks ORDER BY created DESC,rowid DESC",null)){while(c.moveToNext())out.add(read(c));}
   return out;
  }
  // All callers belong to the same serialized unique WorkManager chain.
  public Task claimNext(){
   SQLiteDatabase db=helper.getWritableDatabase();db.beginTransaction();
   try {
-   db.execSQL("UPDATE tasks SET state='pending' WHERE state='processing'");
+   db.execSQL("UPDATE tasks SET state='pending',claim='' WHERE state='processing'");
    String id=null;
    try(Cursor c=db.rawQuery("SELECT id FROM tasks WHERE state='pending' ORDER BY created,rowid LIMIT 1",null)){if(c.moveToFirst())id=c.getString(0);}
    if(id==null){db.setTransactionSuccessful();return null;}
-   db.execSQL("UPDATE tasks SET state='processing',attempts=attempts+1,error='' WHERE id=?",new Object[]{id});
+   db.execSQL("UPDATE tasks SET state='processing',attempts=attempts+1,error='',claim=? WHERE id=?",new Object[]{UUID.randomUUID().toString(),id});
    Task task=get(id);db.setTransactionSuccessful();return task;
   }finally{db.endTransaction();}
  }
- public void complete(String id,NormalizedTask n){
+ public void complete(Task task,NormalizedTask n){
+  Task current=get(task.id);if(current==null||!ClaimGuard.allowed(task.claim,current.claim))return;
   ContentValues v=new ContentValues();v.put("title",n.title);v.put("description",n.description);v.put("state","ready");v.put("error","");
-  helper.getWritableDatabase().update("tasks",v,"id=? AND state='processing'",new String[]{id});
+  helper.getWritableDatabase().update("tasks",v,"id=? AND state='processing' AND claim=?",new String[]{task.id,task.claim});
  }
- public void fail(String id,String code){
+ public void fail(Task task,String code){
+  Task current=get(task.id);if(current==null||!ClaimGuard.allowed(task.claim,current.claim))return;
   ContentValues v=new ContentValues();v.put("state","error");v.put("error",code);
-  helper.getWritableDatabase().update("tasks",v,"id=? AND state='processing'",new String[]{id});
+  helper.getWritableDatabase().update("tasks",v,"id=? AND state='processing' AND claim=?",new String[]{task.id,task.claim});
  }
  public void retry(String id){
-  ContentValues v=new ContentValues();v.put("state","pending");v.put("error","");v.put("attempts",0);
+  ContentValues v=new ContentValues();v.put("state","pending");v.put("error","");v.put("attempts",0);v.put("claim","");
   helper.getWritableDatabase().update("tasks",v,"id=? AND state='error'",new String[]{id});
  }
  @Override public void close(){helper.close();}

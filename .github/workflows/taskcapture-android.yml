@@ -21,6 +21,8 @@ jobs:
       packages: platform-tools
       log-accepted-android-sdk-licenses: false
    - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;28.2.13676358' 'cmake;3.22.1'
+   - name: Check committed build files
+     run: python3 taskcapture-android/scripts/test-build-files.py
    - name: Prepare pinned local model and runtime
      run: python3 scripts/prepare-dependencies.py
      working-directory: taskcapture-android
@@ -34,6 +36,7 @@ jobs:
       cp app/build/outputs/apk/debug/app-debug.apk distribution/TaskCapture-0.1.0-arm64.apk
       python3 scripts/test-verification.py
       python3 scripts/verify-apk.py distribution/TaskCapture-0.1.0-arm64.apk "$ANDROID_HOME/build-tools/36.0.0/aapt" "$ANDROID_HOME/build-tools/36.0.0/apksigner" > distribution/verification.json
+      python3 -m json.tool distribution/verification.json > /dev/null
       cd distribution
       sha256sum TaskCapture-0.1.0-arm64.apk > SHA256SUMS.txt
    - name: Test actual model on ten Russian inputs
@@ -66,6 +69,8 @@ jobs:
       packages: platform-tools
       log-accepted-android-sdk-licenses: false
    - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;28.2.13676358' 'cmake;3.22.1'
+   - name: Check committed build files
+     run: python3 taskcapture-android/scripts/test-build-files.py
    - name: Prepare pinned local model and runtime
      run: python3 scripts/prepare-dependencies.py
      working-directory: taskcapture-android
@@ -94,3 +99,29 @@ jobs:
        taskcapture-android/app/build/reports/androidTests
        taskcapture-android/app/build/outputs/androidTest-results
        taskcapture-android/emulator-ui.xml
+ publish:
+  needs: [apk, emulator]
+  runs-on: ubuntu-latest
+  permissions:
+   contents: write
+  steps:
+   - uses: actions/download-artifact@v4
+     with:
+      name: TaskCapture-Android-APK
+      path: release-artifact
+   - name: Publish tested APK
+     env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+     run: |
+      tag="taskcapture-android-0.1.0-$GITHUB_RUN_ID"
+      cat > release-notes.md <<'NOTES'
+      TaskCapture Android — тестовая версия 0.1.0.
+      Выделите текст → «Создать задачу» → задача автоматически в локальном бэклоге.
+      Альтернативный вход: «Поделиться» → TaskCapture.
+      Модель Qwen3 0.6B встроена, интернет на телефоне не нужен.
+      Android 8.0+, arm64-v8a. Нужен запас свободного места для APK и копии модели.
+      В этой версии модель обрабатывает первые 600 символов; полный исходник сохранён.
+      APK подписан тестовым ключом. Windows — следующим отдельным этапом.
+      NOTES
+      gh release create "$tag" release-artifact/distribution/TaskCapture-0.1.0-arm64.apk release-artifact/distribution/SHA256SUMS.txt --repo "$GH_REPO" --target "$GITHUB_SHA" --prerelease --title "TaskCapture Android 0.1.0" --notes-file release-notes.md

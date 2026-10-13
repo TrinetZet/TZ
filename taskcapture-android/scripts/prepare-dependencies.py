@@ -28,7 +28,7 @@ if not valid(model):
    if attempt==2:raise
    time.sleep(3)
 shutil.copyfile(llama/'LICENSE',assets/'llama-LICENSE.txt')
-with urllib.request.urlopen('https://raw.githubusercontent.com/QwenLM/Qwen3/main/LICENSE',timeout=60) as f:
- (assets/'Qwen-LICENSE.txt').write_bytes(f.read())
+if hashlib.sha256((assets/'Qwen-LICENSE.txt').read_bytes()).hexdigest()!=lock['model_license_sha256']:
+ raise RuntimeError('Pinned model license checksum mismatch')
 (assets/'model-info.json').write_text(json.dumps(lock,indent=2))
 print(json.dumps({'model_size':model.stat().st_size,'model_sha256':lock['model_sha256'],'llama_commit':lock['llama_commit']}))

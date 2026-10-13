@@ -13,8 +13,8 @@ public final class ModelInstaller {
  public static synchronized File ensureInstalled(Context context)throws Exception {
   File target=new File(context.getFilesDir(),"model.gguf");
   if(target.exists()&&target.length()==SIZE&&HASH.equals(hash(target)))return target;
-  if(context.getFilesDir().getUsableSpace()<SIZE+32*1024*1024)throw new IOException("not_enough_space");
   File temp=new File(context.getFilesDir(),"model.partial");
+  ModelFiles.prepare(temp,SIZE+32*1024*1024,()->context.getFilesDir().getUsableSpace());
   try {
    try(InputStream in=context.getAssets().open("model.gguf");FileOutputStream out=new FileOutputStream(temp)){
     byte[] buf=new byte[1024*1024];int n;while((n=in.read(buf))!=-1)out.write(buf,0,n);out.getFD().sync();

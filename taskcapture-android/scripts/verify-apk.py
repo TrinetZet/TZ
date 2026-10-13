@@ -19,5 +19,5 @@ if __name__=='__main__':
  if 'android.permission.INTERNET' in xml:raise ValueError('INTERNET permission detected')
  if 'com.trinetzet.taskcapture' not in xml:raise ValueError('Wrong application id')
  if not any('allowBackup' in line and '0x0' in line for line in xml.splitlines()):raise ValueError('Backup not disabled')
- subprocess.run([signer,'verify','--verbose',sys.argv[1]],check=True)
+ subprocess.run([signer,'verify','--verbose',sys.argv[1]],check=True,stdout=sys.stderr)
  print(json.dumps(report))
