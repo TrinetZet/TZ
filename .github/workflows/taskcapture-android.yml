@@ -29,6 +29,8 @@ jobs:
    - name: Unit tests and arm64 APK
      run: ./gradlew --no-daemon --max-workers=2 testDebugUnitTest assembleDebug
      working-directory: taskcapture-android
+   - name: Check optimized inference kernels
+     run: python3 taskcapture-android/scripts/check-native-flags.py
    - name: Verify packaged offline APK
      working-directory: taskcapture-android
      run: |
@@ -43,7 +45,8 @@ jobs:
      working-directory: taskcapture-android
      run: |
       cmake -S app/src/main/cpp -B host-build -DCMAKE_BUILD_TYPE=Release
-      cmake --build host-build -j2 --target taskcapture-host
+      cmake --build host-build -j2 --target taskcapture-host taskcapture-deadline-test
+      host-build/taskcapture-deadline-test
       python3 scripts/check-inference.py host-build/taskcapture-host app/src/main/assets/model.gguf
    - uses: actions/upload-artifact@v4
      with:
@@ -77,6 +80,8 @@ jobs:
    - name: Build Android test APKs
      run: ./gradlew --no-daemon --max-workers=2 assembleDebug assembleDebugAndroidTest -PtestAbi=x86_64
      working-directory: taskcapture-android
+   - name: Check optimized inference kernels
+     run: python3 taskcapture-android/scripts/check-native-flags.py
    - name: Enable KVM
      run: |
       echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules

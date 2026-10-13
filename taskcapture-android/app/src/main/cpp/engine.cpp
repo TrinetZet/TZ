@@ -1,4 +1,5 @@
 #include "engine.h"
+#include "deadline.h"
 #include "llama.h"
 #include <memory>
 #include <mutex>
@@ -7,6 +8,8 @@
 #include <chrono>
 namespace {
 void silent_log(enum ggml_log_level,const char *,void *) {}
+bool timed_out(void *data){return static_cast<Deadline *>(data)->expired();}
+bool loading_allowed(float,void *data){return !timed_out(data);}
 const char *grammar=R"GBNF(
 root ::= "{\"title\":" ws string ",\"description\":" ws string "}" ws
 string ::= "\"" char+ "\""
@@ -17,10 +20,11 @@ ws ::= [ \t\n\r]*
 std::string extract_task(const std::string &path,const std::string &prompt) {
  static std::once_flag once;
  std::call_once(once,[]{llama_log_set(silent_log,nullptr);llama_backend_init();});
- auto mp=llama_model_default_params();mp.n_gpu_layers=0;mp.load_mode=LLAMA_LOAD_MODE_MMAP;
+ Deadline deadline;
+ auto mp=llama_model_default_params();mp.progress_callback=loading_allowed;mp.progress_callback_user_data=&deadline;mp.n_gpu_layers=0;mp.load_mode=LLAMA_LOAD_MODE_MMAP;
  std::unique_ptr<llama_model,decltype(&llama_model_free)> model(llama_model_load_from_file(path.c_str(),mp),llama_model_free);
  if(!model)throw std::runtime_error("model_load");
- auto cp=llama_context_default_params();cp.n_ctx=2048;cp.n_batch=2048;cp.n_ubatch=128;cp.n_threads=4;cp.n_threads_batch=4;
+ auto cp=llama_context_default_params();cp.n_ctx=2048;cp.n_batch=2048;cp.n_ubatch=128;cp.n_threads=4;cp.n_threads_batch=4;cp.abort_callback=timed_out;cp.abort_callback_data=&deadline;
  std::unique_ptr<llama_context,decltype(&llama_free)> ctx(llama_init_from_model(model.get(),cp),llama_free);
  if(!ctx)throw std::runtime_error("context_load");
  auto vocab=llama_model_get_vocab(model.get());
@@ -39,9 +43,9 @@ std::string extract_task(const std::string &path,const std::string &prompt) {
  llama_sampler_chain_add(sampler.get(),llama_sampler_init_top_p(0.95f,1));
  llama_sampler_chain_add(sampler.get(),llama_sampler_init_temp(0.6f));
  llama_sampler_chain_add(sampler.get(),llama_sampler_init_dist(73));
- std::string out;auto start=std::chrono::steady_clock::now();
+ std::string out;
  for(int i=0;i<256;i++) {
-  if(std::chrono::steady_clock::now()-start>std::chrono::minutes(2))throw std::runtime_error("timeout");
+  if(deadline.expired())throw std::runtime_error("timeout");
   llama_token token=llama_sampler_sample(sampler.get(),ctx.get(),-1);
   if(llama_vocab_is_eog(vocab,token))return out;
   char buf[256];int size=llama_token_to_piece(vocab,token,buf,sizeof(buf),0,false);
