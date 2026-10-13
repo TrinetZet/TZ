@@ -17,7 +17,7 @@ ws ::= [ \t\n\r]*
 std::string extract_task(const std::string &path,const std::string &prompt) {
  static std::once_flag once;
  std::call_once(once,[]{llama_log_set(silent_log,nullptr);llama_backend_init();});
- auto mp=llama_model_default_params();mp.n_gpu_layers=0;mp.use_mmap=true;
+ auto mp=llama_model_default_params();mp.n_gpu_layers=0;mp.load_mode=LLAMA_LOAD_MODE_MMAP;
  std::unique_ptr<llama_model,decltype(&llama_model_free)> model(llama_model_load_from_file(path.c_str(),mp),llama_model_free);
  if(!model)throw std::runtime_error("model_load");
  auto cp=llama_context_default_params();cp.n_ctx=2048;cp.n_batch=2048;cp.n_ubatch=128;cp.n_threads=4;cp.n_threads_batch=4;
