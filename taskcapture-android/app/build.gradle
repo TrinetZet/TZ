@@ -1,0 +1,30 @@
+plugins { id 'com.android.application' }
+android {
+ namespace 'com.trinetzet.taskcapture'
+ compileSdk 36
+ ndkVersion '28.2.13676358'
+ defaultConfig {
+  applicationId 'com.trinetzet.taskcapture'
+  minSdk 26
+  targetSdk 36
+  versionCode 1
+  versionName '0.1.0'
+  testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+  ndk { abiFilters (project.findProperty('testAbi') ?: 'arm64-v8a') }
+  externalNativeBuild { cmake { cppFlags '-std=c++17'; arguments '-DANDROID_STL=c++_shared' } }
+ }
+ externalNativeBuild { cmake { path 'src/main/cpp/CMakeLists.txt'; version '3.22.1' } }
+ compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+ androidResources { noCompress += 'gguf' }
+ packaging { jniLibs { useLegacyPackaging = false } }
+ buildTypes { release { minifyEnabled false } }
+}
+dependencies {
+ implementation 'androidx.work:work-runtime:2.10.1'
+ testImplementation 'junit:junit:4.13.2'
+ testImplementation 'org.json:json:20240303'
+ androidTestImplementation 'androidx.test:runner:1.6.2'
+ androidTestImplementation 'androidx.test:core:1.6.1'
+ androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+ androidTestImplementation 'androidx.test.uiautomator:uiautomator:2.3.0'
+}

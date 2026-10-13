@@ -1,0 +1,6 @@
+.gradle/
+local.properties
+build/
+app/build/
+third_party/
+app/src/main/assets/model.gguf
