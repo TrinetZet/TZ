@@ -62,6 +62,7 @@ import static org.junit.Assert.*;
    assertTrue(d.wait(Until.hasObject(By.desc("Вернуть в бэклог: UI fixture task")),5000));
    try(TaskRepository r=new TaskRepository(c)){assertEquals("done",status(r.get(id)));}
    d.findObject(By.desc("Вернуть в бэклог: UI fixture task")).click();
+   assertTrue(d.wait(Until.hasObject(By.desc("Завершить задачу: UI fixture task")),5000));
    try(TaskRepository r=new TaskRepository(c)){assertEquals("backlog",status(r.get(id)));}
   }
  }
@@ -79,11 +80,11 @@ import static org.junit.Assert.*;
   UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());String component=new ComponentName(c,feature("TaskTileService")).flattenToString();String oldTiles=d.executeShellCommand("settings get secure sysui_qs_tiles").trim();
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
    main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Подготовить список покупок")));
-   d.executeShellCommand("cmd statusbar set-tiles custom("+component+")");d.executeShellCommand("cmd statusbar expand-settings");
+   d.executeShellCommand("settings put secure sysui_qs_tiles custom("+component+")");d.executeShellCommand("cmd statusbar expand-settings");
    assertTrue("TC tile did not bind visibly",d.wait(Until.hasObject(By.text("TC")),10000));d.findObject(By.text("TC")).click();
    waitForCaptured();
    try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Подготовить список покупок",r.get(r.list().get(0).id).source);}
-  }finally{d.executeShellCommand("cmd statusbar collapse");d.executeShellCommand("cmd statusbar set-tiles "+oldTiles);}
+  }finally{d.executeShellCommand("cmd statusbar collapse");d.executeShellCommand(oldTiles.equals("null")?"settings delete secure sysui_qs_tiles":"settings put secure sysui_qs_tiles "+oldTiles);}
   waitUntilProcessed();
  }
  private void waitUntilProcessed(){
@@ -96,9 +97,12 @@ import static org.junit.Assert.*;
  @Test public void readingPositionSurvivesRecreation()throws Exception{
   try(TaskRepository r=new TaskRepository(c)){for(int i=0;i<30;i++){r.capture("Scroll fixture "+i,"scroll"+i);r.complete(r.claimNext(),new NormalizedTask("Scroll fixture "+i,"Описание"));}}
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
-   main.onActivity(a->((android.widget.ListView)a.findViewById(R.id.task_list)).setSelectionFromTop(12,0));
-   UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();main.recreate();UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();
-   main.onActivity(a->assertEquals(12,((android.widget.ListView)a.findViewById(R.id.task_list)).getFirstVisiblePosition()));
+   java.util.concurrent.atomic.AtomicInteger position=new java.util.concurrent.atomic.AtomicInteger(),offset=new java.util.concurrent.atomic.AtomicInteger();
+   main.onActivity(a->{android.widget.ListView list=a.findViewById(R.id.task_list);list.setSelectionFromTop(12,list.getPaddingTop());});
+   UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();
+   main.onActivity(a->{android.widget.ListView list=a.findViewById(R.id.task_list);position.set(list.getFirstVisiblePosition());offset.set(list.getChildAt(0).getTop());assertTrue(position.get()>=10);});
+   main.recreate();UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();
+   main.onActivity(a->{android.widget.ListView list=a.findViewById(R.id.task_list);assertEquals(position.get(),list.getFirstVisiblePosition());assertTrue(Math.abs(offset.get()-list.getChildAt(0).getTop())<=1);});
   }
   String id;try(TaskRepository r=new TaskRepository(c)){id=r.capture("Длинный исходник\n".repeat(100),"long-scroll");r.complete(r.claimNext(),new NormalizedTask("Длинный исходник","Описание"));}
   try(ActivityScenario<TaskDetailActivity> detail=ActivityScenario.launch(new Intent(c,TaskDetailActivity.class).putExtra("id",id))){

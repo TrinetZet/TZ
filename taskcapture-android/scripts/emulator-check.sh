@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+trap 'mkdir -p ui-artifacts; adb pull /sdcard/Download/taskcapture-qa/. ui-artifacts/ >/dev/null 2>&1 || true' EXIT
 adb shell settings put global airplane_mode_on 1
 adb shell svc wifi disable
 adb shell svc data disable
