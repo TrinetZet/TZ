@@ -24,8 +24,35 @@ public class VisualTest {
    d.setOrientationLeft();SystemClock.sleep(500);d.waitForIdle();
    main.onActivity(a->{android.widget.ListView list=a.findViewById(R.id.task_list);assertTrue("Task viewport lost in landscape",list.getHeight()>GlassUi.dp(a,80));});shot(d,"landscape");d.setOrientationNatural();
   }finally{d.setOrientationNatural();d.unfreezeRotation();d.executeShellCommand("settings put system font_scale 1.0");d.executeShellCommand("wm size reset");}
-  c.startActivity(new Intent(CaptureInput.SEND).setClass(c,CaptureActivity.class).setType("text/plain").putExtra(Intent.EXTRA_TEXT,"Созвониться с командой завтра").addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-  assertTrue(d.wait(Until.hasObject(By.text("Добавлено в бэклог")),5000));shot(d,"capture");
+  // UIAutomator waits for idle and can miss this deliberately short-lived overlay.
+  // Copy its actual window after the first rendered confirmation frame, before auto-dismiss.
+  java.util.concurrent.CountDownLatch copied=new java.util.concurrent.CountDownLatch(1);
+  java.util.concurrent.atomic.AtomicReference<Throwable> failure=new java.util.concurrent.atomic.AtomicReference<>();
+  try(ActivityScenario<CaptureActivity> capture=ActivityScenario.launch(new Intent(c,CaptureActivity.class).setAction(CaptureInput.SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT,"Созвониться с командой завтра"))){
+   capture.onActivity(a->{
+    android.view.View decor=a.getWindow().getDecorView();
+    decor.getViewTreeObserver().addOnPreDrawListener(new android.view.ViewTreeObserver.OnPreDrawListener(){
+     public boolean onPreDraw(){
+      if(!hasSuccess(decor)||decor.getWidth()==0||decor.getHeight()==0)return true;
+      decor.getViewTreeObserver().removeOnPreDrawListener(this);
+      decor.postDelayed(()->{
+       try{
+        android.graphics.Bitmap bitmap=android.graphics.Bitmap.createBitmap(decor.getWidth(),decor.getHeight(),android.graphics.Bitmap.Config.ARGB_8888);
+        android.view.PixelCopy.request(a.getWindow(),bitmap,result->{
+         try{assertEquals("Confirmation window copy failed",android.view.PixelCopy.SUCCESS,result);java.io.File file=new java.io.File(c.getExternalFilesDir("qa"),"capture.png");try(java.io.FileOutputStream out=new java.io.FileOutputStream(file)){assertTrue(bitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,out));}}
+         catch(Throwable e){failure.set(e);}finally{bitmap.recycle();copied.countDown();}
+        },new android.os.Handler(android.os.Looper.getMainLooper()));
+       }catch(Throwable e){failure.set(e);copied.countDown();}
+      },500);
+      return true;
+     }
+    });decor.invalidate();
+   });
+   assertTrue("No rendered capture confirmation",copied.await(5,java.util.concurrent.TimeUnit.SECONDS));
+   if(failure.get()!=null)throw new AssertionError("Capture screenshot failed",failure.get());
+   d.executeShellCommand("cp "+new java.io.File(c.getExternalFilesDir("qa"),"capture.png").getAbsolutePath()+" /sdcard/Download/taskcapture-qa/capture.png");
+  }
  }
+ private static boolean hasSuccess(android.view.View view){if(view instanceof SuccessView)return true;if(view instanceof android.view.ViewGroup group)for(int i=0;i<group.getChildCount();i++)if(hasSuccess(group.getChildAt(i)))return true;return false;}
  private void shot(UiDevice d,String name)throws Exception{d.executeShellCommand("screencap -p /sdcard/Download/taskcapture-qa/"+name+".png");}
 }
