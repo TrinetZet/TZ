@@ -19,6 +19,7 @@ jobs:
       gh run watch 38522062750 --repo "$GH_REPO" --exit-status
       gh api repos/"$GH_REPO"/actions/runs/38522062750 > build-run.json
       gh api repos/"$GH_REPO"/actions/runs/38522062750/jobs > build-jobs.json
+      gh api repos/"$GH_REPO"/compare/bedd8ec3c5badc48a4d157b32927c379aa4f2957..."$GITHUB_SHA" > publication-diff.json
       python3 - <<'PY'
       import json
       run=json.load(open('build-run.json'))
@@ -26,6 +27,9 @@ jobs:
       assert run['head_sha']=='bedd8ec3c5badc48a4d157b32927c379aa4f2957', 'Source does not match reviewed version'
       jobs={j['name']:j['conclusion'] for j in json.load(open('build-jobs.json'))['jobs']}
       assert jobs.get('apk')=='success' and jobs.get('emulator')=='success', 'Required checks missing'
+      diff=json.load(open('publication-diff.json'))
+      assert diff['status'] in ('ahead','identical')
+      assert all(f['filename']=='.github/workflows/taskcapture-glass-release.yml' for f in diff['files']), 'Application differs from tested artifact'
       PY
    - uses: actions/download-artifact@v4
      with:
@@ -57,10 +61,11 @@ jobs:
       • Монохромный стеклянный интерфейс, плавные переходы и анимация сохранения.
       • Статусы: Бэклог / В работе / Выполнено; галочка в списке и выбор внутри задачи.
       • Экспорт всех задач в Markdown: сохранить или сразу поделиться.
+      Проверенная сборка: https://github.com/TrinetZet/TZ/actions/runs/38522062750 (исходники bedd8ec3c5badc48a4d157b32927c379aa4f2957). Тег публикации отличается только файлом её workflow; APK взят из этой проверенной сборки без пересборки.
       Проверено: офлайн-модель, база/миграция, статусы, плитка, clipboard, отправка между приложениями, поворот/ландшафт и скриншоты.
       Android 8.0+, arm64. Встроена Qwen3 0.6B; модель обрабатывает первые 600 символов, полный исходник сохраняется.
       Устанавливается рядом с 0.1.0 под названием TaskCapture Glass. Старые задачи остаются в старом приложении: не удаляйте его, если они нужны.
       Тестовая временная подпись; бесшовное следующее обновление пока не гарантируется. Физический Samsung Fold и TalkBack отдельно не проверялись.
       Если повернуть экран во время подготовки экспорта, повторите экспорт; уже открытый выбор файла восстанавливается.
       NOTES
-      gh release create taskcapture-android-0.2.0-38522062750 verified-artifact/distribution/TaskCapture-0.2.0-arm64.apk verified-artifact/distribution/SHA256SUMS.txt verified-artifact/distribution/verification.json --repo "$GH_REPO" --target bedd8ec3c5badc48a4d157b32927c379aa4f2957 --prerelease --title "TaskCapture Glass 0.2.0" --notes-file release-notes.md
+      gh release create taskcapture-android-0.2.0-38522062750 verified-artifact/distribution/TaskCapture-0.2.0-arm64.apk verified-artifact/distribution/SHA256SUMS.txt verified-artifact/distribution/verification.json --repo "$GH_REPO" --target "$GITHUB_SHA" --prerelease --title "TaskCapture Glass 0.2.0" --notes-file release-notes.md
