@@ -91,7 +91,8 @@ import static org.junit.Assert.*;
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
    main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Подготовить список покупок")));
    d.findObject(By.desc("Добавить TC в шторку")).click();
-   assertTrue(d.wait(Until.hasObject(By.text("Добавить плитку")),5000));d.findObject(By.text("Добавить плитку")).click();
+   UiObject2 confirm=d.wait(Until.findObject(By.res("android","button1")),5000);
+   assertNotNull("Tile instruction dialog missing",confirm);confirm.click();
    UiObject2 add=d.wait(Until.findObject(By.text(java.util.regex.Pattern.compile("(?i)add tile|добавить"))),10000);
    assertNotNull("System tile consent did not appear",add);add.click();
    d.executeShellCommand("cmd statusbar expand-settings");
