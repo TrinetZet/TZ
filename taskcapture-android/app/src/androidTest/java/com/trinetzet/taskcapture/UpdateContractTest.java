@@ -37,6 +37,12 @@ import static org.junit.Assert.*;
   }
   assertEquals("Позвонить Кате 🐶",read.invoke(null,ClipData.newPlainText(""," Позвонить Кате 🐶 ")));
  }
+ @Test public void glassDrawablesStayIdenticalAcrossRedraws(){
+  for(android.graphics.drawable.Drawable drawable:new android.graphics.drawable.Drawable[]{new GlassCardDrawable(12,false),new GlassBackground()}){
+   drawable.setBounds(0,0,120,120);android.graphics.Bitmap first=android.graphics.Bitmap.createBitmap(120,120,android.graphics.Bitmap.Config.ARGB_8888),second=android.graphics.Bitmap.createBitmap(120,120,android.graphics.Bitmap.Config.ARGB_8888);
+   drawable.draw(new android.graphics.Canvas(first));drawable.draw(new android.graphics.Canvas(second));assertEquals("Glass surface faded on redraw",first.getPixel(60,60),second.getPixel(60,60));first.recycle();second.recycle();
+  }
+ }
  @Test public void tileAndExportAreDeclared()throws Exception{
   assertNotNull(c.getPackageManager().getServiceInfo(new ComponentName(c,feature("TaskTileService")),0));
   assertEquals("android.permission.BIND_QUICK_SETTINGS_TILE",c.getPackageManager().getServiceInfo(new ComponentName(c,feature("TaskTileService")),0).permission);
@@ -67,21 +73,28 @@ import static org.junit.Assert.*;
   }
  }
  @Test public void focusedClipboardCaptureSurvivesRecreation()throws Exception{
+  java.util.concurrent.atomic.AtomicInteger created=new java.util.concurrent.atomic.AtomicInteger();
+  androidx.test.runner.lifecycle.ActivityLifecycleCallback lifecycle=(activity,stage)->{if(activity instanceof ClipboardActivity&&stage==androidx.test.runner.lifecycle.Stage.CREATED)created.incrementAndGet();};
+  androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(lifecycle);
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
    main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Проверить список дел")));
    try(ActivityScenario<?> capture=ActivityScenario.launch(new Intent(c,feature("ClipboardActivity")))){
     waitForCaptured();capture.onActivity(a->assertTrue("Saved confirmation missing",containsView(a.getWindow().getDecorView(),SuccessView.class)));
-    capture.recreate();try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Проверить список дел",r.get(r.list().get(0).id).source);}
+    capture.onActivity(a->a.recreate());long deadline=android.os.SystemClock.elapsedRealtime()+5000;while(created.get()<2&&android.os.SystemClock.elapsedRealtime()<deadline)android.os.SystemClock.sleep(25);assertTrue("Capture did not recreate",created.get()>=2);
+    try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Проверить список дел",r.get(r.list().get(0).id).source);}
    }
-  }
+  }finally{androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry.getInstance().removeLifecycleCallback(lifecycle);}
   waitUntilProcessed();
  }
  @Test public void quickSettingsTileCreatesTaskWithoutConfirmation()throws Exception{
   UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());String component=new ComponentName(c,feature("TaskTileService")).flattenToString();String oldTiles=d.executeShellCommand("settings get secure sysui_qs_tiles").trim();
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
    main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Подготовить список покупок")));
-   d.executeShellCommand("settings put secure sysui_qs_tiles custom("+component+")");d.executeShellCommand("cmd statusbar expand-settings");
-   assertTrue("TC tile did not bind visibly",d.wait(Until.hasObject(By.text("TC")),10000));d.findObject(By.text("TC")).click();
+   d.executeShellCommand("cmd statusbar add-tile "+component);d.executeShellCommand("settings put secure sysui_qs_tiles custom("+component+")");d.executeShellCommand("cmd statusbar expand-settings");
+   assertTrue("Tile setting was not applied",d.executeShellCommand("settings get secure sysui_qs_tiles").contains(component));
+   boolean tileVisible=d.wait(Until.hasObject(By.text("TC")),10000);
+   if(!tileVisible){ByteArrayOutputStream hierarchy=new ByteArrayOutputStream();d.dumpWindowHierarchy(hierarchy);System.out.println("Tile hierarchy: "+hierarchy.toString("UTF-8"));System.out.println(d.executeShellCommand("dumpsys activity services "+component));d.executeShellCommand("mkdir -p /sdcard/Download/taskcapture-qa");d.executeShellCommand("screencap -p /sdcard/Download/taskcapture-qa/tile-failure.png");}
+   assertTrue("TC tile did not bind visibly",tileVisible);d.findObject(By.text("TC")).click();
    waitForCaptured();
    try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Подготовить список покупок",r.get(r.list().get(0).id).source);}
   }finally{d.executeShellCommand("cmd statusbar collapse");d.executeShellCommand(oldTiles.equals("null")?"settings delete secure sysui_qs_tiles":"settings put secure sysui_qs_tiles "+oldTiles);}

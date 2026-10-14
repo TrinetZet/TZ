@@ -45,6 +45,9 @@ public class MainActivity extends Activity {
   if(!compact){TextView tile=GlassUi.button(this,"＋  TC в шторке",this::showTileHelp);tile.setContentDescription("Добавить TC в шторку");root.addView(tile);
    TextView hint=GlassUi.text(this,"Скопируйте текст → нажмите TC",12);hint.setGravity(Gravity.CENTER);hint.setTextColor(GlassUi.MUTED);root.addView(hint,GlassUi.spaced(this,10));}
   setContentView(root);Insets.apply(root);reload(false);
+  if(saved!=null){final int savedPosition=saved.getInt("scroll_position",0),savedOffset=saved.getInt("scroll_offset",list.getPaddingTop());
+   list.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){public void onGlobalLayout(){list.getViewTreeObserver().removeOnGlobalLayoutListener(this);list.setSelectionFromTop(savedPosition,savedOffset);}});
+  }
   int waiting=0;for(Task t:all)if(t.state.equals("pending")||t.state.equals("processing"))waiting++;
   for(int i=0;i<waiting;i++)try{QueueScheduler.enqueue(this);}catch(Exception ignored){break;}
  }
@@ -108,7 +111,7 @@ public class MainActivity extends Activity {
   final LinearLayout card;final TextView title,description,state,mark;
   Row(LinearLayout c,TextView t,TextView d,TextView s,TextView m){card=c;title=t;description=d;state=s;mark=m;}
  }
- @Override protected void onSaveInstanceState(Bundle state){state.putString("filter",filter);exports.saveState(state);super.onSaveInstanceState(state);}
+ @Override protected void onSaveInstanceState(Bundle state){state.putString("filter",filter);state.putInt("scroll_position",list.getFirstVisiblePosition());state.putInt("scroll_offset",list.getChildAt(0)==null?list.getPaddingTop():list.getChildAt(0).getTop());exports.saveState(state);super.onSaveInstanceState(state);}
  @Override protected void onActivityResult(int request,int result,Intent data){if(!exports.onActivityResult(request,result,data))super.onActivityResult(request,result,data);}
  @Override protected void onResume(){super.onResume();timer.post(refresh);}
  @Override protected void onPause(){timer.removeCallbacks(refresh);super.onPause();}

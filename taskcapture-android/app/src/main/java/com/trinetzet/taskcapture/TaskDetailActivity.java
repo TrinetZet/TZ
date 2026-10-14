@@ -4,12 +4,12 @@ import android.os.*;
 import android.view.*;
 import android.widget.*;
 public class TaskDetailActivity extends Activity {
- private TaskRepository repo;private String id;private TextView title,description,status,processing,retry;private final Handler timer=new Handler(Looper.getMainLooper());
+ private TaskRepository repo;private String id;private TextView title,description,status,processing,retry;private ScrollView scroll;private final Handler timer=new Handler(Looper.getMainLooper());
  private final Runnable refresh=new Runnable(){public void run(){reload();timer.postDelayed(this,2000);}};
  private int dp(float n){return GlassUi.dp(this,n);}
  @Override public void onCreate(Bundle saved){
   super.onCreate(saved);repo=new TaskRepository(this);id=getIntent().getStringExtra("id");Task task=repo.get(id);if(task==null){finish();return;}
-  ScrollView scroll=new ScrollView(this);scroll.setId(R.id.detail_scroll);scroll.setFillViewport(true);scroll.setBackground(new GlassBackground());
+  scroll=new ScrollView(this);scroll.setId(R.id.detail_scroll);scroll.setFillViewport(true);scroll.setBackground(new GlassBackground());
   LinearLayout content=GlassUi.column(this,24);scroll.addView(content);
   TextView back=GlassUi.button(this,"←  Задачи",this::finish);LinearLayout.LayoutParams bp=new LinearLayout.LayoutParams(-2,-2);content.addView(back,bp);
   title=GlassUi.text(this,task.title,29);title.setTypeface(android.graphics.Typeface.create("sans-serif-light",0));title.setTextIsSelectable(true);content.addView(title,GlassUi.spaced(this,26));
@@ -22,6 +22,7 @@ public class TaskDetailActivity extends Activity {
   LinearLayout sourceCard=GlassUi.column(this,20);sourceCard.setBackground(GlassUi.card(this));TextView source=GlassUi.text(this,task.source,15);source.setTextIsSelectable(true);source.setLineSpacing(dp(4),1);source.setTextColor(GlassUi.MUTED);sourceCard.addView(source);content.addView(sourceCard,GlassUi.spaced(this,12));
   if(task.source.codePointCount(0,task.source.length())>600){TextView note=GlassUi.text(this,"Модель обрабатывает первые 600 символов. Полный исходник сохранён.",12);note.setTextColor(GlassUi.MUTED);content.addView(note,GlassUi.spaced(this,14));}
   setContentView(scroll);Insets.apply(content);reload();GlassUi.animateEntrance(body);
+  if(saved!=null){int y=saved.getInt("detail_scroll_y",0);scroll.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){public void onGlobalLayout(){scroll.getViewTreeObserver().removeOnGlobalLayoutListener(this);scroll.scrollTo(0,y);}});}
  }
  private void chooseStatus(){
   Task task=repo.get(id);if(task==null)return;String[] values={"backlog","in_progress","done"};int checked=java.util.Arrays.asList(values).indexOf(task.status);
@@ -38,6 +39,7 @@ public class TaskDetailActivity extends Activity {
   }catch(Exception e){Toast.makeText(this,"Не удалось прочитать задачу",Toast.LENGTH_SHORT).show();}
  }
  @Override protected void onResume(){super.onResume();timer.post(refresh);}
+ @Override protected void onSaveInstanceState(Bundle saved){saved.putInt("detail_scroll_y",scroll.getScrollY());super.onSaveInstanceState(saved);}
  @Override protected void onPause(){timer.removeCallbacks(refresh);super.onPause();}
  @Override protected void onDestroy(){repo.close();super.onDestroy();}
 }

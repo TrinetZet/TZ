@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 public final class GlassBackground extends Drawable {
  private final Paint paint=new Paint(Paint.ANTI_ALIAS_FLAG);
  @Override public void draw(Canvas c){
+  paint.setColor(Color.WHITE);
   Rect b=getBounds();float w=b.width(),h=b.height();
   paint.setShader(new LinearGradient(0,0,w,h,new int[]{0xff202228,0xff0d0e12,0xff17191f},null,Shader.TileMode.CLAMP));c.drawRect(b,paint);
   glow(c,w*.13f,h*.08f,w*.95f,0x557c8291);

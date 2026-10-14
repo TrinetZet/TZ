@@ -5,6 +5,7 @@ public final class GlassCardDrawable extends Drawable {
  private final Paint p=new Paint(Paint.ANTI_ALIAS_FLAG);private final float radius;private final boolean selected;
  public GlassCardDrawable(float radius,boolean selected){this.radius=radius;this.selected=selected;}
  @Override public void draw(Canvas c){
+  p.setColor(Color.WHITE);
   RectF r=new RectF(getBounds());r.inset(1,1);float h=Math.max(1,r.height());
   p.setStyle(Paint.Style.FILL);
   p.setShader(new LinearGradient(r.left,r.top,r.right,r.bottom,new int[]{selected?0x668a8f9b:0x405b606d,selected?0x44434a58:0x24323844,0x18303a4c},new float[]{0,.46f,1},Shader.TileMode.CLAMP));c.drawRoundRect(r,radius,radius,p);
