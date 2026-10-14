@@ -89,12 +89,13 @@ import static org.junit.Assert.*;
  @Test public void quickSettingsTileCreatesTaskWithoutConfirmation()throws Exception{
   UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());String component=new ComponentName(c,feature("TaskTileService")).flattenToString();String oldTiles=d.executeShellCommand("settings get secure sysui_qs_tiles").trim();
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
-   main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Подготовить список покупок")));
    d.findObject(By.desc("Добавить TC в шторку")).click();
    UiObject2 confirm=d.wait(Until.findObject(By.res("android","button1")),5000);
+   if(confirm==null){ByteArrayOutputStream hierarchy=new ByteArrayOutputStream();d.dumpWindowHierarchy(hierarchy);System.out.println("Instruction dialog hierarchy: "+hierarchy.toString("UTF-8"));d.executeShellCommand("mkdir -p /sdcard/Download/taskcapture-qa");d.executeShellCommand("screencap -p /sdcard/Download/taskcapture-qa/instruction-failure.png");}
    assertNotNull("Tile instruction dialog missing",confirm);confirm.click();
    UiObject2 add=d.wait(Until.findObject(By.text(java.util.regex.Pattern.compile("(?i)add tile|добавить"))),10000);
    assertNotNull("System tile consent did not appear",add);add.click();
+   main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Подготовить список покупок")));
    d.executeShellCommand("cmd statusbar expand-settings");
    boolean tileVisible=d.wait(Until.hasObject(By.text("TC")),2000);
    for(int page=0;!tileVisible&&page<5;page++){d.swipe((int)(d.getDisplayWidth()*.85),(int)(d.getDisplayHeight()*.4),(int)(d.getDisplayWidth()*.15),(int)(d.getDisplayHeight()*.4),30);tileVisible=d.wait(Until.hasObject(By.text("TC")),2000);}
