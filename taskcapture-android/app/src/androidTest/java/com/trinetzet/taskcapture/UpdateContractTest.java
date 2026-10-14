@@ -90,14 +90,18 @@ import static org.junit.Assert.*;
   UiDevice d=UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());String component=new ComponentName(c,feature("TaskTileService")).flattenToString();String oldTiles=d.executeShellCommand("settings get secure sysui_qs_tiles").trim();
   try(ActivityScenario<MainActivity> main=ActivityScenario.launch(MainActivity.class)){
    main.onActivity(a->a.getSystemService(ClipboardManager.class).setPrimaryClip(ClipData.newPlainText("fixture","Подготовить список покупок")));
-   d.executeShellCommand("cmd statusbar add-tile "+component);d.executeShellCommand("settings put secure sysui_qs_tiles custom("+component+")");d.executeShellCommand("cmd statusbar expand-settings");
-   assertTrue("Tile setting was not applied",d.executeShellCommand("settings get secure sysui_qs_tiles").contains(component));
-   boolean tileVisible=d.wait(Until.hasObject(By.text("TC")),10000);
+   d.findObject(By.desc("Добавить TC в шторку")).click();
+   assertTrue(d.wait(Until.hasObject(By.text("Добавить плитку")),5000));d.findObject(By.text("Добавить плитку")).click();
+   UiObject2 add=d.wait(Until.findObject(By.textMatches("(?i)add tile|добавить")),10000);
+   assertNotNull("System tile consent did not appear",add);add.click();
+   d.executeShellCommand("cmd statusbar expand-settings");
+   boolean tileVisible=d.wait(Until.hasObject(By.text("TC")),2000);
+   for(int page=0;!tileVisible&&page<5;page++){d.swipe((int)(d.getDisplayWidth()*.85),(int)(d.getDisplayHeight()*.4),(int)(d.getDisplayWidth()*.15),(int)(d.getDisplayHeight()*.4),30);tileVisible=d.wait(Until.hasObject(By.text("TC")),2000);}
    if(!tileVisible){ByteArrayOutputStream hierarchy=new ByteArrayOutputStream();d.dumpWindowHierarchy(hierarchy);System.out.println("Tile hierarchy: "+hierarchy.toString("UTF-8"));System.out.println(d.executeShellCommand("dumpsys activity services "+component));d.executeShellCommand("mkdir -p /sdcard/Download/taskcapture-qa");d.executeShellCommand("screencap -p /sdcard/Download/taskcapture-qa/tile-failure.png");}
    assertTrue("TC tile did not bind visibly",tileVisible);d.findObject(By.text("TC")).click();
    waitForCaptured();
    try(TaskRepository r=new TaskRepository(c)){assertEquals(1,r.list().size());assertEquals("Подготовить список покупок",r.get(r.list().get(0).id).source);}
-  }finally{d.executeShellCommand("cmd statusbar collapse");d.executeShellCommand(oldTiles.equals("null")?"settings delete secure sysui_qs_tiles":"settings put secure sysui_qs_tiles "+oldTiles);}
+  }finally{d.executeShellCommand("cmd statusbar collapse");if(!oldTiles.equals("null"))d.executeShellCommand("cmd statusbar set-tiles "+oldTiles);}
   waitUntilProcessed();
  }
  private void waitUntilProcessed(){
@@ -115,7 +119,7 @@ import static org.junit.Assert.*;
    UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();
    main.onActivity(a->{android.widget.ListView list=a.findViewById(R.id.task_list);position.set(list.getFirstVisiblePosition());offset.set(list.getChildAt(0).getTop());assertTrue(position.get()>=10);});
    main.recreate();UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).waitForIdle();
-   main.onActivity(a->{android.widget.ListView list=a.findViewById(R.id.task_list);assertEquals(position.get(),list.getFirstVisiblePosition());assertTrue(Math.abs(offset.get()-list.getChildAt(0).getTop())<=1);});
+   main.onActivity(a->{android.widget.ListView list=a.findViewById(R.id.task_list);assertEquals(position.get(),list.getFirstVisiblePosition());assertEquals("Restored row offset",offset.get(),list.getChildAt(0).getTop());});
   }
   String id;try(TaskRepository r=new TaskRepository(c)){id=r.capture("Длинный исходник\n".repeat(100),"long-scroll");r.complete(r.claimNext(),new NormalizedTask("Длинный исходник","Описание"));}
   try(ActivityScenario<TaskDetailActivity> detail=ActivityScenario.launch(new Intent(c,TaskDetailActivity.class).putExtra("id",id))){

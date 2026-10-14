@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
    TextView hint=GlassUi.text(this,"Скопируйте текст → нажмите TC",12);hint.setGravity(Gravity.CENTER);hint.setTextColor(GlassUi.MUTED);root.addView(hint,GlassUi.spaced(this,10));}
   setContentView(root);Insets.apply(root);reload(false);
   if(saved!=null){final int savedPosition=saved.getInt("scroll_position",0),savedOffset=saved.getInt("scroll_offset",list.getPaddingTop());
-   list.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){public void onGlobalLayout(){list.getViewTreeObserver().removeOnGlobalLayoutListener(this);list.setSelectionFromTop(savedPosition,savedOffset);}});
+   list.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){public void onGlobalLayout(){list.getViewTreeObserver().removeOnGlobalLayoutListener(this);list.setSelectionFromTop(savedPosition,savedOffset-list.getPaddingTop());}});
   }
   int waiting=0;for(Task t:all)if(t.state.equals("pending")||t.state.equals("processing"))waiting++;
   for(int i=0;i<waiting;i++)try{QueueScheduler.enqueue(this);}catch(Exception ignored){break;}
@@ -75,7 +75,7 @@ public class MainActivity extends Activity {
    if(signature.toString().equals(fingerprint))return;fingerprint=signature.toString();
    int position=list.getFirstVisiblePosition(),top=list.getChildAt(0)==null?0:list.getChildAt(0).getTop();
    visible.clear();for(Task t:next)if(filter.equals("all")||filter.equals(t.status))visible.add(t);
-   adapter.notifyDataSetChanged();list.setSelectionFromTop(filterChanged?0:position,filterChanged?0:top);
+   adapter.notifyDataSetChanged();list.setSelectionFromTop(filterChanged?0:position,filterChanged?0:top-list.getPaddingTop());
    if(filterChanged)GlassUi.animateEntrance(list);
   }catch(Exception e){counter.setText("Не удалось прочитать задачи");}
  }
