@@ -47,7 +47,7 @@ public partial class MainWindow:Window {
  }
  private void OpenFile_Click(object sender,RoutedEventArgs e){try{if(Store is not null)Process.Start(new ProcessStartInfo(Store.Path){UseShellExecute=true});}catch(Exception ex){MessageLabel.Text=ex.Message;}}
  private void Window_Closing(object? sender,CancelEventArgs e){if(!exiting){e.Cancel=true;Hide();}}
- public async Task ExitAsync(){if(exiting)return;exiting=true;timer.Stop();hotkey?.Dispose();tray?.Dispose();if(queue is not null)await queue.DisposeAsync();Store?.Dispose();Close();if(Application.Current.MainWindow==this)Application.Current.Shutdown();}
+ public async Task ExitAsync(){if(exiting)return;exiting=true;timer.Stop();hotkey?.Dispose();tray?.Dispose();if(queue is not null)await queue.DisposeAsync();Store?.Dispose();Close();if(Application.Current is App&&Application.Current.MainWindow==this)Application.Current.Shutdown();}
  public void ShowFromTray(){Show();WindowState=WindowState.Normal;Activate();}
  public sealed record FilterRow(string Id,string Name,int Count);
  public sealed record CardRow(TaskItem Task,List<TaskStage> Stages){public string Title=>Task.Title;public string Description=>Task.Description;public string StageId=>Task.StageId;public string ProcessingLabel=>Task.Processing switch{"pending"=>"Формируется локальной моделью…","error"=>Task.Error,_=>"Обработано · "+Task.CreatedUtc.ToLocalTime().ToString("dd.MM HH:mm")};public Visibility RetryVisibility=>Task.Processing=="error"?Visibility.Visible:Visibility.Collapsed;}
