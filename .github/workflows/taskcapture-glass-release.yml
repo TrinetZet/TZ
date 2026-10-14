@@ -16,21 +16,21 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
      run: |
-      gh run watch 38520921857 --repo "$GH_REPO" --exit-status
-      gh api repos/"$GH_REPO"/actions/runs/38520921857 > build-run.json
-      gh api repos/"$GH_REPO"/actions/runs/38520921857/jobs > build-jobs.json
+      gh run watch 38522062750 --repo "$GH_REPO" --exit-status
+      gh api repos/"$GH_REPO"/actions/runs/38522062750 > build-run.json
+      gh api repos/"$GH_REPO"/actions/runs/38522062750/jobs > build-jobs.json
       python3 - <<'PY'
       import json
       run=json.load(open('build-run.json'))
       assert run['status']=='completed' and run['conclusion']=='success', 'Build is not successful'
-      assert run['head_sha']=='a61a6bbee9a89473e8f6c1cf97673bfe87258fae', 'Source does not match reviewed version'
+      assert run['head_sha']=='bedd8ec3c5badc48a4d157b32927c379aa4f2957', 'Source does not match reviewed version'
       jobs={j['name']:j['conclusion'] for j in json.load(open('build-jobs.json'))['jobs']}
       assert jobs.get('apk')=='success' and jobs.get('emulator')=='success', 'Required checks missing'
       PY
    - uses: actions/download-artifact@v4
      with:
       name: TaskCapture-Android-APK
-      run-id: 38520921857
+      run-id: 38522062750
       github-token: ${{ github.token }}
       path: verified-artifact
    - name: Check received APK
@@ -63,4 +63,4 @@ jobs:
       Тестовая временная подпись; бесшовное следующее обновление пока не гарантируется. Физический Samsung Fold и TalkBack отдельно не проверялись.
       Если повернуть экран во время подготовки экспорта, повторите экспорт; уже открытый выбор файла восстанавливается.
       NOTES
-      gh release create taskcapture-android-0.2.0-38520921857 verified-artifact/distribution/TaskCapture-0.2.0-arm64.apk verified-artifact/distribution/SHA256SUMS.txt verified-artifact/distribution/verification.json --repo "$GH_REPO" --target a61a6bbee9a89473e8f6c1cf97673bfe87258fae --prerelease --title "TaskCapture Glass 0.2.0" --notes-file release-notes.md
+      gh release create taskcapture-android-0.2.0-38522062750 verified-artifact/distribution/TaskCapture-0.2.0-arm64.apk verified-artifact/distribution/SHA256SUMS.txt verified-artifact/distribution/verification.json --repo "$GH_REPO" --target bedd8ec3c5badc48a4d157b32927c379aa4f2957 --prerelease --title "TaskCapture Glass 0.2.0" --notes-file release-notes.md
