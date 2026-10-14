@@ -1,0 +1,66 @@
+name: Publish verified TaskCapture Glass 0.2
+on:
+ push:
+  branches: [feat/taskcapture-android]
+  paths: ['.github/workflows/taskcapture-glass-release.yml']
+permissions:
+ contents: write
+ actions: read
+jobs:
+ publish:
+  runs-on: ubuntu-latest
+  timeout-minutes: 20
+  steps:
+   - name: Verify completed build and source
+     env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+     run: |
+      gh run watch 38518310660 --repo "$GH_REPO" --exit-status
+      gh api repos/"$GH_REPO"/actions/runs/38518310660 > build-run.json
+      gh api repos/"$GH_REPO"/actions/runs/38518310660/jobs > build-jobs.json
+      python3 - <<'PY'
+      import json
+      run=json.load(open('build-run.json'))
+      assert run['status']=='completed' and run['conclusion']=='success', 'Build is not successful'
+      assert run['head_sha']=='7c34d6b6043eaf9d79e0ec6e7d37c64cab42f8c1', 'Source does not match reviewed version'
+      jobs={j['name']:j['conclusion'] for j in json.load(open('build-jobs.json'))['jobs']}
+      assert jobs.get('apk')=='success' and jobs.get('emulator')=='success', 'Required checks missing'
+      PY
+   - uses: actions/download-artifact@v4
+     with:
+      name: TaskCapture-Android-APK
+      run-id: 38518310660
+      github-token: ${{ github.token }}
+      path: verified-artifact
+   - name: Check received APK
+     working-directory: verified-artifact/distribution
+     run: |
+      sha256sum --check SHA256SUMS.txt
+      python3 - <<'PY'
+      import json,pathlib
+      report=json.load(open('verification.json'))
+      assert report['package']=='com.trinetzet.taskcapture.glass' and report['version']=='0.2.0'
+      assert report['abi']=='arm64-v8a'
+      assert report['model_sha256']=='ac2d97712095a558e31573f62f466a3f9d93990898b0ec79d7c974c1780d524a'
+      assert len(report['certificate_sha256'])==64
+      assert report['apk_bytes']==pathlib.Path('TaskCapture-0.2.0-arm64.apk').stat().st_size
+      PY
+   - name: Publish reviewed APK
+     env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+     run: |
+      cat > release-notes.md <<'NOTES'
+      TaskCapture Glass 0.2.0
+      • TC в шторке: скопируйте текст → нажмите плитку → задача сохранена без подтверждения.
+      • Монохромный стеклянный интерфейс, плавные переходы и анимация сохранения.
+      • Статусы: Бэклог / В работе / Выполнено; галочка в списке и выбор внутри задачи.
+      • Экспорт всех задач в Markdown: сохранить или сразу поделиться.
+      Проверено: офлайн-модель, база/миграция, статусы, плитка, clipboard, отправка между приложениями, поворот/ландшафт и скриншоты.
+      Android 8.0+, arm64. Встроена Qwen3 0.6B; модель обрабатывает первые 600 символов, полный исходник сохраняется.
+      Устанавливается рядом с 0.1.0 под названием TaskCapture Glass. Старые задачи остаются в старом приложении: не удаляйте его, если они нужны.
+      Тестовая временная подпись; бесшовное следующее обновление пока не гарантируется. Физический Samsung Fold и TalkBack отдельно не проверялись.
+      Если повернуть экран во время подготовки экспорта, повторите экспорт; уже открытый выбор файла восстанавливается.
+      NOTES
+      gh release create taskcapture-android-0.2.0-38518310660 verified-artifact/distribution/TaskCapture-0.2.0-arm64.apk verified-artifact/distribution/SHA256SUMS.txt verified-artifact/distribution/verification.json --repo "$GH_REPO" --target 7c34d6b6043eaf9d79e0ec6e7d37c64cab42f8c1 --prerelease --title "TaskCapture Glass 0.2.0" --notes-file release-notes.md
