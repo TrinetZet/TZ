@@ -1,0 +1,106 @@
+name: TaskCapture Windows
+on:
+ push:
+  branches: [feat/taskcapture-windows]
+  paths: ['taskcapture-windows/**', '.github/workflows/taskcapture-windows.yml']
+ workflow_dispatch:
+permissions:
+ contents: read
+jobs:
+ native:
+  runs-on: windows-2022
+  timeout-minutes: 45
+  steps:
+   - uses: actions/checkout@v5
+   - uses: actions/cache@v4
+     with:
+      path: |
+       taskcapture-android/third_party/llama.cpp
+       taskcapture-android/app/src/main/assets/model.gguf
+      key: taskcapture-win-model-ac2d977-llama-1b70350
+   - name: Prepare pinned model and native source
+     run: python taskcapture-android/scripts/prepare-dependencies.py
+   - name: Compile offline Windows worker
+     run: |
+      cmake -S taskcapture-windows/native -B taskcapture-windows/build/native -A x64
+      cmake --build taskcapture-windows/build/native --config Release --parallel 2 --target taskcapture-worker
+   - name: Package native runtime and licenses
+     shell: pwsh
+     run: |
+      New-Item -ItemType Directory -Force native-artifact | Out-Null
+      Copy-Item taskcapture-windows/build/native/Release/taskcapture-worker.exe native-artifact/
+      Copy-Item taskcapture-android/app/src/main/assets/model.gguf native-artifact/
+      Copy-Item taskcapture-android/app/src/main/assets/*LICENSE.txt native-artifact/
+      Copy-Item taskcapture-android/dependencies.lock.json native-artifact/model-info.json
+      if ((Get-FileHash native-artifact/model.gguf).Hash.ToLowerInvariant() -ne 'ac2d97712095a558e31573f62f466a3f9d93990898b0ec79d7c974c1780d524a') { throw 'Model hash mismatch' }
+   - uses: actions/upload-artifact@v4
+     with:
+      name: TaskCapture-Windows-Native
+      path: native-artifact/*
+      compression-level: 0
+      retention-days: 14
+ checks:
+  runs-on: windows-2022
+  timeout-minutes: 20
+  steps:
+   - uses: actions/checkout@v5
+   - uses: actions/setup-dotnet@v5
+     with:
+      dotnet-version: '10.0.x'
+   - name: Core contracts
+     run: dotnet run --project taskcapture-windows/Core.Tests -c Release
+   - name: Windows selection and WPF contracts
+     working-directory: taskcapture-windows
+     shell: pwsh
+     run: |
+      dotnet run --project Windows.Tests -c Release | Tee-Object windows-tests.log
+      if ($LASTEXITCODE -ne 0) { throw 'Windows contracts failed' }
+   - uses: actions/upload-artifact@v4
+     if: always()
+     with:
+      name: TaskCapture-Windows-Checks
+      path: |
+       taskcapture-windows/windows-tests.log
+       taskcapture-windows/qa-artifacts/*
+ package:
+  needs: [native, checks]
+  runs-on: windows-2022
+  timeout-minutes: 30
+  steps:
+   - uses: actions/checkout@v5
+   - uses: actions/setup-dotnet@v5
+     with:
+      dotnet-version: '10.0.x'
+   - uses: actions/download-artifact@v4
+     with:
+      name: TaskCapture-Windows-Native
+      path: native-artifact
+   - name: Build verified installer and portable application
+     run: ./taskcapture-windows/scripts/build.ps1
+   - name: Actual offline model on Windows
+     working-directory: taskcapture-windows
+     shell: pwsh
+     run: |
+      $alias = Join-Path $env:TEMP 'TaskCapture QA Кате'
+      New-Item -ItemType Junction -Path $alias -Target (Resolve-Path distribution/portable).Path | Out-Null
+      dotnet run --project Windows.Tests -c Release -- --model-root "$alias" | Tee-Object model-tests.log
+      if ($LASTEXITCODE -ne 0) { throw 'Actual model failed' }
+   - name: Current-user installation and uninstall
+     run: ./taskcapture-windows/scripts/install-check.ps1
+   - uses: actions/upload-artifact@v4
+     if: always()
+     with:
+      name: TaskCapture-Windows-Package-Checks
+      path: |
+       taskcapture-windows/model-tests.log
+       taskcapture-windows/qa-artifacts/*
+   - uses: actions/upload-artifact@v4
+     with:
+      name: TaskCapture-Windows-Installers
+      path: |
+       taskcapture-windows/distribution/*.exe
+       taskcapture-windows/distribution/*.zip
+       taskcapture-windows/distribution/*.json
+       taskcapture-windows/distribution/SHA256SUMS.txt
+      compression-level: 0
+      retention-days: 30

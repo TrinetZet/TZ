@@ -1,0 +1,8 @@
+bin/
+obj/
+build/
+distribution/
+qa-artifacts/
+
+__pycache__/
+*.pyc
